@@ -14,8 +14,9 @@ Cette solution digitalisée améliore l'efficacité, l'organisation et la satisf
     - Les méthodes sont déclarées en camelCase
     - Le nom des constante est espacé avec des _ (Underscore)
 
-  - Pour chaque issue -> Créer une branche lié à l'issue et les fermées lorsque la fonctionnalité est fonctionnalisée.
+  - Pour chaque issue -> Créer une branche liée à l'issue et les fermées lorsque la fonctionnalité est finalisée.
   - Suivre la convention pour le nom des branches -> issue-NomFonctionnalité
+  - Attention : Un manager ne peut pas poser de congé !
 
 ## Documentation 
 Lien vers le google drive : https://drive.google.com/drive/folders/1cOEcns99USQY1flzMX9oSofIQXH-dKru?usp=drive_link
