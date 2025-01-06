@@ -20,10 +20,3 @@ Cette solution digitalisée améliore l'efficacité, l'organisation et la satisf
 ## Documentation 
 Lien vers le google drive : https://drive.google.com/drive/folders/1cOEcns99USQY1flzMX9oSofIQXH-dKru?usp=drive_link
 
-## Découpage des sprints :
- **Sprint 1** :
-  - [ ]  Module d’authentification = Adrien
-
-**Sprint 2** :
-  - [x] Page Accueil = Noah
-
