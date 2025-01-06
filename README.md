@@ -1,5 +1,5 @@
 # Symfony-CongeFacile
-> Groupe de travail : Noah Bonaventure (TechnicienDeSurface), Leclère Adrien (ENFANTSDUPAYS), Quentin Morel (), Heddy Mameri (Orgalord-Darkness).
+> Groupe de travail : Noah Bonaventure (TechnicienDeSurface), Leclère Adrien (ENFANTSDUPAYS), Quentin Morel (Qwezen), Heddy Mameri (Orgalord-Darkness).
 
 Ceci est un projet de groupe réalisé pendant notre 2ème année de BTS SIO option SLAM au lycée Saint-Vincent de Senlis 2024-2025
 ## Présentation du projet :
