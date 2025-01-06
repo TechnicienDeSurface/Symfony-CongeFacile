@@ -13,6 +13,7 @@ Cette solution digitalisée améliore l'efficacité, l'organisation et la satisf
     - Le nom des classes sont déclarés PascalCase
     - Les méthodes sont déclarées en camelCase
     - Le nom des constante est espacé avec des _ (Underscore)
+    - Le nom des images correspond à nomImage-typeImage (typeImage -> logo / icon etc ...)
 
   - Pour chaque issue -> Créer une branche liée à l'issue et les fermées lorsque la fonctionnalité est finalisée.
   - Suivre la convention pour le nom des branches -> issue-NomFonctionnalité
