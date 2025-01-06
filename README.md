@@ -7,6 +7,8 @@ Le projet vise à développer une application web intuitive pour simplifier et c
 tandis que les managers disposeront d'outils pour évaluer et valider les requêtes rapidement, tout en gardant une vue d'ensemble sur les absences et la disponibilité des équipes. 
 Cette solution digitalisée améliore l'efficacité, l'organisation et la satisfaction des collaborateurs.
 
+##Documentation 
+Lien vers le google drive : https://drive.google.com/drive/folders/1cOEcns99USQY1flzMX9oSofIQXH-dKru?usp=drive_link
 ## Contraintes techniques : 
 
 ## Découpage des sprints :
