@@ -17,7 +17,7 @@ Cette solution digitalisée améliore l'efficacité, l'organisation et la satisf
 
   - Pour chaque issue -> Créer une branche liée à l'issue et les fermées lorsque la fonctionnalité est finalisée.
   - Suivre la convention pour le nom des branches -> issue-NomFonctionnalité
-  - Attention : Un manager ne peut pas poser de congé !
+  - Attention : Utilisation de TailWind obligatoire !
 
 ## Documentation 
 Lien vers le google drive : https://drive.google.com/drive/folders/1cOEcns99USQY1flzMX9oSofIQXH-dKru?usp=drive_link
