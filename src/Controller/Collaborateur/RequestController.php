@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Collaborateur\Controller;
+namespace App\Controller\Collaborateur;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RequestController extends AbstractController
 {
-    //NOUVELLE DEMANDE "COLLABORATEUR"
+    //PAGE NOUVELLE DEMANDE "COLLABORATEUR"
     #[Route('/new-request', name: 'app_new_request')]
     public function viewNewRequest(): Response
     {
@@ -17,7 +17,7 @@ class RequestController extends AbstractController
         ]);
     }
 
-    //HISTORIQUE DES DEMANDES "COLLABORATEUR"
+    //PAGE HISTORIQUE DES DEMANDES "COLLABORATEUR"
     #[Route('/request-history', name: 'app_request_history')]
     public function viewRequestHistory(): Response
     {
@@ -26,7 +26,7 @@ class RequestController extends AbstractController
         ]);
     }
 
-    //DETAILS DES DEMANDES "COLLABORATEUR"
+    //PAGE DETAILS DES DEMANDES "COLLABORATEUR"
     #[Route('/detail-request-collaborateur', name: 'app_detail_request_collaborateur')]
     public function detailRequest(): Response
     {
