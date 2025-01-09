@@ -18,7 +18,7 @@ class RequestController extends AbstractController
     }
 
     //PAGE DETAILS DES DEMANDES EN ATTENTE
-    #[Route('/detail-request-pending', name: 'app_detail_request_pending')]
+    #[Route('/detail-request-pending/{id}', name: 'app_detail_request_pending')]
     public function viewDetailRequestPending(): Response
     {
         return $this->render('manager/detail_request_pending.html.twig', [

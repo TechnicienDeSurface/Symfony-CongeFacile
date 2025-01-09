@@ -27,7 +27,7 @@ class RequestController extends AbstractController
     }
 
     //PAGE DETAILS DES DEMANDES "COLLABORATEUR"
-    #[Route('/detail-request-collaborateur', name: 'app_detail_request_collaborateur')]
+    #[Route('/detail-request-collaborateur/{id}', name: 'app_detail_request_collaborateur')]
     public function detailRequest(): Response
     {
         return $this->render('collaborateur/detail_request.html.twig', [

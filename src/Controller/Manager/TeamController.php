@@ -18,11 +18,15 @@ class TeamController extends AbstractController
     }
 
     //PAGE DETAILS DE L'EQUIPE GERER PAR LE MANAGER
-    #[Route('/detail-team-manager', name: 'app_detail_team')]
+    #[Route('/detail-team-manager/{id}', name: 'app_detail_team')]
     public function viewDetailTeam(): Response
     {
         return $this->render('manager/detail_team.html.twig', [
             'page' => 'detail-team-manager',
         ]);
     }
+
+    // PAGE SUPPRESSION D'UN MEMBRE
+    //#[Route('/delete-member/{id}', name: 'app_delete_member', methods: ['POST', 'DELETE'])]
+    
 }

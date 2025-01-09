@@ -10,7 +10,7 @@ class PreferenceController extends AbstractController
 {
     //PAGE PREFERENCE "COLLABORATEUR"
     #[Route('/preference-collaborateur', name: 'app_preference_collaborateur')]
-    public function index(): Response
+    public function viewPreferenceCollaborateur(): Response
     {
         return $this->render('collaborateur/preference.html.twig', [
             'page' => 'preference-collaborateur',

@@ -26,12 +26,16 @@ class JobController extends AbstractController
         ]);
     }
 
-    //PAGE MODIFIER JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
-    #[Route('/administration-modifier-job', name: 'app_administration_modifier_job')]
+    //PAGE DETAIL JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
+    #[Route('/administration-detail-job/{id}', name: 'app_administration_detail_job')]
     public function editJob(): Response
     {
         return $this->render('manager/admin/job/detail_job.html.twig', [
-            'page' => 'administration-modifier-job',
+            'page' => 'administration-detail-job',
         ]);
     }
+
+    //SUPPRIMER JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
+    //#[Route('/administration-supprimer-job/{id}', name: 'app_administration_supprimer_job', methods: ['POST', 'DELETE'])]
+
 }

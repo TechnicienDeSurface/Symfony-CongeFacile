@@ -10,7 +10,7 @@ class InformationController extends AbstractController
 {
     //PAGE INFORMATIONS "COLLABORATEUR"
     #[Route('/information-collaborateur', name: 'app_information_collaborateur')]
-    public function index(): Response
+    public function viewInformationCollaborateur(): Response
     {
         return $this->render('collaborateur/information.html.twig', [
             'page' => 'information-collaborateur',
