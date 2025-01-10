@@ -3,3 +3,11 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+#POUR REDIRIGER VERS HOME DIRECTEMENT GRÂCE A MON CONTROLLER
+index_redirect:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+    defaults:
+        route: home
+        permanent: true
