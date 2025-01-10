@@ -28,7 +28,7 @@ class User
     #[ORM\Column(length: 50)]
     private ?string $role = null;
 
-    #[ORM\ManyToMany(targetEntity: Person::class)]
+    #[ORM\ManyToOne(targetEntity: Person::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?Person $person_id = null ;
 
