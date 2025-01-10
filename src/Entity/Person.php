@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PersonRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Department;  
 
 #[ORM\Entity(repositoryClass: PersonRepository::class)]
 class Person
@@ -19,14 +20,17 @@ class Person
     #[ORM\Column(length: 100)]
     private ?string $first_name = null;
 
-    #[ORM\Column]
-    private ?int $manager_id = null;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $manager_id = null ;
 
-    #[ORM\Column]
-    private ?int $department_id = null;
+    #[ORM\ManyToOne(targetEntity: Department::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Department $department_id = null ;
 
-    #[ORM\Column]
-    private ?int $position_id = null;
+    #[ORM\ManyToOne(targetEntity: Position::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Position $position_id = null ;
 
     #[ORM\Column]
     private ?bool $alert_new_request = null;
