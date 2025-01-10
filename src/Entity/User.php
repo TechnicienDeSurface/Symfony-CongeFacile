@@ -28,8 +28,9 @@ class User
     #[ORM\Column(length: 50)]
     private ?string $role = null;
 
-    #[ORM\Column]
-    private ?int $person_id = null;
+    #[ORM\ManyToMany(targetEntity: Person::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Person $person_id = null ;
 
     public function getId(): ?int
     {

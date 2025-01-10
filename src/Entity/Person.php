@@ -20,7 +20,7 @@ class Person
     #[ORM\Column(length: 100)]
     private ?string $first_name = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToMany(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $manager_id = null ;
 
