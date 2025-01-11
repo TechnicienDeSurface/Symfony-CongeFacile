@@ -22,3 +22,8 @@ Cette solution digitalisée améliore l'efficacité, l'organisation et la satisf
 ## Documentation 
 Lien vers le google drive : https://drive.google.com/drive/folders/1cOEcns99USQY1flzMX9oSofIQXH-dKru?usp=drive_link
 
+- Dictionnaire de données : https://drive.google.com/file/d/1xV23xk4MigbeckaaVO7Q00zv2nOvbDui/view?usp=drive_link
+
+- Script SQL : https://drive.google.com/file/d/1mXGMRIPgMGVBZ7Eu-21Wk3o5WlMs36vw/view?usp=drive_link
+
+- MEA : https://drive.google.com/file/d/1sBTtiYTdtAe7vDEhh8EeV_m3u4NPXC7_/view?usp=drive_link
