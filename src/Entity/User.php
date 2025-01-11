@@ -30,7 +30,7 @@ class User
 
     #[ORM\ManyToOne(targetEntity: Person::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Person $person_id = null ;
+    private ?Person $person = null ;
 
     public function getId(): ?int
     {
@@ -99,12 +99,12 @@ class User
 
     public function getPersonId(): ?int
     {
-        return $this->person_id;
+        return $this->person ; 
     }
 
-    public function setPersonId(int $person_id): static
+    public function setPersonId(int $person): static
     {
-        $this->person_id = $person_id;
+        $this->person = $person;
 
         return $this;
     }

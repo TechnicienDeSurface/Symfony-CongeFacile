@@ -22,15 +22,15 @@ class Person
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $manager_id = null ;
+    private ?User $manager = null ;
 
     #[ORM\ManyToOne(targetEntity: Department::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Department $department_id = null ;
+    private ?Department $department = null ;
 
     #[ORM\ManyToOne(targetEntity: Position::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Position $position_id = null ;
+    private ?Position $position = null ;
 
     #[ORM\Column]
     private ?bool $alert_new_request = null;
@@ -72,36 +72,36 @@ class Person
 
     public function getManagerId(): ?int
     {
-        return $this->manager_id;
+        return $this->manager;
     }
 
-    public function setManagerId(int $manager_id): static
+    public function setManagerId(int $manager): static
     {
-        $this->manager_id = $manager_id;
+        $this->manager = $manager;
 
         return $this;
     }
 
     public function getDepartmentId(): ?int
     {
-        return $this->department_id;
+        return $this->department;
     }
 
-    public function setDepartmentId(int $department_id): static
+    public function setDepartmentId(int $department): static
     {
-        $this->department_id = $department_id;
+        $this->department = $department;
 
         return $this;
     }
 
     public function getPositionId(): ?int
     {
-        return $this->position_id;
+        return $this->position;
     }
 
-    public function setPositionId(int $position_id): static
+    public function setPositionId(int $position): static
     {
-        $this->position_id = $position_id;
+        $this->position = $position;
 
         return $this;
     }
