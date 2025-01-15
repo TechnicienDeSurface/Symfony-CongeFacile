@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+{# {% include 'layout/_sidebar.html.twig'%} #}
+    <h1 class="color-blue">{{titre}}</h1>
+    <p>{{paragraphe}}</p>
+    <h1>{{titre2}}</h1>
+     <div class="flex items-start max-w-screen-lg mx-auto">
+      <div class="w-full">
+        <div class="flex items-center w-full">
+          <div class="w-7 h-7 shrink-0 mx-[-1px] bg-blue-600 flex items-center justify-center rounded-full">
+            <span class="text-sm text-white font-bold">1</span>
+          </div>
+          <div class="w-full h-[3px] mx-4 rounded-lg bg-blue-600"></div>
+        </div>
+        <div class="mt-2 mr-4">
+          <h6 class="text-sm font-bold text-blue-500">Personal Info</h6>
+          <p class="text-xs text-gray-500">Completed</p>
+        </div>
+      </div>
+      <div class="w-full">
+        <div class="flex items-center w-full">
+          <div class="w-7 h-7 shrink-0 mx-[-1px] bg-blue-600 flex items-center justify-center rounded-full">
+            <span class="text-sm text-white font-bold">2</span>
+          </div>
+          <div class="w-full h-[3px] mx-4 rounded-lg bg-blue-600"></div>
+        </div>
+        <div class="mt-2 mr-4">
+          <h6 class="text-sm font-bold text-blue-500">Education</h6>
+          <p class="text-xs text-gray-500">Completed</p>
+        </div>
+      </div>
+      <div>
+        <div class="flex items-center">
+          <div class="w-7 h-7 shrink-0 mx-[-1px] bg-gray-300 flex items-center justify-center rounded-full">
+            <span class="text-sm text-white font-bold">3</span>
+          </div>
+        </div>
+        <div class="mt-2">
+          <h6 class="text-sm font-bold text-blue-500">Review</h6>
+          <p class="text-xs text-gray-500">Pending</p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-4 bg-grey">
+            <p>{{texte1}}</p>
+        </div>
+        <div class="col-1 bg-white"></div>
+        <div class="col-4 bg-grey">
+            {# <p>{{texte2}}</p> #}
+            <p>Mon manager valide ou refuse la demande</p>
+        </div>
+        <div class="col-1 bg-white"></div>
+        <div class="col-4 bg-grey">
+            <p>{{texte3}}</p>
+        </div>
+        <div class="col-1 bg-white"></div>
+    </div>
+    <div class="row">
+        <p class="justify-content-center">En cas de difficulté avec l'application, veuillez envoyer un email à</p>
+        <a class="justify-content-center" href="https://gmail.com/">contact@mentalworks.fr</a>
+    </div>
+{% endblock %}
