@@ -1,0 +1,8 @@
+:root {
+    --custom-blue: #004C6C;
+  }
+.marine
+{
+    background-color: var(--custom-blue) !important ;
+
+}

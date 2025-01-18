@@ -29,13 +29,19 @@ class HomeController extends AbstractController
         $texte2 = "Mon manager valide ou refuse la demande" ; 
         $texte3 = "Je consulte l'historique de mes demandes"; 
         return $this->render('accueil/accueil.html.twig', [
-            'page' => 'accueil',
-            'titre'=>'CongéFacile', 
+            'page' => 'accueil', //définir la page
+            'titre'=>'CongéFacile',  //définir le titre 
             'paragraphe' => $paragraphe, 
             'titre2' => 'Etapes', 
             'texte1' =>$texte1, 
             'texte2 '=>$texte2,
             'texte3' =>$texte3,  
+            'etape1_fond' => '#004C6C', //définit la couleur du fond de l'étape 1 en back  
+            'etape1_texte' => '#FFFFFF', //définit la couleur du texte et du bord du cercle de l'étape 1 en back 
+            'etape2_fond' => '#004C6C', 
+            'etape2_texte' => '#FFFFFF',
+            'etape3_fond' => '#FFFFFF', 
+            'etape3_texte' => '#004C6C',
         ]); 
     }
 }
