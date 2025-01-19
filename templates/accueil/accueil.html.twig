@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <h1 class="text-left font-bold text-2xl my-4" style='color : #004C6C !important'>{{titre}}</h1> {#textes affichés gérés en back #}
+    <p class="text-left mb-8">
+        {{paragraphe}}
+    </p>
+    <h2 class="text-left font-semibold text-xl mb-4" style='color : #004C6C !important'>{{titre2}}</h2>
+    <div class="relative flex justify-between items-start max-w-screen-lg mx-auto">
+        <div class="absolute top-5 left-0 w-full h-1 bgz-0" style="background-color : #004C6C !important"></div>
+
+        <div class="relative z-10 w-1/3 text-center">
+            <div class="flex items-center justify-center">
+                 <div class="w-10 h-10 flex items-center justify-center rounded-full" style="border : solid 3px {{etape1_texte}}; 
+                  color : {{etape1_texte}} !important; background-color : {{etape1_fond}} !important"> {#Couleurs des étapes gérées en back via des variables #}
+                    <span class="text-sm text-white font-bold">1</span>
+                </div>
+            </div>
+            <div class="mr-10 mt-4 bg-gray-100 p-4 rounded-lg">
+                <p class="text-gray-700">{{texte1}}</p>
+            </div>
+        </div>
+        <div class="relative z-10 w-1/3 text-center">
+            <div class="flex items-center justify-center">
+                 <div class="w-10 h-10 flex items-center justify-center rounded-full" style="border : solid 3px {{etape2_texte}}; 
+                 color : {{etape2_texte}} !important; background-color : {{etape2_fond}} !important">
+                    <span class="text-sm text-white font-bold">2</span>
+                </div>
+            </div>
+            <div class=" mr-10 mt-4 bg-gray-100 p-4 rounded-lg">
+                <p class="text-gray-700">Mon manager valide ou refuse la demande</p>
+            </div>
+        </div>
+        <div class="relative z-10 w-1/3 text-center">
+            <div class="flex items-center justify-center">
+              <div class="w-10 h-10 flex items-center justify-center rounded-full" style="border : solid 3px {{etape3_texte}}; 
+              color : {{etape3_texte}} !important; background-color : {{etape3_fond}} !important">
+                    <span class="text-sm font-bold">3</span>
+                </div>
+            </div>
+            <div class="mr-10 mt-4 bg-gray-100 p-4 rounded-lg">
+                <p class="text-gray-700">{{texte3}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 text-center">
+        <p class="text-gray-600">En cas de difficulté avec l'application, veuillez envoyer un email à</p>
+        <a href="mailto:contact@mentalworks.fr" class="text-blue-600 font-semibold">contact@mentalworks.fr</a>
+    </div>
+{% endblock %}
