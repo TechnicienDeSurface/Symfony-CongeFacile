@@ -42,6 +42,7 @@ class RequestController extends AbstractController
 
         return $this->render('collaborateur/new_request.html.twig', [
             'page' => 'new-request',
+            'form' => $form->createView(),
         ]);
     }
 

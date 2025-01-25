@@ -11,3 +11,4 @@ index_redirect:
     defaults:
         route: home
         permanent: true
+    

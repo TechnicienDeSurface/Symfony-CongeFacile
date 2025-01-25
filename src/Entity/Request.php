@@ -5,6 +5,9 @@ namespace App\Entity;
 use App\Repository\RequestRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\RequestType ; 
+use App\Entity\Person; 
+use App\Entity\Department ; 
 
 #[ORM\Entity(repositoryClass: RequestRepository::class)]
 class Request
@@ -55,41 +58,74 @@ class Request
         return $this->id;
     }
 
-    public function getRequestTypeId(): ?int
+    public function getRequestType(): ?RequestType
     {
         return $this->request_type;
     }
 
-    public function setRequestTypeId(?int $request_type): static
+    public function setRequestType(?RequestType $request_type): self
     {
         $this->request_type = $request_type;
-
         return $this;
     }
 
-    public function getCollaboratorId(): ?int
+    public function getCollaborator(): ?Person
     {
         return $this->collaborator;
     }
 
-    public function setCollaboratorId(?int $collaborator): static
+    public function setCollaborator(?Person $collaborator): self
     {
         $this->collaborator = $collaborator;
-
         return $this;
     }
 
-    public function getDepartmentId(): ?int
+    public function getDepartment(): ?Department
     {
         return $this->department;
     }
 
-    public function setDepartmentId(?int $department): static
+    public function setDepartment(?Department $department): self
     {
         $this->department = $department;
-
         return $this;
     }
+
+    // public function getRequestTypeId(): ?int
+    // {
+    //     return $this->request_type;
+    // }
+
+    // public function setRequestTypeId(?int $request_type): static
+    // {
+    //     $this->request_type = $request_type;
+
+    //     return $this;
+    // }
+
+    // public function getCollaboratorId(): ?int
+    // {
+    //     return $this->collaborator;
+    // }
+
+    // public function setCollaboratorId(?int $collaborator): static
+    // {
+    //     $this->collaborator = $collaborator;
+
+    //     return $this;
+    // }
+
+    // public function getDepartmentId(): ?int
+    // {
+    //     return $this->department;
+    // }
+
+    // public function setDepartmentId(?int $department): static
+    // {
+    //     $this->department = $department;
+
+    //     return $this;
+    // }
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {

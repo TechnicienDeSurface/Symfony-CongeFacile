@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+    {{ form_start(form) }}
+        {{ form_row(form.start_at) }}
+        {{ form_row(form.end_at) }}
+        {{ form_row(form.working_days) }}
+    {{ form_end(form) }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startAtInput = document.getElementById('start_at');
+            const endAtInput = document.getElementById('end_at');
+            const workingDaysInput = document.getElementById('working_days');
+
+            function calculateWorkingDays(startDate, endDate) {
+                let count = 0;
+                let currentDate = new Date(startDate);
+
+                while (currentDate <= endDate) {
+                    const dayOfWeek = currentDate.getDay();
+                    if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Exclude Sundays and Saturdays
+                        count++;
+                    }
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+
+                return count;
+            }
+
+            function updateWorkingDays() {
+                const startAt = new Date(startAtInput.value);
+                const endAt = new Date(endAtInput.value);
+
+                if (startAt && endAt && !isNaN(startAt) && !isNaN(endAt)) {
+                    const workingDays = calculateWorkingDays(startAt, endAt);
+                    workingDaysInput.value = workingDays;
+                } else {
+                    workingDaysInput.value = '';
+                }
+            }
+
+            startAtInput.addEventListener('change', updateWorkingDays);
+            endAtInput.addEventListener('change', updateWorkingDays);
+        });
+    </script>
+{% endblock %}
