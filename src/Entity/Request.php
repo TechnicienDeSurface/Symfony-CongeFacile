@@ -30,13 +30,17 @@ class Request
     private ?Department $department = null ;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    private ?\DateTime $created_at = null ;
+    public function __construct()
+    {
+        $this->created_at = new \DateTime();
+    }
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $start_at = null;
+    private ?\DateTime $start_at = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $end_at = null;
+    private ?\DateTime $end_at = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $receipt_file = null;
@@ -50,8 +54,8 @@ class Request
     #[ORM\Column(nullable: true)]
     private ?bool $answer = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $answer_at = null;
+    #[ORM\Column(nullable: true)]
+    private ?\DateTime $answer_at = null;
 
     public function getId(): ?int
     {
@@ -127,36 +131,36 @@ class Request
     //     return $this;
     // }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->created_at;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
-    {
-        $this->created_at = $created_at;
-
-        return $this;
+    public function setCreatedAtValue(): void
+{
+    if ($this->created_at === null) {
+        $this->created_at = new \DateTime();
     }
+}
 
-    public function getStartAt(): ?\DateTimeImmutable
+    public function getStartAt(): ?\DateTime
     {
         return $this->start_at;
     }
 
-    public function setStartAt(\DateTimeImmutable $start_at): static
+    public function setStartAt(\DateTime $start_at): static
     {
         $this->start_at = $start_at;
 
         return $this;
     }
 
-    public function getEndAt(): ?\DateTimeImmutable
+    public function getEndAt(): ?\DateTime
     {
         return $this->end_at;
     }
 
-    public function setEndAt(\DateTimeImmutable $end_at): static
+    public function setEndAt(\DateTime $end_at): static
     {
         $this->end_at = $end_at;
 
@@ -211,12 +215,12 @@ class Request
         return $this;
     }
 
-    public function getAnswerAt(): ?\DateTimeImmutable
+    public function getAnswerAt(): ?\DateTime
     {
         return $this->answer_at;
     }
 
-    public function setAnswerAt(\DateTimeImmutable $answer_at): static
+    public function setAnswerAt(\DateTime $answer_at): static
     {
         $this->answer_at = $answer_at;
 

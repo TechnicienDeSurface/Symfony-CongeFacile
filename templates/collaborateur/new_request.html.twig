@@ -1,46 +1,28 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+     <script>
+        function calculerJoursOuvres() {
+            var date1 = new Date(document.getElementById('date1').value);
+            var date2 = new Date(document.getElementById('date2').value);
+            var joursOuvres = 0;
 
-    {{ form_start(form) }}
-        {{ form_row(form.start_at) }}
-        {{ form_row(form.end_at) }}
-        {{ form_row(form.working_days) }}
-    {{ form_end(form) }}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const startAtInput = document.getElementById('start_at');
-            const endAtInput = document.getElementById('end_at');
-            const workingDaysInput = document.getElementById('working_days');
-
-            function calculateWorkingDays(startDate, endDate) {
-                let count = 0;
-                let currentDate = new Date(startDate);
-
-                while (currentDate <= endDate) {
-                    const dayOfWeek = currentDate.getDay();
-                    if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Exclude Sundays and Saturdays
-                        count++;
+            if (date1 && date2 && date1 <= date2) {
+                var currentDate = new Date(date1);
+                while (currentDate <= date2) {
+                    var dayOfWeek = currentDate.getDay();
+                    if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Exclure les dimanches (0) et samedis (6)
+                        joursOuvres++;
                     }
                     currentDate.setDate(currentDate.getDate() + 1);
                 }
-
-                return count;
             }
 
-            function updateWorkingDays() {
-                const startAt = new Date(startAtInput.value);
-                const endAt = new Date(endAtInput.value);
-
-                if (startAt && endAt && !isNaN(startAt) && !isNaN(endAt)) {
-                    const workingDays = calculateWorkingDays(startAt, endAt);
-                    workingDaysInput.value = workingDays;
-                } else {
-                    workingDaysInput.value = '';
-                }
-            }
-
-            startAtInput.addEventListener('change', updateWorkingDays);
-            endAtInput.addEventListener('change', updateWorkingDays);
-        });
+            document.getElementById('joursOuvres').value = joursOuvres;
+        }
     </script>
+    {{ form_start(form) }}
+        {{ form_row(form.start_at, {'attr': {'id': 'date1', 'oninput': 'calculerJoursOuvres()'}}) }}
+        {{ form_row(form.end_at, {'attr': {'id': 'date2', 'oninput': 'calculerJoursOuvres()'}}) }}
+        {{ form_row(form.working_days, {'attr': {'id': 'joursOuvres', 'readonly': true}}) }}
+    {{ form_end(form) }}
 {% endblock %}

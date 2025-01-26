@@ -21,7 +21,7 @@ class Person
     private ?string $first_name = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)] //Il faut rendre le manager_id nullable sinon on ne peht pas créer de person et de user 
     private ?User $manager = null ;
 
     #[ORM\ManyToOne(targetEntity: Department::class)]
