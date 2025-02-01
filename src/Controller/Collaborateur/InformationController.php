@@ -26,7 +26,7 @@ class InformationController extends AbstractController
 
         return $this->render('collaborateur/information.html.twig', [
             'page' => 'information-collaborateur',
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 }

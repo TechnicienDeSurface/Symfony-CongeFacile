@@ -33,12 +33,13 @@ class InformationFormType extends AbstractType
                 'disabled' => 'disabled'
             ],
         ])
-        ->add('manager_id', EntityType::class, [
-            'class' => User::class, // Remplace UserContact par l'entité correcte
-            'choice_label' => 'email',
-            'label' => 'Adresse email',
+        ->add('email', TextType::class, [
+            'label' => 'Adresse email du manager',
+            'mapped' => false,
             'attr' => [
                 'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
+                'readonly' => true,
+                'value'=>'email.example@gmail.com',
                 'disabled' => 'disabled'
             ],
         ])
@@ -48,7 +49,7 @@ class InformationFormType extends AbstractType
             'label' => 'Direction/Service',
             'attr' => [
                 'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
-                'disabled' => 'disabled'
+                'disabled' => 'disabled',
             ],
         ])
         ->add('position_id', EntityType::class, [
@@ -57,16 +58,16 @@ class InformationFormType extends AbstractType
             'label' => 'Poste',
             'attr' => [
                 'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
-                'disabled' => 'disabled'
+                'disabled' => 'disabled',
             ],
         ])
         ->add('manager_id', EntityType::class, [
             'class' => User::class,
-            'choice_label' => 'name',
+            'choice_label' => 'role',
             'label' => 'Manager',
             'attr' => [
                 'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
-                'disabled' => 'disabled'
+                'disabled' => 'disabled',
             ],
         ]);
         
