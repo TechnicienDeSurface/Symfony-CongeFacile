@@ -3,7 +3,9 @@
 namespace App\Controller\Collaborateur;
 
 use App\Entity\Person;
+use App\Entity\User;
 use App\Form\InformationFormType;
+use App\Form\MotDePasseType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +18,9 @@ class InformationController extends AbstractController
     public function viewInformationCollaborateur(): Response
     {
         $person = new Person();
-        $form = $this->createForm(InformationFormType::class, $person);
+        $user = new User() ;
+        $form_person= $this->createForm(InformationFormType::class, $person);
+        $form_password = $this->createForm(MotDePasseType::class, $user);
 
         // $form->handleRequest($request);
 
@@ -26,7 +30,8 @@ class InformationController extends AbstractController
 
         return $this->render('collaborateur/information.html.twig', [
             'page' => 'information-collaborateur',
-            'form' => $form,
+            'form1' => $form_person,
+            'form2' => $form_password, 
         ]);
     }
 }

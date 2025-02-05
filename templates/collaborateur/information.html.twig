@@ -4,87 +4,52 @@
 {% block body %}
     <div class="max-w-4xl mx-auto bg-white p-8 shadow-lg rounded-lg">
         <h1 class="text-2xl font-semibold text-gray-900 mb-6">Mes informations</h1>
-       {{ form_start(form) }}
+       {{ form_start(form1) }}
             <div class="space-y-6">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        {{ form_row(form.last_name) }}
+                        {{ form_row(form1.last_name) }}
                     </div>
                     <div>
-                        {{ form_row(form.first_name) }}
+                        {{ form_row(form1.first_name) }}
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-1">
-                        {{ form_row(form.email) }}
+                        {{ form_row(form1.email) }}
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        {{ form_row(form.department_id) }}
+                        {{ form_row(form1.department_id) }}
                     </div>
                     <div class="col-span-1">
-                        {{ form_row(form.position_id) }}
+                        {{ form_row(form1.position_id) }}
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-1">
-                        {{ form_row(form.manager_id) }}
+                        {{ form_row(form1.manager_id) }}
                     </div>
                 </div>
             </div>
-        {{ form_end(form) }}
-
-
-{#         
-        {{ form_start(form, { attr: { class: "space-y-6" } }) }}
-
-        <div class="grid grid-cols-2 gap-6">
-            <div>
-                <label class="block text-gray-700 font-medium">{{ form_label(form.last_name) }}</label>
-                {{ form_widget(form.last_name, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md bg-gray-200", disabled: "disabled" } }) }}
-            </div>
-            <div>
-                <label class="block text-gray-700 font-medium">{{ form_label(form.first_name) }}</label>
-                {{ form_widget(form.first_name, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md bg-gray-200", disabled: "disabled" } }) }}
-            </div>
-        </div>
-
-        <div class="mt-4">
-            <label class="block text-gray-700 font-medium">Adresse email</label>
-            <input type="text" value="{{ form.vars.data.user.email }}" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-gray-200" disabled>
-        </div> 
-
-        <div class="grid grid-cols-2 gap-6 mt-4">
-            <div>
-                <label class="block text-gray-700 font-medium">{{ form_label(form.department_id) }}</label>
-                {{ form_widget(form.department_id, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md bg-gray-200", disabled: "disabled" } }) }}
-            </div>
-            <div>
-                <label class="block text-gray-700 font-medium">{{ form_label(form.position_id) }}</label>
-                {{ form_widget(form.position_id, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md bg-gray-200", disabled: "disabled" } }) }}
-            </div>
-        </div>
-
-        <div class="mt-4">
-            <label class="block text-gray-700 font-medium">{{ form_label(form.manager_id) }}</label>
-            {{ form_widget(form.manager_id, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md bg-gray-200", disabled: "disabled" } }) }}
-        </div> #}
+        {{ form_end(form1) }}
 
         <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Réinitialiser mon mot de passe</h2>
-
-        {#<div class="grid grid-cols-3 gap-6">
+        {{ form_start(form2) }}
+        <div class="grid grid-cols-3 gap-6">
             <div>
-                <label class="block text-gray-700 font-medium">{{ form_label(form.current_password) }}</label>
-                {{ form_widget(form.current_password, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md" } }) }}
+                <label class="block text-gray-700 font-medium">{{ form_label(form2.currentPassword) }}</label>
+                {{ form_widget(form2.currentPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md" } }) }}
+            </div>
+            <br>
+            <div>
+                <label class="block text-gray-700 font-medium">{{ form_label(form2.newPassword) }}</label>
+                {{ form_widget(form2.newPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md" } }) }}
             </div>
             <div>
-                <label class="block text-gray-700 font-medium">{{ form_label(form.new_password) }}</label>
-                {{ form_widget(form.new_password, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md" } }) }}
-            </div>
-            <div>
-                <label class="block text-gray-700 font-medium">{{ form_label(form.confirm_password) }}</label>
-                {{ form_widget(form.confirm_password, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md" } }) }}
+                <label class="block text-gray-700 font-medium">{{ form_label(form2.confirmPassword) }}</label>
+                {{ form_widget(form2.confirmPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md" } }) }}
             </div>
         </div>
 
@@ -94,6 +59,6 @@
             </button>
         </div> 
 
-        {{ form_end(form) }}#}
+    {{ form_end(form2) }}
     </div>
 {% endblock %}
