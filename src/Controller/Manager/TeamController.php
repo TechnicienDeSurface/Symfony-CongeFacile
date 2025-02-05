@@ -14,6 +14,7 @@ class TeamController extends AbstractController
     {
         return $this->render('manager/team.html.twig', [
             'page' => 'team-manager',
+            'nombre' =>5, 
         ]);
     }
 
