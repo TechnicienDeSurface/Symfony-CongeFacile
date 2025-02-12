@@ -5,6 +5,10 @@ namespace App\Controller\Manager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\PersonRepository  ; 
+use Symfony\Component\HttpFoundation\Request;
+use App\Form\PersonType ; 
+use Doctrine\Persistence\ManagerRegistry;
 
 class RequestController extends AbstractController
 {
@@ -33,5 +37,29 @@ class RequestController extends AbstractController
         return $this->render('manager/history_request.html.twig', [
             'page' => 'history-request',
         ]);
+    }
+
+    //PAGE MISE à JOUR 
+    #[Route('/update-manager',name: 'update_manager' )]
+    public function edit(int $id, ManagerRegistry $registry, PersonRepository $repository, Request $request): Response
+    {
+        $manager = $repository->find($id); 
+        if(!$manager)
+        {
+            throw $this->createNotFoundException('Pas de manager trouvé') ; 
+        }
+        $form = $this->createForm(PersonType::class, $manager); 
+        $form->handleRequest($request); 
+
+        if($form->isSubmitted()){
+            if($form->isValid()){
+                $request->cookies->all(); 
+                $registry->getManager()->flush();  
+            }
+        }
+        return $this->render('manager/update_request.html.twig', [
+            'page'=>'update-request',
+            'form' => $form,  
+        ]); 
     }
 }
