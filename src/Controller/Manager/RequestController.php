@@ -57,7 +57,7 @@ class RequestController extends AbstractController
                 $registry->getManager()->flush();  
             }
         }
-        return $this->render('manager/update_request.html.twig', [
+        return $this->render('manager/detail_request_pending.html.twig', [
             'page'=>'update-request',
             'form' => $form,  
         ]); 
