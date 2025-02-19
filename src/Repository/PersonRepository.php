@@ -58,12 +58,13 @@ class PersonRepository extends ServiceEntityRepository
        public function findByFirstPoste($value): array
        {
            return $this->createQueryBuilder('p')
-               ->andWhere('p.poste = :val')
-               ->setParameter('val', $value)
-               ->orderBy('p.id', 'ASC')
-               ->setMaxResults(10)
-               ->getQuery()
-               ->getResult()
+                ->innerJoin('p.position', 'f')
+                ->andWhere('p.position.name = :val')
+                ->setParameter('val', $value)
+                ->orderBy('p.id', 'ASC')
+                ->setMaxResults(10)
+                ->getQuery()
+                ->getResult()
            ;
        }
 

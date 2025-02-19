@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\PersonRepository as UserRepository ;
+use App\Repository\RequestRepository as RequestRepository ;
 use Doctrine\Persistence\ManagerRegistry ; 
 use Doctrine\ORM\EntityRepository;
 
@@ -82,9 +83,9 @@ class TeamController extends AbstractController
     }
 
     #[Route('/search-team-by-nbConge=/{nbConge}', name: 'search_by_nbconge')]
-    public function searchNbConge(string $value, UserRepository $repository)
+    public function searchNbConge(string $value, RequestRepository $repository)
     {
-        $user = $repository->findByNbConge($value) ; 
+        $user = $repository->finfindByCongeByCollaboratordByNbConge($value) ; 
         if(!$user){
             throw $this->createNotFoundException('No category found for id ' . $value);
         }

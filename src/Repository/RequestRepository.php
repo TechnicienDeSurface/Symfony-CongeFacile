@@ -19,17 +19,18 @@ class RequestRepository extends ServiceEntityRepository
     //    /**
     //     * @return Request[] Returns an array of Request objects
     //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+       public function findByCongeByCollaborator($value): array
+       {
+           return $this->createQueryBuilder('r')
+                ->select('COUNT(p.id)')
+               ->andWhere('r.collaborator_id = :val')
+               ->setParameter('val', $value)
+               ->orderBy('r.id', 'ASC')
+               ->setMaxResults(10)
+               ->getQuery()
+               ->getResult()
+           ;
+       }
 
     //    public function findOneBySomeField($value): ?Request
     //    {
