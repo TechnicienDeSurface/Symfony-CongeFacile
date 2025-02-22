@@ -1,0 +1,19 @@
+{# templates/type_demande/form.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h2 class="mb-3">Types de demandes</h2>
+
+    {{ form_start(form) }}
+        <div class="mb-3">
+            {{ form_label(form.nom) }}
+            {{ form_widget(form.nom, { 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <div class="d-flex gap-2">
+            {{ form_widget(form.supprimer, { 'attr': {'class': 'btn btn-danger'} }) }}
+            {{ form_widget(form.mettreAJour, { 'attr': {'class': 'btn btn-primary'} }) }}
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

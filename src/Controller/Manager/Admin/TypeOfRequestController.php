@@ -5,6 +5,10 @@ namespace App\Controller\Manager\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
+use App\Entity\RequestType ; 
+use App\Form\RequestTypeForm ; 
+use Doctrine\ORM\EntityManagerInterface;
 
 class TypeOfRequestController extends AbstractController
 {
@@ -42,10 +46,18 @@ class TypeOfRequestController extends AbstractController
 
     //PAGE DETAIL TYPE DE DEMANDE VIA ADMINISTRATION MANAGER
     #[Route('/administration-detail-type-de-demande/{id}', name: 'app_administration_detail_type_of_request')]
-    public function editTypeOfRequest(): Response
+    public function editRequestType(RequestType $typeDemande, Request $request, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('manager/admin/type-of-request/detail_type_of_request.html.twig', [
-            'page' => 'administration-detail-type-de-demande',
+        $form = $this->createForm(RequestTypeForm::class, $typeDemande);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            return $this->redirectToRoute('some_route');
+        }
+
+        return $this->render('type_demande/form.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
