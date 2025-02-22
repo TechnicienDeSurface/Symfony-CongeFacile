@@ -15,18 +15,21 @@ class TeamController extends AbstractController
 {
     //PAGE DE L'EQUIPE GERER PAR LE MANAGER
     #[Route('/team-manager', name: 'app_team')]
-    public function viewTeam(Request $request,UserRepository $repository): Response 
+    public function viewTeam(Request $request,UserRepository $repository, RequestRepository $conge): Response 
     {
         $limit = 10;
         $currentPage = $request->query->getInt('page', 1);
-        $team = $repository->findPagination($currentPage, $limit);
-        $team = $team->getResult() ; 
-        $totalItems = $repository->countAll();
-        $totalPages = ceil($totalItems / $limit);
-        return $this->render('category/index.html.twig', ['team'=>$team, 
+        //$team = $repository->findPagination($currentPage, $limit);
+        $team = $repository->getTeam() ; 
+        $nbconge = $conge->getNbConge() ; 
+        $teams = array_merge($team, $nbconge) ; 
+        //$totalItems = $repository->countAll();
+        //$totalPages = ceil($totalItems / $limit);
+        //dd($teams) ; 
+        return $this->render('manager/team.html.twig', ['team'=>$teams,
         'currentPage' => $currentPage,
         'itemsPerPage' => $limit,
-        'totalPages' => $totalPages,
+        //'totalPages' => $totalPages,
         ]);
     }
 

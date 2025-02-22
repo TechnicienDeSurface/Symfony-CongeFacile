@@ -16,9 +16,9 @@ class RequestRepository extends ServiceEntityRepository
         parent::__construct($registry, Request::class);
     }
 
-    //    /**
-    //     * @return Request[] Returns an array of Request objects
-    //     */
+       /**
+        * @return Request[] Returns an array of Request objects
+        */
        public function findByCongeByCollaborator($value): array
        {
            return $this->createQueryBuilder('r')
@@ -30,6 +30,15 @@ class RequestRepository extends ServiceEntityRepository
                ->getQuery()
                ->getResult()
            ;
+       }
+
+       public function getNbConge(): array
+       {
+        return $this->createQueryBuilder('r')
+                ->select('COUNT(r.id)')
+                // ->groupBy('r.collaborator_id')
+                ->getQuery()
+                ->getResult() ; 
        }
 
     //    public function findOneBySomeField($value): ?Request
