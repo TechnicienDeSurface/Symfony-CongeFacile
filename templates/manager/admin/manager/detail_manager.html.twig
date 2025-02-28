@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+    <h1 class="text-2xl font-bold mb-4">{{ user.lastName }} {{ user.firstName }}</h1>
+    
+    <form method="post" class="space-y-4">
+        <div>
+            <label class="block text-sm font-medium">Adresse email - champ obligatoire</label>
+            <input type="email" name="email" value="{{ user.email }}" class="w-full p-2 border rounded" required>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium">Nom de famille - champ obligatoire</label>
+                <input type="text" name="lastName" value="{{ user.lastName }}" class="w-full p-2 border rounded" required>
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Prénom - champ obligatoire</label>
+                <input type="text" name="firstName" value="{{ user.firstName }}" class="w-full p-2 border rounded" required>
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-sm font-medium">Direction/Service - champ obligatoire</label>
+            <select name="service" class="w-full p-2 border rounded" required>
+                <option value="BU Symfony" {% if user.service == 'BU Symfony' %}selected{% endif %}>BU Symfony</option>
+            </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium">Nouveau mot de passe</label>
+                <input type="password" name="password" class="w-full p-2 border rounded">
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Confirmation de mot de passe</label>
+                <input type="password" name="passwordConfirm" class="w-full p-2 border rounded">
+            </div>
+        </div>
+
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Mettre à jour</button>
+    </form>
+</div>
+{% endblock %}
