@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Historique des demandes{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h2 class="mb-4">Historique des demandes</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Type de demande</th>
+                <th>Collaborateur</th>
+                <th>Date de début</th>
+                <th>Date de fin</th>
+                <th>Nb jours</th>
+                <th>Statut</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for demande in demandes %}
+                <tr>
+                    <td>{{ demande.type }}</td>
+                    <td>{{ demande.collaborateur }}</td>
+                    <td>{{ demande.dateDebut|date('d/m/Y H:i') }}</td>
+                    <td>{{ demande.dateFin|date('d/m/Y H:i') }}</td>
+                    <td>{{ demande.nbJours }} jours</td>
+                    <td>
+                        <span class="badge {% if demande.statut == 'Validé' %}bg-success{% elseif demande.statut == 'Refusé' %}bg-danger{% else %}bg-warning{% endif %}">
+                            {{ demande.statut }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ path('demande_details', { id: demande.id }) }}" class="btn btn-secondary btn-sm">Détails</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-center">Aucune demande trouvée.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
