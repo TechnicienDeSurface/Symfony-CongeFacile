@@ -8,15 +8,15 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/home', name: 'home')]
-    public function viewHome(): Response
-    {
-        return $this->render('default/index.html.twig', [
-            'page' => 'home',
-        ]);
-    }
+    // #[Route('/home', name: 'home')]
+    // public function viewHome(): Response
+    // {
+    //     return $this->render('default/index.html.twig', [
+    //         'page' => 'home',
+    //     ]);
+    // }
 
-    #[Route('/accueil', name: 'accueil')]
+    #[Route('/home', name: 'home')]
     public function accueil(): Response
     {
         // $paragraphe = "CongéFacile est votre nouvel outil dédié à la gestion des congés au sein de l'entreprise.<br>
