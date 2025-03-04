@@ -30,8 +30,8 @@
         "symfony/validator": "7.2.*",
         "symfony/var-dumper": "7.2.*",
         "symfony/yaml": "7.2.*",
-        "twig/extra-bundle": "^2.12|^3.18",
-        "twig/twig": "^2.12|^3.18"
+        "twig/extra-bundle": "^2.12|^3.19",
+        "twig/twig": "^2.12|^3.19"
     },
     "config": {
         "allow-plugins": {
@@ -84,6 +84,8 @@
         }
     },
     "require-dev": {
-        "symfony/maker-bundle": "^1.61"
+        "symfony/maker-bundle": "^1.61",
+        "symfony/stopwatch": "7.2.*",
+        "symfony/web-profiler-bundle": "7.2.*"
     }
 }
