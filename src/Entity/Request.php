@@ -17,9 +17,9 @@ class Request
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: RequestType::class)]
+    #[ORM\ManyToOne(targetEntity: RequestType::class, cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?RequestType $request_type = null ;
+    private ?RequestType $request_type;
 
     #[ORM\ManyToOne(targetEntity: Person::class)]
     #[ORM\JoinColumn(nullable: false)]
