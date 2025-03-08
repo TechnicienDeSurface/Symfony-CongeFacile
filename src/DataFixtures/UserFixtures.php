@@ -12,7 +12,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface{
     public function load(ObjectManager $manager): void {
         // fixture 1
         $user = new User();
-        $user->setEmail("admin@admin.com");
+        $user->setEmail("Manager@manager.com");
         $user->setPassword("test");
         $user->setEnabled(true);
         $user->setRole("Manager");
@@ -21,7 +21,20 @@ class UserFixtures extends Fixture implements DependentFixtureInterface{
         $manager->persist($user);
         $manager->flush();
 
-        $this->addReference('admin@admin.com', $user);
+        $this->addReference('Manager@manager.com', $user);
+
+        // fixture 2
+        $user2 = new User();
+        $user2->setEmail("colab@colab.com");
+        $user2->setPassword("test");
+        $user2->setEnabled(true);
+        $user2->setRole("Collaborateur");
+        $user2->setPerson($this->getReference("Jane", Person::class));
+        $user2->setCreatedAt(new \DateTimeImmutable());
+        $manager->persist($user2);
+        $manager->flush();
+
+        $this->addReference('colab@colab.com', $user2);
     }
     public function getDependencies(): array
     {
