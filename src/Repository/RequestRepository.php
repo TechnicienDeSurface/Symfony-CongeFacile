@@ -32,6 +32,14 @@ class RequestRepository extends ServiceEntityRepository
            ;
        }
 
+       public function countAll(): int
+    {
+        return $this->createQueryBuilder('p')
+            ->select('count(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
        public function getNbConge(): array
        {
         return $this->createQueryBuilder('r')

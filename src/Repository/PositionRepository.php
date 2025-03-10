@@ -28,6 +28,23 @@ class PositionRepository extends ServiceEntityRepository
         return ($query);
     }
 
+    public function countAll(): int
+    {
+        return $this->createQueryBuilder('p')
+            ->select('count(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function findPeopleByPost($id): int  
+    {
+        return $this->createQueryBuilder('p')
+        ->select('count(p.id)')
+        ->where('p.id',$id)
+        ->getQuery()
+        ->getSingleScalarResult();
+    }
+
     //    /**
     //     * @return Position[] Returns an array of Position objects
     //     */

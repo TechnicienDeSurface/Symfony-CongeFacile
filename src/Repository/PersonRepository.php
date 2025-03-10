@@ -29,6 +29,14 @@ class PersonRepository extends ServiceEntityRepository
             ->getResult();
 
         }
+
+        public function countAll(): int
+    {
+        return $this->createQueryBuilder('p')
+            ->select('count(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
         
         /**
         * @return Person[] Returns an array of Person objects

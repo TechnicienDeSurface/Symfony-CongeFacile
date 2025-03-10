@@ -20,7 +20,7 @@ class JobController extends AbstractController
         $postes = $postes->getResult() ; 
         $totalItems = $repository->countAll();
         $totalPages = ceil($totalItems / $limit);
-        return $this->render('category/index.html.twig', ['postes'=>$postes, 
+        return $this->render('manager/admin/job/job.html.twig', ['jobs'=>$postes, 
         'currentPage' => $currentPage,
         'itemsPerPage' => $limit,
         'totalPages' => $totalPages,

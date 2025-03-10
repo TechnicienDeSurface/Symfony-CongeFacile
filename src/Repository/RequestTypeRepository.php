@@ -16,6 +16,14 @@ class RequestTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, RequestType::class);
     }
 
+    public function countAll(): int
+    {
+        return $this->createQueryBuilder('p')
+            ->select('count(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     //    /**
     //     * @return RequestType[] Returns an array of RequestType objects
     //     */
