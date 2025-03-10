@@ -15,122 +15,53 @@ class PersonRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Person::class);
     }
-
-        /**
-        * @return Person[] Returns an array of Person objects
-        */
-        public function getTeam()
-        {
-            return $this->createQueryBuilder('t')
-            ->select('t.first_name, t.last_name, u.email, p.name')
-            ->join('t.manager', 'u')  
-            ->join('t.position', 'p')
-            ->getQuery()
-            ->getResult();
-
-        }
         
-        /**
-        * @return Person[] Returns an array of Person objects
-        */
-        public function findByFirstname($value): array
+        public function searchTeamMembers(array $filters): \Doctrine\ORM\Query
         {
-            return $this->createQueryBuilder('p')
-                ->andWhere('p.firstname = :val')
-                ->setParameter('val', $value)
-                ->orderBy('p.id', 'ASC')
-                ->setMaxResults(10)
-                ->getQuery()
-                ->getResult()
-            ;
-        }
-
-        /**
-        * @return Person[] Returns an array of Person objects
-        */
-        public function findByLasname($value): array
-        {
-            return $this->createQueryBuilder('p')
-                ->andWhere('p.lastname = :val')
-                ->setParameter('val', $value)
-                ->orderBy('p.id', 'ASC')
-                ->setMaxResults(10)
-                ->getQuery()
-                ->getResult()
-            ;
-        }
-
-        /**
-        * @return Person[] Returns an array of Person objects
-        */
-        public function findByEmail($value): array
-        {
-            return $this->createQueryBuilder('p')
-                ->andWhere('p.email = :val')
-                ->setParameter('val', $value)
-                ->orderBy('p.id', 'ASC')
-                ->setMaxResults(10)
-                ->getQuery()
-                ->getResult()
-            ;
-        }
-
-        /**
-        * @return Person[] Returns an array of Person objects
-        */
-        public function findByFirstPoste($value): array
-        {
-            return $this->createQueryBuilder('p')
-                ->innerJoin('p.position', 'f')
-                ->andWhere('p.position.name = :val')
-                ->setParameter('val', $value)
-                ->orderBy('p.id', 'ASC')
-                ->setMaxResults(10)
-                ->getQuery()
-                ->getResult()
-            ;
-        }
-
-        /**
-        * @return Person[] Returns an array of Person objects
-        */
-        public function findByNbConge($value): array
-        {
-            return $this->createQueryBuilder('p')
-                ->andWhere('p.firstname = :val')
-                ->setParameter('val', $value)
-                ->orderBy('p.id', 'ASC')
-                ->setMaxResults(10)
-                ->getQuery()
-                ->getResult()
-            ;
-        }
-
-        public function findByTeamMembers(): \Doctrine\ORM\Query
-        {
-            //RECUPERE L'UTILISATEUR ACTUELLEMENT CONNECTE
             $user = $this->security->getUser();
 
             if (!$user) {
                 throw new \Exception('Aucun utilisateur connecté.');
             }
 
-            //RECUPERE LES MEMBRES DE L'EQUIPE DU MANAGER
-            return $this->createQueryBuilder('person')
+            $qb = $this->createQueryBuilder('person')
                 ->where('person.manager = :manager')
-                ->setParameter('manager', $user)
-                ->getQuery();
+                ->setParameter('manager', $user);
+
+            //FILTRE PAR LASTNAME
+            if (!empty($filters['last_name'])) {
+                $qb->andWhere('person.lastName LIKE :last_name')
+                ->setParameter('last_name', '%' . $filters['last_name'] . '%');
+            }
+
+            //FILTRE PAR FIRSTNAME
+            if (!empty($filters['first_name'])) {
+                $qb->andWhere('person.firstName LIKE :first_name')
+                ->setParameter('first_name', '%' . $filters['first_name'] . '%');
+            }
+
+            //FILTRE PAR EMAIL
+            if (!empty($filters['email'])) {
+                $qb->andWhere('person.email LIKE :email')
+                ->setParameter('email', '%' . $filters['email'] . '%');
+            }
+
+            //FILTRE PAR LE POSTE
+            if (!empty($filters['position_name'])) {
+                $qb->andWhere('pos.name = :position_name')
+                ->setParameter('position_name', $filters['position_name']);
+            }
+
+            //FILTRE PAR NOMBRE DE CONGE ATTENTION, CALCUL A FAIRE EN AMONT
+            if (!empty($filters['conges'])) {
+                $qb->andWhere('person.conges = :conges')
+                ->setParameter('conges', $filters['conges']);
+            }
+
+            return $qb->getQuery();
         }
 
-        // public function findOneBySomeField($value): ?Person
-        // {
-        //     return $this->createQueryBuilder('p')
-        //         ->andWhere('p.exampleField = :val')
-        //         ->setParameter('val', $value)
-        //         ->getQuery()
-        //         ->getOneOrNullResult()
-        //     ;
-        // }
+        
 
     
 }

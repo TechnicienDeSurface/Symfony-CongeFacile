@@ -17,10 +17,18 @@ class TeamController extends AbstractController
 {
     //PAGE DE L'EQUIPE GERER PAR LE MANAGER
     #[Route('/team-manager/{page}', name: 'app_team')]
-    public function viewTeam(PersonRepository $personRepository, int $page = 1): Response 
+    public function viewTeam(Request $request ,PersonRepository $personRepository, int $page = 1): Response 
     {
 
-        $query = $personRepository->findByTeamMembers();
+        $filters = [
+            'last_name'     => $request->query->get('last_name'),
+            'first_name'    => $request->query->get('first_name'),
+            'email'         => $request->query->get('email'),
+            'position_name' => $request->query->get('position_name'),
+        ];
+        
+
+        $query = $personRepository->searchTeamMembers($filters);
 
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);
@@ -37,6 +45,7 @@ class TeamController extends AbstractController
         return $this->render('manager/team.html.twig', [
             'pager' => $pagerfanta,
             'team' => $pagerfanta->getCurrentPageResults(),
+            'filters' => $filters,
         ]);
     }
 
@@ -54,51 +63,6 @@ class TeamController extends AbstractController
              'user' => $user,
          ]);
 
-    }
-
-    #[Route('/search-team-by-firstname=/{firstname}', name: 'search_by_firstname')]
-    public function searchFirstname(string $firstname, UserRepository $repository)
-    {
-        $user = $repository->findByFirstname($firstname) ; 
-        if(!$user){
-            throw $this->createNotFoundException('No category found for id ' . $firstname);
-        }
-    }
-
-    #[Route('/search-team-by-lastname=/{lastname}', name: 'search_by_lastname')]
-    public function searchLastname(string $lastname, UserRepository $repository)
-    {
-        $user = $repository->findByLastname($lastname) ; 
-        if(!$user){
-            throw $this->createNotFoundException('No category found for id ' . $lastname);
-        }
-    }
-
-    #[Route('/search-team-by-email=/{email}', name: 'search_by_email')]
-    public function searchEmail(string $value, UserRepository $repository)
-    {
-        $user = $repository->findByEmail($value) ; 
-        if(!$user){
-            throw $this->createNotFoundException('No category found for id ' . $value);
-        }
-    }
-
-    #[Route('/search-team-by-poste=/{poste}', name: 'search_by_poste')]
-    public function searchPoste(string $value, UserRepository $repository)
-    {
-        $user = $repository->findByPoste($value) ; 
-        if(!$user){
-            throw $this->createNotFoundException('No category found for id ' . $value);
-        }
-    }
-
-    #[Route('/search-team-by-nbConge=/{nbConge}', name: 'search_by_nbconge')]
-    public function searchNbConge(string $value, RequestRepository $repository)
-    {
-        $user = $repository->finfindByCongeByCollaboratordByNbConge($value) ; 
-        if(!$user){
-            throw $this->createNotFoundException('No category found for id ' . $value);
-        }
     }
 
     // PAGE SUPPRESSION D'UN MEMBRE
