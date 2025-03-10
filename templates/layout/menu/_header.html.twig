@@ -1,0 +1,49 @@
+{% block header %}
+
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            /*background-color: #fff;*/
+        }
+        
+        .header {
+            width: 98%;
+            height: 50px;
+            margin: 20px auto;
+            margin-bottom: 0px;
+            display: flex;
+            align-items: center;
+            background-color: #004c6c; /* Bleu foncé */
+            border-radius: 10px; /* Bords arrondis */
+
+            position: relative;
+        }
+
+        .header-ombre {
+
+            width: 97%;
+            height: 40px;
+            margin: -8px 1.5%;
+            border-radius: 10px;
+            background-color: #b4c4cf;
+            position: absolute;
+            
+        }
+
+        .logo img {
+            height: 40px; /* Taille du logo */
+            margin: 0px 20px;
+        }
+    </style>
+
+
+    <div class="header-ombre"></div>
+    <div class="header">
+        <div class="logo">
+            <img src="logo-mentalworks-blanc.png" alt="Logo"> 
+        </div>
+    </div>
+
+{% endblock %}
