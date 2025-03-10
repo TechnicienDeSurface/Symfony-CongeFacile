@@ -58,5 +58,13 @@ Vous recevrez par la suite un email avec un lien vous permettant de réinitialis
         ]); 
     }
 
+    #[Route('/accueil', name:'accueil')]
+    public function manager(): Response
+    {
+        return $this->render('manager/index.html.twig', [
+            'nombre' => 2 ,
+        ]) ; 
+    }
+
 
 }
