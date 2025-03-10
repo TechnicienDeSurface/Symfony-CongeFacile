@@ -106,6 +106,22 @@ class PersonRepository extends ServiceEntityRepository
             ;
         }
 
+        public function findByTeamMembers(): \Doctrine\ORM\Query
+        {
+            //RECUPERE L'UTILISATEUR ACTUELLEMENT CONNECTE
+            $user = $this->security->getUser();
+
+            if (!$user) {
+                throw new \Exception('Aucun utilisateur connecté.');
+            }
+
+            //RECUPERE LES MEMBRES DE L'EQUIPE DU MANAGER
+            return $this->createQueryBuilder('person')
+                ->where('person.manager = :manager')
+                ->setParameter('manager', $user)
+                ->getQuery();
+        }
+
         // public function findOneBySomeField($value): ?Person
         // {
         //     return $this->createQueryBuilder('p')

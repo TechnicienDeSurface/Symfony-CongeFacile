@@ -16,7 +16,7 @@ class HomeController extends AbstractController
     //     ]);
     // }
 
-    #[Route('/home', name: 'home')]
+    #[Route('/home', name: 'app_home')]
     public function accueil(): Response
     {
         // $paragraphe = "CongéFacile est votre nouvel outil dédié à la gestion des congés au sein de l'entreprise.<br>

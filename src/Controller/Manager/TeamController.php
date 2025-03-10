@@ -2,6 +2,7 @@
 
 namespace App\Controller\Manager;
 
+use App\Repository\PersonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -9,29 +10,33 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Repository\PersonRepository as UserRepository ;
 use App\Repository\RequestRepository as RequestRepository ;
 use Doctrine\Persistence\ManagerRegistry ; 
-use Doctrine\ORM\EntityRepository;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 
 class TeamController extends AbstractController
 {
     //PAGE DE L'EQUIPE GERER PAR LE MANAGER
-    #[Route('/team-manager', name: 'app_team')]
-    public function viewTeam(Request $request,UserRepository $repository, RequestRepository $conge): Response 
+    #[Route('/team-manager/{page}', name: 'app_team')]
+    public function viewTeam(PersonRepository $personRepository, int $page = 1): Response 
     {
 
-        $limit = 10;
-        $currentPage = $request->query->getInt('page', 1);
-        //$team = $repository->findPagination($currentPage, $limit);
-        $team = $repository->getTeam() ; 
-        $nbconge = $conge->getNbConge() ; 
-        $teams = array_merge($team, $nbconge) ; 
-        //$totalItems = $repository->countAll();
-        //$totalPages = ceil($totalItems / $limit);
-        //dd($teams) ; 
-        return $this->render('manager/team.html.twig', ['team'=>$teams,
-        'currentPage' => $currentPage,
-        'itemsPerPage' => $limit,
-        //'totalPages' => $totalPages,
+        $query = $personRepository->findByTeamMembers();
 
+        // Pagination avec QueryAdapter
+        $adapter = new QueryAdapter($query);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage(5);
+
+        try{
+            $pagerfanta->setCurrentPage($page);
+        }
+        catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
+            throw $this->createNotFoundException('La page demandée n\'existe pas.');
+        }
+
+        return $this->render('manager/team.html.twig', [
+            'pager' => $pagerfanta,
+            'team' => $pagerfanta->getCurrentPageResults(),
         ]);
     }
 
