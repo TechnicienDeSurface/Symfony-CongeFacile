@@ -58,8 +58,12 @@ class PersonRepository extends ServiceEntityRepository
                 ->setParameter('conges', $filters['conges']);
             }
 
+            //ATTENTION, MANQUE LE FILTRE PAR LE NOMBRE DE CONGE
+
             return $qb->getQuery();
         }
+
+
 
         
 

@@ -25,6 +25,7 @@ class TeamController extends AbstractController
             'first_name'    => $request->query->get('first_name'),
             'email'         => $request->query->get('email'),
             'position_name' => $request->query->get('position_name'),
+            //ATTENTION, MANQUE LE FILTRE PAR LE NOMBRE DE CONGE
         ];
         
 
@@ -54,6 +55,7 @@ class TeamController extends AbstractController
     public function viewDetailTeam(int $id, ManagerRegistry $registry, UserRepository $repository, Request $request): Response
     {
         $user = $repository->find($id);
+        
         if(!$user){
             throw $this->createNotFoundException('No category found for id ' . $id);
         }
