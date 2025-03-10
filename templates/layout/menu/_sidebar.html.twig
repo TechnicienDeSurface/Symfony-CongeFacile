@@ -1,162 +1,172 @@
 {% block sidebar %}
 
-    <style>
-        /* Menu sidebar ///////////////////////////////////////////////*/
-        
-        /*///Test Ne pas toucher Merci//*/
-       /* * /* {
+	<style>
+		/* Menu sidebar ///////////////////////////////////////////////*/
+
+		/*/ // Test Ne pas toucher Merci//*/
+		/* * /* {
             /*box-sizing: border-box;*/
-        /*    font-family: Arial, sans-serif;
+		/*    font-family: Arial, sans-serif;
         }*/
 
 
-        .sidebar {
-            width: 250px;
-            height: 620px;
-            background: white;
-            padding: 20px 0px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-        }
+		.sidebar {
+			width: 18%;
+			height: 91vh;
+			background: white;
+			padding: 20px 0;
+			display: flex;
+			flex-direction: column;
+			box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+			bottom: 0;
+			left: 0;
+		}
 
-        .sidebar a {
-            text-decoration: none;
-            color: #00476D;
-            padding: 12px 30px;
-            
-            display: block;
-            font-size: 14px;
-            transition: background 0.3s, padding-left 0.3s;
-        }
-
-
-        /* Effet hover en bleu clair */
-        .sidebar a:hover {
-            background-color: #E6F0F8;
-            border-right: 4px solid #00476D;
-            /*padding-left: 16px;*/
-            font-weight: bold;
-            width: 187px;
-        }
+		.sidebar a {
+			text-decoration: none;
+			color: #00476D;
+			padding: 12px 30px;
+			width: 100%;
+			display: block;
+			font-size: 14px;
+			transition: background 0.3s, padding-left 0.3s;
+		}
 
 
-        .sidebar .user-info {
-            margin-top: auto;
-            padding: 20px 40px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .sidebar .user-info img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-
-        .sidebar .user-info div {
-            font-size: 12px;
-            color: #555;
-        }
-
-        /* Indicateur "5" pour les notifications */
-        .notif {
-            background: #ebf1f4;
-            color: #00476D;
-            font-size: 12px;
-            padding: 5px 10px;
-            border-radius: 5px;
-            margin-left: 5px;
-        }
-
-        .trait {
-            width: 160px;
-            height: 1px;
-            background-color: #dfe4ea;
-            margin: 32px;
-        }
-
-        svg {
-            float: right;
-            width: 14px;
-        }
-
-        
-        /*/////////////////////////////////////////////////////////////////////*/
-        
-
-         /* Actif = Bleu foncé avec texte blanc */
-         .sidebar a.active {
-            background-color: #00476D;
-            color: white;
-        }
-
-        .sidebar .submenu {
-            padding-left: 20px;
-            display: none;
-        }
-
-        .sidebar .submenu a {
-            width: 167px;
-        }
-
-        /* Dropdown */
-        .dropdown-toggle {
-            cursor: pointer;
-        }
-
-        .dropdown-open .submenu {
-            display: flex;
-            flex-direction: column;
-        }
+		/* Effet hover en bleu clair */
+		.sidebar a:hover {
+			background-color: #E6F0F8;
+			border-right: 4px solid #00476D;
+			/*padding-left: 16px;*/
+			font-weight: bold;
+			width: 187px;
+			width: 100%;
+		}
 
 
-    </style>
+		.sidebar .user-info {
+			margin-top: auto;
+			padding: 20px 40px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			width: 100%;
+		}
+
+		.sidebar .user-info img {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+		}
+
+		.sidebar .user-info div {
+			font-size: 12px;
+			color: #555;
+		}
+
+		/* Indicateur "5" pour les notifications */
+		.notif {
+			background: #ebf1f4;
+			color: #00476D;
+			font-size: 12px;
+			padding: 5px 10px;
+			border-radius: 5px;
+			margin-left: 5px;
+		}
+
+		.trait {
+			width: 160px;
+			height: 1px;
+			background-color: #dfe4ea;
+			margin: 32px;
+		}
+
+		svg {
+			float: right;
+			width: 14px;
+		}
 
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <a href="#">Accueil</a>
-        <a href="#">Demandes en attente <span class="notif">5{{nombre}}</span></a>
-        <a href="#">Historique des demandes</a>
-        <a href="#">Mon équipe</a>
-        <a href="#">Statistiques</a>
+		/*/ // //////////////////////////////////////////////////////////////////*/
 
-        <div class="trait"></div>
 
-        <a href="#">Mes informations</a>
-        <a href="#">Mes préférences</a>
-        
-        <div class="dropdown-toggle">
-            <a href="#" class="">Administration <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg></a>
-            <div class="submenu">
-                <a href="#"> Types de demandes</a>
-                <a href="#"> Directions/Services</a>
-                <a href="#"> Managers</a>
-                <a href="#"> Postes</a>
-            </div>
-        </div>
-       
-        <a href="#">Déconnexion</a>
+		/* Actif = Bleu foncé avec texte blanc */
+		.sidebar a.active {
+			background-color: #00476D;
+			color: white;
+			width: 100%;
+		}
 
-        <div class="user-info">
-            <img src="avatar.png" alt="User">
-            <div>
-                <strong>Frédéric Salesse</strong><br>
-                Manager
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        document.querySelectorAll('.dropdown-toggle').forEach(item => {
-            item.addEventListener('click', function() {
-                this.classList.toggle('dropdown-open');
-            });
-        });
-    </script>
+		.sidebar .submenu {
+			padding-left: 20px;
+			display: none;
+			width: 100%;
+		}
 
+		.sidebar .submenu a {
+			width: 167px;
+		}
+
+		/* Dropdown */
+		.dropdown-toggle {
+			cursor: pointer;
+		}
+
+		.dropdown-open .submenu {
+			display: flex;
+			flex-direction: column;
+		}
+
+	</style>
+
+
+	<!-- SIDEBAR -->
+	<aside class="sidebar">
+		<a href="#">Accueil</a>
+		{# <a href="#">Demandes en attente <span class="notif">5{{nombre}}</span></a> #}
+		<a href="#">Historique des demandes</a>
+		<a href="#">Mon équipe</a>
+		<a href="#">Statistiques</a>
+
+		<div class="trait"></div>
+
+		<a href="#">Mes informations</a>
+		<a href="#">Mes préférences</a>
+
+		<div class="dropdown-toggle">
+			<a href="#" class="">Administration
+				<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+			</a>
+			<div class="submenu">
+				<a href="#">
+					Types de demandes</a>
+				<a href="#">
+					Directions/Services</a>
+				<a href="#">
+					Managers</a>
+				<a href="#">
+					Postes</a>
+			</div>
+		</div>
+
+		<a href="#">Déconnexion</a>
+
+		<div class="user-info">
+			<img src="avatar.png" alt="User">
+			<div>
+				<strong>Frédéric Salesse</strong><br>
+				Manager
+			</div>
+		</div>
+	</aside>
+
+	<script>
+		document.querySelectorAll('.dropdown-toggle').forEach(item => {
+item.addEventListener('click', function () {
+this.classList.toggle('dropdown-open');
+});
+});
+	</script>
 
 
 {% endblock %}
