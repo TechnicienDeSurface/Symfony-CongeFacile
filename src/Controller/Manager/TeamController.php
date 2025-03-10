@@ -17,6 +17,7 @@ class TeamController extends AbstractController
     #[Route('/team-manager', name: 'app_team')]
     public function viewTeam(Request $request,UserRepository $repository, RequestRepository $conge): Response 
     {
+
         $limit = 10;
         $currentPage = $request->query->getInt('page', 1);
         //$team = $repository->findPagination($currentPage, $limit);
@@ -30,6 +31,7 @@ class TeamController extends AbstractController
         'currentPage' => $currentPage,
         'itemsPerPage' => $limit,
         //'totalPages' => $totalPages,
+
         ]);
     }
 

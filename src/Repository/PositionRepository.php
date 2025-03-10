@@ -16,6 +16,18 @@ class PositionRepository extends ServiceEntityRepository
         parent::__construct($registry, Position::class);
     }
 
+    public function findPagination(int $page, int $limit)
+    {
+        $offset = ($page - 1) * $limit;
+    
+        $query = $this->createQueryBuilder('p')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery();
+    
+        return ($query);
+    }
+
     //    /**
     //     * @return Position[] Returns an array of Position objects
     //     */

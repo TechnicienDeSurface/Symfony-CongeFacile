@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Person;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
@@ -28,9 +29,9 @@ class User
     #[ORM\Column(length: 50)]
     private ?string $role = null;
 
-    #[ORM\ManyToOne(targetEntity: Person::class)]
+    #[ORM\ManyToOne(targetEntity: Person::class, cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Person $person = null ;
+    private Person $person;
 
     public function getId(): ?int
     {
@@ -97,15 +98,16 @@ class User
         return $this;
     }
 
-    public function getPersonId(): ?int
+    public function getPerson(): ?Person
     {
         return $this->person ; 
     }
 
-    public function setPersonId(int $person): static
+    public function setPerson(Person $person): static
     {
         $this->person = $person;
 
         return $this;
     }
+    
 }
