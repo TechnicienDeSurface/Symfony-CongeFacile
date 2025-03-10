@@ -1,0 +1,64 @@
+{# templates/collaborateur/information.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="max-w-4xl mx-auto bg-white p-8 shadow-lg rounded-lg">
+        <h1 class="text-2xl font-semibold text-gray-900 mb-6">Mes informations</h1>
+       {{ form_start(form1) }}
+            <div class="space-y-6">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        {{ form_row(form1.last_name) }}
+                    </div>
+                    <div>
+                        {{ form_row(form1.first_name) }}
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="col-span-1">
+                        {{ form_row(form1.email) }}
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        {{ form_row(form1.department_id) }}
+                    </div>
+                    <div class="col-span-1">
+                        {{ form_row(form1.position_id) }}
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="col-span-1">
+                        {{ form_row(form1.manager_id) }}
+                    </div>
+                </div>
+            </div>
+        {{ form_end(form1) }}
+
+        <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Réinitialiser mon mot de passe</h2>
+        {{ form_start(form2) }}
+        <div class="grid grid-cols-3 gap-6">
+            <div>
+                <label class="block text-gray-700 font-medium">{{ form_label(form2.currentPassword) }}</label>
+                {{ form_widget(form2.currentPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md" } }) }}
+            </div>
+            <br>
+            <div>
+                <label class="block text-gray-700 font-medium">{{ form_label(form2.newPassword) }}</label>
+                {{ form_widget(form2.newPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md" } }) }}
+            </div>
+            <div>
+                <label class="block text-gray-700 font-medium">{{ form_label(form2.confirmPassword) }}</label>
+                {{ form_widget(form2.confirmPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md" } }) }}
+            </div>
+        </div>
+
+        <div class="mt-6">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+                Réinitialiser le mot de passe
+            </button>
+        </div> 
+
+    {{ form_end(form2) }}
+    </div>
+{% endblock %}
