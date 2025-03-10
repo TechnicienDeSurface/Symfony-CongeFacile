@@ -61,15 +61,25 @@ class InformationFormType extends AbstractType
                 'disabled' => 'disabled',
             ],
         ])
-        ->add('manager_id', EntityType::class, [
+        // ->add('manager_id', EntityType::class, [
+        //     'class' => User::class,
+        //     'choice_label' => 'role',
+        //     'label' => 'Manager',
+        //     'attr' => [
+        //         'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
+        //         'disabled' => 'disabled',
+        //     ],
+        // ])
+        ->add('manager', EntityType::class, [
             'class' => User::class,
-            'choice_label' => 'role',
+            'choice_label' => 'id',
             'label' => 'Manager',
             'attr' => [
                 'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
                 'disabled' => 'disabled',
             ],
-        ]);
+            'required' => false,])
+        ;
         
     }
 
