@@ -149,9 +149,11 @@
 			</div>
 		</div>
 		
-		<a href="{{path('app_logout')}}">Déconnexion</a>
-
-		<a href="/connexion">Connexion</a>
+		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+			<a href="{{ path('app_logout') }}">Déconnexion</a>
+		{% else %}
+			<a href="{{ path('app_login') }}">Connexion</a>
+		{% endif %}
 
 		<div class="user-info">
 			<img src="avatar.png" alt="User">

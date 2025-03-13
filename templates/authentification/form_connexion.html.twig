@@ -2,10 +2,7 @@
 
 {% block body %}
 
-	<title>
-		{% block title %}Connexion
-		{% endblock %}
-	</title>
+	<title>{% block title %}Connexion{% endblock %}</title>
 
 	<script src="{{ asset('js/MotDePasse.js') }}"></script>
 
@@ -33,29 +30,38 @@
 				Connectez-vous
 			</h1>
 
-			<form action="{{ path('connexion') }}" method="post" class="max-w-md">
+			<form action="{{ path('app_login') }}" method="POST" class="max-w-md">
+				<input type="hidden" name="_csrf_token"value="{{ csrf_token('authenticate') }}">
 				<div class="mb-6 relative">
 					<label for="email" class="block text-gray-700 text-sm font-bold mb-2">Adresse email</label>
 					<div class="absolute left-3 mt-5 transform -translate-y-1/2 text-gray-400">
 						<img src="{{ asset('image/icon-enveloppe.svg') }}" alt="Icon Courrier" class="h-5 w-5">
 					</div>
-					<input type="text" id="username" name="username" placeholder="****@mentalworks.fr" class="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+					<input type="text" value="{{ last_username }}" id="username" name="_username" placeholder="****@mentalworks.fr" class="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-500" autocomplete="email" required autofocus>
 				</div>
 
 				<div class="mb-6 relative">
 					<label for="password" class="block text-gray-700 text-sm font-bold mb-2">Mot de passe</label>
-					<input type="password" id="password" name="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Mot de passe" required>
+					<input type="password" id="password" name="_password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Mot de passe" autocomplete="current-password" required>
 					<button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-6">
 						<img id="eyeIcon" src="{{ asset('image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
 					</button>
 				</div>
 
 				<button type="submit" class="bg-[#004C6C] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Connexion au portail</button>
+				{% if error %}
+					<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+				{% endif %}
+
+				{% if app.user %}
+					<div class="mb-3">
+						Vous êtes déjà connecté avec{{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
+					</div>
+				{% endif %}
 			</form>
 
-			<p class="text-left mb-8 mt-8">
-				Vous avez oublié votre mot de passe ?
-				<a class="text-[#004C6C]" href="/motdepasse">
+			<p class="text-left mb-8 mt-8">Vous avez oublié votre mot de passe ?
+				<a class="text-[#004C6C]" href="{{path('app_forgot_password_request')}}">
 					<strong>Cliquez-ici</strong>
 				</a>
 				pour le réinitialiser.
