@@ -9,6 +9,10 @@ index_redirect:
     path: /
     controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
     defaults:
-        route: home
+        route: accueil
         permanent: true
-    
+        
+#Pour l'erreur 404
+error_404:
+    path: /error/404
+    controller: App\Controller\ErrorController::page404

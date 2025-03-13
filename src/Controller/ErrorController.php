@@ -10,16 +10,17 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ErrorController extends AbstractController
 {
-    //ERREUR 404
-    #[Route(path: '/error-404', name: 'app_error-404', methods: ['GET'])]
-    public function ViewErreur404(): Response
+    /**
+     * @Route("/error/404", name="error_404")
+     */
+    public function page404(): Response
     {
-        // Déclenche une erreur HTTP 404.
-        throw new NotFoundHttpException("La page demandée n'a pas été trouvée.");
+        return $this->render('bundles/TwigBundle/Exception/error404.html.twig');
     }
+
     
     //ERREUR 403
-    #[Route(path: '/error-403', name: 'app_error-403', methods: ['GET'])]
+    #[Route(path: '/403', name: 'app_error-403', methods: ['GET'])]
     public function ErrorNotdenied(): Response
     {
         // Déclenche une erreur HTTP 403.
