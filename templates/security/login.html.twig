@@ -14,6 +14,7 @@
 
 		<div class="w-full p-8">
 
+
 			<h1 class="text-left font-bold text-2xl my-4 " style='color : #004C6C !important'>
 				CongéFacile
 			</h1>
@@ -29,7 +30,6 @@
 			<h1 class="text-left font-bold text-2xl my-4 " style='color : #004C6C !important'>
 				Connectez-vous
 			</h1>
-
 			<form action="{{ path('app_login') }}" method="POST" class="max-w-md">
 				<input type="hidden" name="_csrf_token"value="{{ csrf_token('authenticate') }}">
 				<div class="mb-6 relative">
@@ -62,12 +62,12 @@
 
 			<p class="text-left mb-8 mt-8">Vous avez oublié votre mot de passe ?
 				<a class="text-[#004C6C]" href="{{path('app_forgot_password_request')}}">
+
 					<strong>Cliquez-ici</strong>
 				</a>
 				pour le réinitialiser.
 			</p>
-
-
+      
 		</div>
 	</main>
 {% endblock %}
