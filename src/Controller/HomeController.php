@@ -8,14 +8,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/home', name: 'home')]
+    #[Route('/home', name: 'app_home')]
     public function viewHome(): Response
-    {
-        return $this->redirectToRoute('app_home');
-    }
-
-    #[Route('/accueil', name: 'app_home')]
-    public function accueil(): Response
     {
         // $paragraphe = "CongéFacile est votre nouvel outil dédié à la gestion des congés au sein de l'entreprise.<br>
         // Plus besoin d'échanges interminables ou de formulaires papier : en quelques clics, vous pouvez gérer<br>
@@ -26,7 +20,7 @@ class HomeController extends AbstractController
         $texte1 = "j'effectue ma demande de congés";
         $texte2 = "Mon manager valide ou refuse la demande";
         $texte3 = "Je consulte l'historique de mes demandes";
-        return $this->render('accueil/accueil.html.twig', [
+        return $this->render('home/home.html.twig', [
             'page' => 'accueil', //définir la page
             'titre' => 'CongéFacile',  //définir le titre 
             'paragraphe' => $paragraphe,
@@ -43,8 +37,8 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/motdepasse', name: 'motdepasse')]
-    public function motdepasse(): Response
+    #[Route('/password', name: 'app_password')]
+    public function password(): Response
     {
 
         $paragraphe = "Renseignez votre adresse email dans le champ ci-dessous.
@@ -56,7 +50,7 @@ Vous recevrez par la suite un email avec un lien vous permettant de réinitialis
         ]);
     }
 
-    #[Route('/connexion', name: 'connexion')]
+    #[Route('/login', name: 'app_login')]
     public function connexion(): Response
     {
         return $this->render('authentification/form_connexion.html.twig');

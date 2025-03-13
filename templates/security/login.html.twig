@@ -1,39 +1,88 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Se connecter{% endblock %}
+{% block title %}Se connecter
+{% endblock %}
 
 {% block body %}
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
 
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-            </div>
-        {% endif %}
+	<script src="{{ asset('js/MotDePasse.js') }}"></script>
 
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="username">Email</label>
-        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
-        <label for="password">Password</label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
 
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-        >
+	{% include 'layout/menu/_header.html.twig' %}
 
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
+	<main style="display: flex;">
+		{% include 'layout/menu/_sidebar.html.twig' %}
 
-            <div class="checkbox mb-3">
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-                <label for="_remember_me">Remember me</label>
-            </div>
-        #}
+		<div class="p-8 w-full">
 
-        <button class="btn btn-lg btn-primary" type="submit">Se connecter</button>
-    </form>
+			<h1 class="text-left font-bold text-2xl my-4 " style='color : #004C6C !important'>
+				CongéFacile
+			</h1>
+
+			<p class="text-left mb-8">
+				CongéFacile est votre nouvel outil dédié à la gestion des congés au sein de l’entreprise.
+				<br>
+				Plus besoin d’échanges interminables ou de formulaires papier : en quelques clics, vous pouvez gérer
+				<br>
+				vos absences en toute transparence et simplicité. Connectez-vous ci-dessous pour accéder à votre espace.
+			</p>
+
+			<h1 class="text-left font-bold text-2xl my-4 " style='color : #004C6C !important'>
+				Connectez-vous
+			</h1>
+
+			<form method="post" class="w-1/4">
+				{% if error %}
+					<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+				{% endif %}
+
+				{% if app.user %}
+					<div class="mb-3">
+						You are logged in as
+						{{ app.user.userIdentifier }},
+						<a href="{{ path('app_logout') }}">Logout</a>
+					</div>
+				{% endif %}
+
+				<div class="mb-6 relative">
+					<label for="email" class="block text-gray-700 text-sm font-bold mb-2">Adresse email</label>
+					<div class="absolute left-3 mt-5 transform -translate-y-1/2 text-gray-400">
+						<img src="{{ asset('image/icon-enveloppe.svg') }}" alt="Icon Courrier" class="h-5 w-5">
+					</div>
+					<input type="text" id="username" name="username" placeholder="****@mentalworks.fr" class="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+				</div>
+
+				<div class="mb-6 relative">
+					<label for="password" class="block text-gray-700 text-sm font-bold mb-2">Mot de passe</label>
+					<input type="password" id="password" name="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Mot de passe" required>
+					<button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-6">
+						<img id="eyeIcon" src="{{ asset('image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
+					</button>
+				</div>
+
+				<button type="submit" class="bg-[#004C6C] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Connexion au portail</button>
+
+				<input
+				type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+			{#
+				Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+				See https://symfony.com/doc/current/security/remember_me.html
+												
+				<div class="checkbox mb-3">
+				<input type="checkbox" name="_remember_me" id="_remember_me">
+				<label for="_remember_me">Remember me</label>
+				</div>
+			#}
+			</form>
+
+			<p class="text-left mb-8 mt-8">
+				Vous avez oublié votre mot de passe ?
+				<a class="text-[#004C6C]" href="/motdepasse">
+					<strong>Cliquez-ici</strong>
+				</a>
+				pour le réinitialiser.
+			</p>
+		</div>
+	</main>
 {% endblock %}
