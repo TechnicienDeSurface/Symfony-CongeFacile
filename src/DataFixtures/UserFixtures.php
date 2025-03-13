@@ -15,7 +15,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface{
         $user->setEmail("Manager@manager.com");
         $user->setPassword("test");
         $user->setEnabled(true);
-        $user->setRole("Manager");
+        $user->setRoles(["ROLE_MANAGER"]);
         $user->setPerson($this->getReference("John", Person::class));
         $user->setCreatedAt(new \DateTimeImmutable());
         $manager->persist($user);
@@ -28,7 +28,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface{
         $user2->setEmail("colab@colab.com");
         $user2->setPassword("test");
         $user2->setEnabled(true);
-        $user2->setRole("Collaborateur");
+        $user2->setRoles(["ROLE_COLLABORATEUR"]);
         $user2->setPerson($this->getReference("Jane", Person::class));
         $user2->setCreatedAt(new \DateTimeImmutable());
         $manager->persist($user2);

@@ -122,34 +122,34 @@
 
 	<!-- SIDEBAR -->
 	<aside class="sidebar">
-		<a href="/accueil">Accueil</a>
+		<a href="{{path('app_home')}}">Accueil</a>
 		{# <a href="#">Demandes en attente <span class="notif">5{{nombre}}</span></a> #}
-		<a href="#">Historique des demandes</a>
-		<a href="#">Mon équipe</a>
-		<a href="#">Statistiques</a>
+		<a href="{{path('app_history_request')}}">Historique des demandes</a>
+		<a href="{{path('app_team')}}">Mon équipe</a>
+		<a href="{{ path('app_statistic') }}">Statistiques</a>
 
 		<div class="trait"></div>
 
-		<a href="#">Mes informations</a>
-		<a href="#">Mes préférences</a>
+		<a href="{{path('app_information_manager')}}">Mes informations</a>
+		<a href="{{path('app_preference_manager')}}">Mes préférences</a>
 
 		<div class="dropdown-toggle">
 			<a href="#" class="">Administration
 				<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
 			</a>
 			<div class="submenu">
-				<a href="#">
+				<a href="{{path('app_administration_type_of_request')}}">
 					Types de demandes</a>
-				<a href="#">
+				<a href="{{path('app_administration_management_service')}}">
 					Directions/Services</a>
-				<a href="#">
+				<a href="{{path('app_administration_manager')}}">
 					Managers</a>
-				<a href="#">
+				<a href="{{path('app_administration_job')}}">
 					Postes</a>
 			</div>
 		</div>
-
-		<a href="#">Déconnexion</a>
+		
+		<a href="{{path('app_logout')}}">Déconnexion</a>
 
 		<a href="/connexion">Connexion</a>
 
