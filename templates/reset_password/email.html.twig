@@ -1,9 +1,28 @@
-<h1>Hi!</h1>
+{% extends 'base.html.twig' %}
 
-<p>To reset your password, please visit the following link</p>
+{% block title %}Password Reset Request{% endblock %}
 
-<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+{% block body %}
+    <div class="max-w-md mx-auto font-[sans-serif] text-[#333]">
+        <h1 class="text-[#004C6C] font-bold text-2xl my-4">Hi!</h1>
+        
+        <p class="text-sm text-gray-600 mb-4">
+            To reset your password, please visit the following link:
+        </p>
 
-<p>This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
+        <div class="mt-4">
+            <a href="{{ url('app_reset_password', {token: resetToken.token}) }}"
+               class="text-[#004C6C] font-semibold hover:text-[#006bff] text-sm">
+                {{ url('app_reset_password', {token: resetToken.token}) }}
+            </a>
+        </div>
 
-<p>Cheers!</p>
+        <p class="text-sm text-gray-600 mt-4 mb-6">
+            This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+        </p>
+
+        <p class="text-sm text-gray-600">
+            Cheers!
+        </p>
+    </div>
+{% endblock %}
