@@ -43,22 +43,4 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/motdepasse', name: 'motdepasse')]
-    public function motdepasse(): Response
-    {
-
-        $paragraphe = "Renseignez votre adresse email dans le champ ci-dessous.
-Vous recevrez par la suite un email avec un lien vous permettant de réinitialiser votre mot de passe.";
-        return $this->render('authentification/form_mdp.html.twig', [
-            'page' => 'motdepasse', //définir la page
-            'titre' => 'Mot de passe oublié',  //définir le titre 
-            'paragraphe' => $paragraphe,
-        ]);
-    }
-
-    #[Route('/connexion', name: 'connexion')]
-    public function connexion(): Response
-    {
-        return $this->render('authentification/form_connexion.html.twig');
-    }
 }

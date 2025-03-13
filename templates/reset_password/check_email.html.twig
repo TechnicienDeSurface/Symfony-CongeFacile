@@ -3,9 +3,23 @@
 {% block title %}Password Reset Email Sent{% endblock %}
 
 {% block body %}
-    <p>
-        If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password.
-        This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
-    </p>
-    <p>If you don't receive an email please check your spam folder or <a href="{{ path('app_forgot_password_request') }}">try again</a>.</p>
+    <div class="max-w-2xl mx-auto my-8 p-6 bg-white rounded-lg shadow-lg">
+        <h1 class="text-[#004C6C] font-bold text-2xl mb-4">Password Reset Email Sent</h1>
+        
+        <p class="text-sm text-gray-600 mb-4">
+            Si un compte correspondant à votre adresse e-mail existe, un e-mail vient de vous être envoyé contenant un lien pour réinitialiser votre mot de passe.
+            Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+        </p>
+        
+        <p class="text-sm text-gray-600 mb-6">
+            Si vous ne recevez pas d'email, veuillez vérifier votre dossier de spam ou 
+            <a href="{{ path('app_forgot_password_request') }}" class="text-[#004C6C] font-semibold hover:text-[#006bff]">réessayez</a>.
+        </p>
+
+        <div class="mt-4">
+            <a href="{{ path('app_home') }}" class="px-6 py-2.5 w-full text-sm bg-[#004C6C] hover:bg-blue-600 text-white rounded active:bg-[#006bff] text-center inline-block">
+                Retourner à la page connexion
+            </a>
+        </div>
+    </div>
 {% endblock %}

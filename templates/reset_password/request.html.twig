@@ -1,22 +1,50 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reset your password{% endblock %}
-
 {% block body %}
-    {% for flash_error in app.flashes('reset_password_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
-    <h1>Reset your password</h1>
+    <title>{% block title %}Mot de passe oublié{% endblock %}</title>
+    <h1 style='color : #004C6C' class="font-bold text-2xl my-4">Mot de passe oublié</h1>
+    <br>
+    <p>Renseignez votre adresse email dans le champ ci-dessous.
+    Vous recevrez par la suite un email avec un lien vous permettant de réinitialiser votre mot de passe.</p>
+    <br>
+    
+    {{ form_start(form, {'attr': {'class': 'space-y-4 font-[sans-serif] text-[#333] max-w-md mx-auto'}}) }}
+        {{ form_label(form.email) }}
+        <div class="relative flex items-center">
+            {# Icône SVG à gauche dans l'input #}
+            <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb" class="w-[18px] h-[18px] absolute left-4"
+                viewBox="0 0 682.667 682.667">
+                <defs>
+                    <clipPath id="a" clipPathUnits="userSpaceOnUse">
+                        <path d="M0 512h512V0H0Z" data-original="#000000"></path>
+                    </clipPath>
+                </defs>
+                <g clip-path="url(#a)" transform="matrix(1.33 0 0 -1.33 0 682.667)">
+                    <path fill="none" stroke-miterlimit="10" stroke-width="40"
+                        d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z"
+                        data-original="#000000"></path>
+                    <path
+                        d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z"
+                        data-original="#000000"></path>
+                </g>
+            </svg>
 
-    {{ form_start(requestForm) }}
-        {{ form_row(requestForm.email) }}
-        <div>
-            <small>
-                Enter your email address, and we will send you a
-                link to reset your password.
-            </small>
+            {# Champ email avec padding ajusté pour faire de la place à l'icône #}
+            {{ form_widget(form.email, {'attr': {'class': 'px-10 py-3 focus:bg-transparent w-full text-sm border outline-[#007bff] rounded transition-all pl-12'}}) }}
         </div>
 
-        <button class="btn btn-primary">Send password reset email</button>
-    {{ form_end(requestForm) }}
+        <div class="mt-4">
+            {{ form_row(form.reset) }}
+        </div>
+
+        {% for flash_error in app.flashes('reset_password_error') %}
+            <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+        {% endfor %}
+
+    {{ form_end(form) }}
+
+    <div class="mt-8 text-left col-flex">
+        <a href="{{ path('app_home') }}" class="col-flex text-[#004C6C] font-semibold">Cliquez ici</a>
+        <p class="text-gray-600 col-flex">pour retourner à la page de connexion</p>
+    </div>
 {% endblock %}
