@@ -1,10 +1,12 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <h1 class="text-left font-bold text-2xl my-4" style='color : #004C6C !important'>{{titre}}</h1> {#textes affichés gérés en back #}
+    <h1 class="text-left font-bold text-2xl my-4" style='color : #004C6C !important'>CongéFacile</h1> {#textes affichés gérés en back #}
     <p class="text-left mb-8">
-        {{paragraphe}}
+       CongéFacile est votre nouvel outil dédié à la gestion des congés au sein de l'entreprise.
+        Plus besoin d'échanges interminables ou de formulaires papier : en quelques clics, vous pouvez gérer
+        vos absences en toute transparence et simplicité.
     </p>
-    <h2 class="text-left font-semibold text-xl mb-4" style='color : #004C6C !important'>{{titre2}}</h2>
+    <h2 class="text-left font-semibold text-xl mb-4" style='color : #004C6C !important'>Etapes</h2>
     <div class="relative flex justify-between items-start max-w-screen-lg mx-auto">
         <div class="absolute top-5 left-0 w-full h-1 bgz-0" style="background-color : #004C6C !important"></div>
 
@@ -16,13 +18,13 @@
                 </div>
             </div>
             <div class="mr-10 mt-4 bg-gray-100 p-4 rounded-lg">
-                <p class="text-gray-700">{{texte1}}</p>
+                <p class="text-gray-700">j'effectue ma demande de congés</p>
             </div>
         </div>
         <div class="relative z-10 w-1/3 text-center">
             <div class="flex items-center justify-center">
-                 <div class="w-10 h-10 flex items-center justify-center rounded-full" style="border : solid 3px {{etape2_texte}}; 
-                 color : {{etape2_texte}} !important; background-color : {{etape2_fond}} !important">
+                 <div class="w-10 h-10 flex items-center justify-center rounded-full" style="border : solid 3px {{etape1_texte}}; 
+                 color : {{etape1_texte}} !important; background-color : {{etape1_fond}} !important">
                     <span class="text-sm text-white font-bold">2</span>
                 </div>
             </div>
@@ -32,13 +34,13 @@
         </div>
         <div class="relative z-10 w-1/3 text-center">
             <div class="flex items-center justify-center">
-              <div class="w-10 h-10 flex items-center justify-center rounded-full" style="border : solid 3px {{etape3_texte}}; 
-              color : {{etape3_texte}} !important; background-color : {{etape3_fond}} !important">
+              <div class="w-10 h-10 flex items-center justify-center rounded-full" style="border : solid 3px {{etape1_fond}}; 
+              color : {{etape1_fond}} !important; background-color : {{etape1_texte}} !important">
                     <span class="text-sm font-bold">3</span>
                 </div>
             </div>
             <div class="mr-10 mt-4 bg-gray-100 p-4 rounded-lg">
-                <p class="text-gray-700">{{texte3}}</p>
+                <p class="text-gray-700">Je consulte l'historique de mes demandes</p>
             </div>
         </div>
     </div>
