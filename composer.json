@@ -10,18 +10,18 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "babdev/pagerfanta-bundle": "^4.5",
-        "doctrine/dbal": "^3.9.3",
-        "doctrine/doctrine-bundle": "^2.13.1",
-        "doctrine/doctrine-migrations-bundle": "^3.3.1",
-        "doctrine/orm": "^3.3.1",
-        "pagerfanta/pagerfanta": "^4.7",
+        "doctrine/dbal": "^3.9.4",
+        "doctrine/doctrine-bundle": "^2.13.2",
+        "doctrine/doctrine-migrations-bundle": "^3.4.1",
+        "doctrine/orm": "^3.3.2",
+        "pagerfanta/pagerfanta": "^4.7.1",
         "symfony/asset": "^7.2",
-        "symfony/asset-mapper": "^7.2",
+        "symfony/asset-mapper": "^7.2.3",
         "symfony/console": "7.2.*",
         "symfony/dependency-injection": "7.2.*",
         "symfony/dotenv": "7.2.*",
         "symfony/event-dispatcher": "7.2.*",
-        "symfony/flex": "^2.4.7",
+        "symfony/flex": "^2.5.0",
         "symfony/form": "7.2.*",
         "symfony/framework-bundle": "7.2.*",
         "symfony/http-foundation": "7.2.*",
@@ -35,10 +35,10 @@
         "symfony/validator": "7.2.*",
         "symfony/var-dumper": "7.2.*",
         "symfony/yaml": "7.2.*",
-        "symfonycasts/reset-password-bundle": "^1.23",
-        "symfonycasts/verify-email-bundle": "^1.17",
-        "twig/extra-bundle": "^2.12|^3.19",
-        "twig/twig": "^2.12|^3.19"
+        "symfonycasts/reset-password-bundle": "^1.23.1",
+        "symfonycasts/verify-email-bundle": "^1.17.3",
+        "twig/extra-bundle": "^2.12|^3.20",
+        "twig/twig": "^2.12|^3.20"
     },
     "config": {
         "allow-plugins": {
@@ -93,7 +93,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^4.0",
-        "symfony/maker-bundle": "^1.61",
+        "symfony/maker-bundle": "^1.62.1",
         "symfony/stopwatch": "7.2.*",
         "symfony/web-profiler-bundle": "7.2.*"
     }
