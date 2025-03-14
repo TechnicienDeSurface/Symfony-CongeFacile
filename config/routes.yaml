@@ -7,12 +7,17 @@ controllers:
 #POUR REDIRIGER VERS HOME DIRECTEMENT GRÂCE A MON CONTROLLER
 index_redirect:
     path: /
-    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
+    controller: App\Controller\HomeController::viewHome
     defaults:
-        route: home
+        route: app_home
         permanent: true
         
 #Pour l'erreur 404
 error_404:
     path: /error/404
     controller: App\Controller\ErrorController::page404
+
+#Pour l'erreur 403
+error_403:
+    path: /error/403
+    controller: App\Controller\ErrorController::page403

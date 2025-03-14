@@ -6,7 +6,7 @@ framework:
     session: true
 
     error_controller: 'App\Controller\ErrorController::page404'
-
+    access_denied_url: 'App\Controller\ErrorController::page403'
     #esi: true
     #fragments: true
 
