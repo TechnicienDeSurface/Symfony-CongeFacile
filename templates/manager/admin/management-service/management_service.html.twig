@@ -1,0 +1,25 @@
+{# templates/admin/directions_services.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-4">Directions/Services</h1>
+        <button class="bg-blue-600 text-white px-4 py-2 rounded">Ajouter une direction/service</button>
+        
+        <div class="mt-4">
+            <input type="text" placeholder="Nom de la direction ou du service" class="border p-2 w-full rounded">
+        </div>
+        
+        <div class="mt-6 bg-white shadow-md rounded-lg overflow-hidden">
+            {% set services = ['BU Symfony', 'BU Wordpress', 'BU Applications mobiles', 'BU Marketing', 'Autre'] %}
+            
+            {% for service in services %}
+                <div class="flex justify-between items-center p-4 border-b last:border-b-0">
+                    <span>{{ service }}</span>
+                    <button class="bg-gray-200 text-gray-800 px-4 py-1 rounded">Détails</button>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
