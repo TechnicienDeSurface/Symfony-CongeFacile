@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -35,24 +36,5 @@ class HomeController extends AbstractController
             'etape3_fond' => '#FFFFFF',
             'etape3_texte' => '#004C6C',
         ]);
-    }
-
-    #[Route('/password', name: 'app_password')]
-    public function password(): Response
-    {
-
-        $paragraphe = "Renseignez votre adresse email dans le champ ci-dessous.
-Vous recevrez par la suite un email avec un lien vous permettant de réinitialiser votre mot de passe.";
-        return $this->render('authentification/form_mdp.html.twig', [
-            'page' => 'motdepasse', //définir la page
-            'titre' => 'Mot de passe oublié',  //définir le titre 
-            'paragraphe' => $paragraphe,
-        ]);
-    }
-
-    #[Route('/login', name: 'app_login')]
-    public function connexion(): Response
-    {
-        return $this->render('authentification/form_connexion.html.twig');
     }
 }
