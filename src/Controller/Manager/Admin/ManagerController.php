@@ -2,25 +2,50 @@
 
 namespace App\Controller\Manager\Admin;
 
+use App\Entity\User; 
+use App\Form\UserType ; 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Request;
+use App\Repository\UserRepository as PersonRepository ; 
+use Doctrine\Persistence\ManagerRegistry;
 
 class ManagerController extends AbstractController
 {
     //PAGE MANAGER VIA ADMINISTRATION MANAGER
     #[Route('/administration-manager', name: 'app_administration_manager')]
-    public function viewManager(): Response
+    public function viewManager(Request $request, PersonRepository $repository): Response
     {
+        $managers = $repository->findAll() ;;  
+
         return $this->render('manager/admin/manager/manager.html.twig', [
             'page' => 'administration-manager',
+            'managers' => $managers , 
         ]);
     }
 
     //PAGE AJOUTER MANAGER VIA ADMINISTRATION MANAGER
     #[Route('/administration-ajouter-manager', name: 'app_administration_ajouter_manager')]
-    public function addManager(): Response
+    public function addManager(ManagerRegistry $registry,Request $request): Response
     {
+        $manager = new User() ; 
+        $form = $this->createForm(UserType::class, $manager) ; 
+        $form->handleRequest($request) ; 
+        
+        if($form->isSubmitted())
+        {
+            if($form->isValid()){
+                try{
+                    $request->cookies->all() ; 
+                    $registry->getManager()->persist($manager) ; 
+                    $registry->getManager()->flush();
+                    $this->addFlash('success', 'Success to add manager') ; 
+                }catch(\Exception $e ){
+                    $this->addFlash('error', 'Error to add manager') ; 
+                }
+            }
+        }
         return $this->render('manager/admin/manager/add_manager.html.twig', [
             'page' => 'administration-ajouter-manager',
         ]);
@@ -28,13 +53,52 @@ class ManagerController extends AbstractController
 
     //PAGE DETAIL MANAGER VIA ADMINISTRATION MANAGER
     #[Route('/administration-detail-manager/{id}', name: 'app_administration_detail_manager')]
-    public function editManager(): Response
+    public function editManager(PersonRepository $repository, int $id, ManagerRegistry $registry,Request $request): Response
     {
+        $manager = $repository->find($id);
+        if(!$manager){
+            throw $this->createNotFoundException('No category found for id ' . $id);
+        }
+        $form = $this->createForm(UserType::class, $manager);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $request->cookies->all();
+                // Si valide : j'enregistre les données dans la BDD.
+                $registry->getManager()->flush();
+            } else {
+                // Sinon j'affiche un message d'erreur
+            }
+        }
         return $this->render('manager/admin/manager/detail_manager.html.twig', [
             'page' => 'administration-detail-manager',
         ]);
     }
 
     //SUPPRIMER MANAGER VIA L'ADMINISTRATION DU PORTAIL MANAGER
-    //#[Route('/administration-supprimer-manager/{id}', name: 'app_administration_supprimer_manager', methods: ['POST', 'DELETE'])]
+    #[Route('/administration-supprimer-manager/{id}', name: 'app_administration_supprimer_manager', methods: ['POST', 'DELETE'])]
+    public function delete(int $id, PersonRepository $productRepository, PersonRepository $repository, ManagerRegistry $registry): Response 
+    {
+        $manager = $repository->find($id);
+
+        if (!$manager) {
+            throw $this->createNotFoundException('No category found for id ' . $id);
+        }
+
+        $entityManager = $registry->getManager();
+        $productCount = $productRepository->countByCategory($manager->getId());
+
+        if ($productCount > 0) {
+            $this->addFlash('error', 'Impossible de supprimer ce manager car elle est utilisée par des produits.');
+            return $this->redirectToRoute('category/list');
+        }else{
+            $entityManager->remove($manager);
+            $entityManager->flush();
+        }
+        
+        return $this->render('manager/admin/manager/manager.html.twig', [
+            'page' => 'administration-manager',
+        ]);
+    }
 }
