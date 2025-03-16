@@ -61,7 +61,7 @@ class InformationFormType extends AbstractType
                 'disabled' => 'disabled',
             ],
         ])
-        ->add('manager_id', EntityType::class, [
+        ->add('manager', EntityType::class, [
             'class' => User::class,
             'choice_label' => 'role',
             'label' => 'Manager',

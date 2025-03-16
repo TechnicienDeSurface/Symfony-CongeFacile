@@ -6,7 +6,6 @@ framework:
     session: true
 
     error_controller: 'App\Controller\ErrorController::page404'
-
     #esi: true
     #fragments: true
 
