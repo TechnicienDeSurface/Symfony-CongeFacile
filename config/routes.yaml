@@ -20,4 +20,9 @@ error_404:
 #Pour l'erreur 403
 error_403:
     path: /error/403
-    controller: App\Controller\ErrorController::page403
+    controller: App\Controller\ErrorController::ErrorNotdenied
+
+#Pour l'erreur 500
+error_500:
+    path: /error/500
+    controller: App\Controller\ErrorController::ErrorServer
