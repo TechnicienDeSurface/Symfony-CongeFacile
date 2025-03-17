@@ -14,9 +14,9 @@
 
 	<main style="display: flex;">
 		{% include 'layout/menu/_sidebar.html.twig' %}
-		<div class="w-full p-8">
+		<div class="w-full p-8 overflow-y-auto">
 			<h1 class="text-left font-bold text-2xl my-4 " style='color : #004C6C !important'>Statistiques</h1>
-			<!--<h2 class="text-left font-semibold text-xl mb-4" style='color : #38738c !important'>Types de demandes sur l’année</h2>
+			<h2 class="text-left font-semibold text-xl mb-4" style='color : #38738c !important'>Types de demandes sur l’année</h2>
 
 			<canvas id="myChart"></canvas>
 			<script>
@@ -54,7 +54,7 @@
 				});
 
 			</script>
-			-->
+		
 			<h2 class="text-left font-semibold text-xl mb-4 mt-[1rem]" style='color : #38738c !important'>Pourcentage d’acceptation des demandes sur l’année</h2>
 			<script> 
 				document.addEventListener("DOMContentLoaded", function () {
@@ -66,7 +66,7 @@
 						data: {
 							labels: chartData.labels,  // Mois de l'année
 							datasets: [{
-								label: 'Pourcentage de demandes traitées', // Légende de la courbe
+								label: 'Pourcentage de demandes acceptées', // Légende de la courbe
 								data: chartData.values,  // Pourcentages des mois
 								fill: false,  // Ne pas remplir sous la courbe
 								borderColor: '#4284f4', // Couleur de la ligne
@@ -100,7 +100,6 @@
 					});
 				});
 			</script>
-
 		</div>
     </main> 
 {% endblock %}

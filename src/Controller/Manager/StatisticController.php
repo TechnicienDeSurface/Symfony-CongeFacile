@@ -15,7 +15,6 @@ class StatisticController extends AbstractController
     {
         $requests = $entityManagerInterface->getRepository(RequestEntity::class)->findAll();
         $requestCounts = [];
-        $acceptedCounts = [];
 
         //GRAPHIQUE EN CAMEMBERT
         foreach ($requests as $requestEntity) {
