@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+	<title>{% block title %}Statistique{% endblock %}</title>
+    {% include 'layout/menu/_header.html.twig' %}
+
+	<main style="display: flex;">
+		{% include 'layout/menu/_sidebar.html.twig' %}
+    </main> 
+{% endblock %}
