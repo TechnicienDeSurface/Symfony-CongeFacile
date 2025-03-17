@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', function () {
         toggleButton.addEventListener('click', function () { // Toggle password visibility
     if (passwordField.type === 'password') {
         passwordField.type = 'text';
-        eyeIcon.src = "/assets/image/eye-solid-T_vXmAp.svg"; // Eye open
+        eyeIcon.src = eyeIcon.dataset.eyeOpen;
     } else {
         passwordField.type = 'password';
-        eyeIcon.src = "/assets/image/eye-slash-solid-wo370My.svg"; // Eye closed
+        eyeIcon.src = eyeIcon.dataset.eyeClosed; // Eye closed
     }
     });
     }
