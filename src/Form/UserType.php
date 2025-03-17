@@ -21,7 +21,7 @@ class UserType extends AbstractType
             ->add('created_at', null, [
                 'widget' => 'single_text',
             ])
-            ->add('role')
+            ->add('roles')
             // ->add('person', EntityType::class, [
             //     'class' => Person::class,
             //     'choice_label' => 'id',

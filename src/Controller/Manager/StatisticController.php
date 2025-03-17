@@ -12,8 +12,14 @@ class StatisticController extends AbstractController
     #[Route('/statistic-manager', name: 'app_statistic')]
     public function viewStatistic(): Response
     {
+        $data = [
+            'labels' => ['Catégorie A', 'Catégorie B', 'Catégorie C'],
+            'values' => [30, 50, 20]
+        ];
+
         return $this->render('manager/statistic.html.twig', [
             'page' => 'statistic-manager',
+            'chartsCamembert' => json_encode($data),
         ]);
     }
 }
