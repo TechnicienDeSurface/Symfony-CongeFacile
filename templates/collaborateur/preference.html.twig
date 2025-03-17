@@ -1,0 +1,22 @@
+{# templates/preference.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Préférences
+{% endblock %}
+
+{% block body %}
+    {% include 'layout/menu/_header.html.twig' %}
+	{% include 'layout/menu/_sidebar.html.twig' %}
+    {{ form_start(form) }}
+        <div class="flex items-center">
+            {{ form_widget(form.alert_on_answer, {'attr': {'class': 'hidden'}}) }}
+            <label for="{{ form.alert_on_answer.vars.id }}" class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="{{ form.alert_on_answer.vars.id }}" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600"></div>
+                <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-full"></div>
+            </label>
+            {{ form_label(form.alert_on_answer, null, {'label_attr': {'class': 'ml-3'}}) }}
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
