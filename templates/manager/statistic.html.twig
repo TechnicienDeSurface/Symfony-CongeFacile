@@ -6,6 +6,10 @@
 		width: 500px!important;
 		height: 500px!important;
 	}
+	#myGraphic{
+		width: auto!important;
+		height: 500px!important;
+	}
 </style>
 {% endblock %}
 {% block body %}
@@ -38,8 +42,8 @@
 							responsive: false,
 							plugins: {
 								legend: {
-									display: false,
-									position: 'bottom',
+									display: true,
+									position: 'right',
 								},
 								 tooltip: {
 									enabled: true,
@@ -56,21 +60,22 @@
 			</script>
 		
 			<h2 class="text-left font-semibold text-xl mb-4 mt-[1rem]" style='color : #38738c !important'>Pourcentage d’acceptation des demandes sur l’année</h2>
+			<canvas id="myGraphic"></canvas>
 			<script> 
 				document.addEventListener("DOMContentLoaded", function () {
-					const ctx = document.getElementById('myChart').getContext('2d');
+					const ctx = document.getElementById('myGraphic').getContext('2d');
 					const chartData = {{ dataAccepted|raw }};
 
 					new Chart(ctx, {
 						type: 'line',
 						data: {
-							labels: chartData.labels,  // Mois de l'année
+							labels: chartData.labels,
 							datasets: [{
 								label: 'Pourcentage de demandes acceptées', // Légende de la courbe
 								data: chartData.values,  // Pourcentages des mois
 								fill: false,  // Ne pas remplir sous la courbe
 								borderColor: '#4284f4', // Couleur de la ligne
-								tension: 0.1,  // Courbure de la ligne (0 pour une ligne droite)
+								tension: 0,  // Courbure de la ligne (0 pour une ligne droite)
 								borderWidth: 3,  // Épaisseur de la ligne
 							}]
 						},
@@ -78,15 +83,15 @@
 							responsive: true,
 							scales: {
 								y: {
-									beginAtZero: true,  // Commence à 0 sur l'axe des ordonnées
+									beginAtZero: true,
 									ticks: {
-										callback: function(value) { return value + '%'; }  // Affiche le pourcentage sur l'axe Y
+										callback: function(value) { return value + '%'; }
 									}
 								},
 								x: {
 									title: {
 										display: true,
-										text: 'Mois de l\'année',  // Titre de l'axe des X
+										text: 'Mois de l\'année',
 									}
 								}
 							},
