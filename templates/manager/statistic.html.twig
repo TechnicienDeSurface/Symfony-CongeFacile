@@ -80,18 +80,24 @@
 							}]
 						},
 						options: {
-							responsive: true,
+							responsive: false,
 							scales: {
 								y: {
-									beginAtZero: true,
+									beginAtZero: false,
 									ticks: {
-										callback: function(value) { return value + '%'; }
+										callback: function(value) { return value + '%'; },
+										size: 16,//POLICE LABELS AXE Y
 									}
 								},
 								x: {
 									title: {
 										display: true,
 										text: 'Mois de l\'année',
+									},
+									 ticks: {
+										font: {
+											size: 16,//POLICE LABELS AXE X
+										}
 									}
 								}
 							},
