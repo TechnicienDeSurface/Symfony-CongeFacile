@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Password Reset Request{% endblock %}
+{% block title %}Demande de réinitialisation du mot de passe{% endblock %}
 
 {% block body %}
     <div class="max-w-md mx-auto font-[sans-serif] text-[#333]">
-        <h1 class="text-[#004C6C] font-bold text-2xl my-4">Hi!</h1>
+        <h1 class="text-[#004C6C] font-bold text-2xl my-4">Bonjour !</h1>
         
         <p class="text-sm text-gray-600 mb-4">
-            To reset your password, please visit the following link:
+            Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien suivant :
         </p>
 
         <div class="mt-4">
@@ -18,11 +18,15 @@
         </div>
 
         <p class="text-sm text-gray-600 mt-4 mb-6">
-            This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+            Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
         </p>
 
         <p class="text-sm text-gray-600">
-            Cheers!
+            Cordialement,
+        </p>
+
+        <p class="text-sm text-gray-600">
+            L'équipe de {{ app.name }}
         </p>
     </div>
 {% endblock %}
