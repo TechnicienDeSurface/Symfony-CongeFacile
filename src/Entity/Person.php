@@ -75,7 +75,7 @@ class Person
         return $this->manager;
     }
 
-    public function setManagerId(?User $manager): static
+    public function setManager(?User $manager): static
     {
         $this->manager = $manager;
 
@@ -87,19 +87,19 @@ class Person
         return $this->department;
     }
 
-    public function setDepartmentId(?Department $department): static
+    public function setDepartment(?Department $department): static
     {
         $this->department = $department;
 
         return $this;
     }
 
-    public function getPositionId(): ?Position
+    public function getPosition(): ?Position
     {
         return $this->position;
     }
 
-    public function setPositionId(?Position $position): static
+    public function setPosition(?Position $position): static
     {
         $this->position = $position;
 
