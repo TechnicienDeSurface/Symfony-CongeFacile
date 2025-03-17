@@ -16,7 +16,7 @@
 		{% include 'layout/menu/_sidebar.html.twig' %}
 		<div class="w-full p-8">
 			<h1 class="text-left font-bold text-2xl my-4 " style='color : #004C6C !important'>Statistiques</h1>
-			<h2 class="text-left font-semibold text-xl mb-4" style='color : #38738c !important'>Types de demandes sur l’année</h2>
+			<!--<h2 class="text-left font-semibold text-xl mb-4" style='color : #38738c !important'>Types de demandes sur l’année</h2>
 
 			<canvas id="myChart"></canvas>
 			<script>
@@ -54,8 +54,53 @@
 				});
 
 			</script>
-	
+			-->
 			<h2 class="text-left font-semibold text-xl mb-4 mt-[1rem]" style='color : #38738c !important'>Pourcentage d’acceptation des demandes sur l’année</h2>
+			<script> 
+				document.addEventListener("DOMContentLoaded", function () {
+					const ctx = document.getElementById('myChart').getContext('2d');
+					const chartData = {{ dataAccepted|raw }};
+
+					new Chart(ctx, {
+						type: 'line',
+						data: {
+							labels: chartData.labels,  // Mois de l'année
+							datasets: [{
+								label: 'Pourcentage de demandes traitées', // Légende de la courbe
+								data: chartData.values,  // Pourcentages des mois
+								fill: false,  // Ne pas remplir sous la courbe
+								borderColor: '#4284f4', // Couleur de la ligne
+								tension: 0.1,  // Courbure de la ligne (0 pour une ligne droite)
+								borderWidth: 3,  // Épaisseur de la ligne
+							}]
+						},
+						options: {
+							responsive: true,
+							scales: {
+								y: {
+									beginAtZero: true,  // Commence à 0 sur l'axe des ordonnées
+									ticks: {
+										callback: function(value) { return value + '%'; }  // Affiche le pourcentage sur l'axe Y
+									}
+								},
+								x: {
+									title: {
+										display: true,
+										text: 'Mois de l\'année',  // Titre de l'axe des X
+									}
+								}
+							},
+							plugins: {
+								legend: {
+									display: true,
+									position: 'bottom',
+								}
+							}
+						}
+					});
+				});
+			</script>
+
 		</div>
     </main> 
 {% endblock %}
