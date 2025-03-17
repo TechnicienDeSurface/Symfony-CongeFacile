@@ -1,41 +1,84 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
-     <script>
-        function calculerJoursOuvres() {
-            var date1Element = document.getElementById('request_start_at'); //Quand j'inspecte ces ids apparaissent sans doute un attribut qui génére ça automatiquement
-            var date2Element = document.getElementById('request_end_at');
-            var joursOuvresElement = document.getElementById('request_working_days');
+<script>
+    function calculerJoursOuvres() {
+        var date1Element = document.getElementById('request_start_at'); 
+        var date2Element = document.getElementById('request_end_at');
+        var joursOuvresElement = document.getElementById('request_working_days');
 
-            if (!date1Element || !date2Element || !joursOuvresElement) {
-                console.error("Un ou plusieurs éléments DOM sont introuvables.");
-                return;
-            }
-
-            var date1 = new Date(date1Element.value);
-            var date2 = new Date(date2Element.value);
-            var joursOuvres = 0;
-
-            console.log("Date1:", date1);
-            console.log("Date2:", date2);
-
-            if (date1 && date2 && date1 <= date2) {
-                var currentDate = new Date(date1);
-                while (currentDate <= date2) {
-                    var dayOfWeek = currentDate.getDay();
-                    if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Exclure les dimanches (0) et samedis (6)
-                        joursOuvres++;
-                    }
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
-            }
-
-            console.log("Jours ouvrés:", joursOuvres);
-            joursOuvresElement.value = joursOuvres;
+        if (!date1Element || !date2Element || !joursOuvresElement) {
+            console.error("Un ou plusieurs éléments DOM sont introuvables.");
+            return;
         }
-    </script>
-    {{ form_start(form) }}
-        {{ form_row(form.start_at, {'attr': { 'oninput': 'calculerJoursOuvres()'}}) }}
-        {{ form_row(form.end_at, {'attr': { 'oninput': 'calculerJoursOuvres()'}}) }}
-        {{ form_row(form.working_days, {'attr': { 'readonly': true}}) }}
-    {{ form_end(form) }}
+
+        var date1 = new Date(date1Element.value);
+        var date2 = new Date(date2Element.value);
+        var joursOuvres = 0;
+        if (date1 && date2 && date1 <= date2) {
+            var currentDate = new Date(date1);
+            while (currentDate <= date2) {
+                var dayOfWeek = currentDate.getDay();
+                if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Exclure dimanches (0) et samedis (6)
+                    joursOuvres++;
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+        }
+        joursOuvresElement.value = joursOuvres;
+    }
+</script>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    {% include 'layout/menu/_header.html.twig' %}
+
+    <main class="flex flex-grow">
+        {% include 'layout/menu/_sidebar.html.twig' %}
+
+        <section class="w-full justify-center items-start p-8">
+            <div class="bg-white p-6 rounded-lg shadow-md w-full">
+                <h2 class="text-2xl font-bold text-gray-700 mb-6">Effectuer une nouvelle demande</h2>
+
+                {{ form_start(form) }}
+
+                <div class="mb-4">
+                    {{ form_label(form.request_type, 'Type de demande', {'label_attr': {'class': 'block text-gray-600 font-semibold mb-2'}}) }}
+                    {{ form_widget(form.request_type, {'attr': {'class': 'w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500'}}) }}
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        {{ form_label(form.start_at, 'Date début', {'label_attr': {'class': 'block text-gray-600 font-semibold mb-2'}}) }}
+                        {{ form_widget(form.start_at, {'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500', 'oninput': 'calculerJoursOuvres()'}}) }}
+                    </div>
+                    <div>
+                        {{ form_label(form.end_at, 'Date fin', {'label_attr': {'class': 'block text-gray-600 font-semibold mb-2'}}) }}
+                        {{ form_widget(form.end_at, {'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500', 'oninput': 'calculerJoursOuvres()'}}) }}
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(form.working_days, 'Nombre de jours demandés', {'label_attr': {'class': 'block text-gray-600 font-semibold mb-2'}}) }}
+                    {{ form_widget(form.working_days, {'attr': {'class': 'w-full p-2 border border-gray-300 rounded-lg bg-gray-100', 'readonly': true}}) }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(form.receipt_file, 'Justificatif (si applicable)', {'label_attr': {'class': 'block text-gray-600 font-semibold mb-2'}}) }}
+                    {{ form_widget(form.receipt_file, {'attr': {'class': 'w-full p-2 border border-gray-300 rounded-lg'}}) }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form_label(form.comment, 'Commentaire supplémentaire', {'label_attr': {'class': 'block text-gray-600 font-semibold mb-2'}}) }}
+                    {{ form_widget(form.comment, {'attr': {'class': 'w-full p-2 border border-gray-300 rounded-lg', 'placeholder': 'Si congé exceptionnel ou sans solde, précisez ici...'}}) }}
+                </div>
+                {# <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition">
+                    Soumettre ma demande*
+                </button> #}
+
+                {{ form_end(form) }}
+            </div>
+        </section>
+    </main>
+</body>
+
 {% endblock %}
