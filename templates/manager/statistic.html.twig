@@ -1,8 +1,16 @@
 {% extends 'base.html.twig' %}
-{% block body %}
 
-	<title>{% block title %}Statistique{% endblock %}</title>
+{% block stylesheets %}
+<style>
+	#myChart{
+		width: 500px!important;
+		height: 500px!important;
+	}
+</style>
+{% endblock %}
+{% block body %}
     {% include 'layout/menu/_header.html.twig' %}
+	<title>{% block title %}Statistique{% endblock %}</title>
 
 	<main style="display: flex;">
 		{% include 'layout/menu/_sidebar.html.twig' %}
@@ -14,7 +22,7 @@
 			<script>
 				document.addEventListener("DOMContentLoaded", function () {
 					const ctx = document.getElementById('myChart').getContext('2d');
-					const chartData = {{ chartsCamembert|raw }};
+					const chartData = {{ requestData|raw }};
 
 					new Chart(ctx, {
 						type: 'pie',
@@ -22,14 +30,32 @@
 							labels: chartData.labels,
 							datasets: [{
 								data: chartData.values,
-								backgroundColor: ['red', 'blue', 'green'],
+								backgroundColor: ['#4284f4', '#db4537', '#f4b400', '#0b9d58', '#ff6d01','#333333'],
+								hoverBackgroundColor: ['#3164c8', '#b3362d', '#c39300', '#097e45', '#cc5500', '333330'],
 							}]
+						},
+						options: {
+							responsive: false,
+							plugins: {
+								legend: {
+									display: false,
+									position: 'bottom',
+								},
+								 tooltip: {
+									enabled: true,
+									titleFont: { size: 16, weight: 'bold' },
+									bodyFont: { size: 14 },
+									padding: 12,
+									boxPadding: 10,
+								 },
+							}
 						}
 					});
 				});
+
 			</script>
 	
-			<h2 class="text-left font-semibold text-xl mb-4" style='color : #38738c !important'>Pourcentage d’acceptation des demandes sur l’année</h2>
+			<h2 class="text-left font-semibold text-xl mb-4 mt-[1rem]" style='color : #38738c !important'>Pourcentage d’acceptation des demandes sur l’année</h2>
 		</div>
     </main> 
 {% endblock %}
