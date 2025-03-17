@@ -21,8 +21,8 @@ class Person
     private ?string $first_name = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ["persist"])]
-     #[ORM\JoinColumn(nullable: false)]
-     private ?int $manager = null;
+    #[ORM\JoinColumn(nullable: true)] //Il faut rendre le manager_id nullable sinon on ne peut pas créer de person et de user 
+    private ?User $manager = null ;
 
     #[ORM\ManyToOne(targetEntity: Department::class, cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]
@@ -70,37 +70,36 @@ class Person
         return $this;
     }
 
-    public function getManager(): ?int
+    public function getManagerId(): ?User
     {
         return $this->manager;
     }
 
-    public function setManager(int $managerId): static
+    public function setManagerId(?User $manager): static
     {
-        $this->manager = $managerId;
+        $this->manager = $manager;
 
         return $this;
     }
 
-    public function getDepartmentId(): ?int
+    public function getDepartmentId(): ?Department
     {
         return $this->department;
     }
 
-    public function setDepartment(Department $department): static
+    public function setDepartmentId(?Department $department): static
     {
         $this->department = $department;
 
         return $this;
     }
 
-    public function getPositionId(): ?int
-     {
-         return $this->position;
-     }
- 
+    public function getPositionId(): ?Position
+    {
+        return $this->position;
+    }
 
-    public function setPosition(Position $position): static
+    public function setPositionId(?Position $position): static
     {
         $this->position = $position;
 
@@ -115,6 +114,7 @@ class Person
     public function setAlertNewRequest(bool $alert_new_request): static
     {
         $this->alert_new_request = $alert_new_request;
+
         return $this;
     }
 
