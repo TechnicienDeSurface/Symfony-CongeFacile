@@ -10,6 +10,13 @@
             {# <link href="/public/css/tailwind.css" rel="stylesheet"> #}
         {% endblock %}
 
+        {% block script %}
+            <script src="https://cdn.tailwindcss.com"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script src="{{ asset('assets/js/MotDePasse.js') }}"></script>
+        {% endblock %}
+        
+
     </head>
     <body>
         {% block body %}{% endblock %}

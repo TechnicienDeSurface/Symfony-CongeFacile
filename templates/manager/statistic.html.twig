@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<style>
+	#myChart{
+		width: 500px!important;
+		height: 500px!important;
+	}
+	#myGraphic{
+		width: auto!important;
+		height: 500px!important;
+	}
+	.sidebar{
+		height: auto!important;
+	}
+</style>
+{% endblock %}
+{% block body %}
+    {% include 'layout/menu/_header.html.twig' %}
+	<title>{% block title %}Statistique{% endblock %}</title>
+
+	<main style="display: flex;">
+		{% include 'layout/menu/_sidebar.html.twig' %}
+		<div class="w-full p-8 overflow-y-auto">
+			<h1 class="text-left font-bold text-2xl my-4 " style='color : #004C6C !important'>Statistiques</h1>
+			<h2 class="text-left font-semibold text-xl mb-4" style='color : #38738c !important'>Types de demandes sur l’année</h2>
+
+			<canvas id="myChart"></canvas>
+			<script>
+				document.addEventListener("DOMContentLoaded", function () {
+					const ctx = document.getElementById('myChart').getContext('2d');
+					const chartData = {{ requestData|raw }};
+
+					new Chart(ctx, {
+						type: 'pie',
+						data: {
+							labels: chartData.labels,
+							datasets: [{
+								data: chartData.values,
+								backgroundColor: ['#4284f4', '#db4537', '#f4b400', '#0b9d58', '#ff6d01','#333333'],
+								hoverBackgroundColor: ['#3164c8', '#b3362d', '#c39300', '#097e45', '#cc5500', '333330'],
+							}]
+						},
+						options: {
+							responsive: false,
+							plugins: {
+								legend: {
+									display: true,
+									position: 'right',
+								},
+								 tooltip: {
+									enabled: true,
+									titleFont: { size: 16, weight: 'bold' },
+									bodyFont: { size: 14 },
+									padding: 12,
+									boxPadding: 10,
+								 },
+							}
+						}
+					});
+				});
+
+			</script>
+		
+			<h2 class="text-left font-semibold text-xl mb-4 mt-[1rem]" style='color : #38738c !important'>Pourcentage d’acceptation des demandes sur l’année</h2>
+			<canvas id="myGraphic"></canvas>
+			<script> 
+				document.addEventListener("DOMContentLoaded", function () {
+					const ctx = document.getElementById('myGraphic').getContext('2d');
+					const chartData = {{ dataAccepted|raw }};
+
+					new Chart(ctx, {
+						type: 'line',
+						data: {
+							labels: chartData.labels,
+							datasets: [{
+								label: 'Pourcentage de demandes acceptées', // Légende de la courbe
+								data: chartData.values,  // Pourcentages des mois
+								fill: false,  // Ne pas remplir sous la courbe
+								borderColor: '#4284f4', // Couleur de la ligne
+								tension: 0,  // Courbure de la ligne (0 pour une ligne droite)
+								borderWidth: 3,  // Épaisseur de la ligne
+							}]
+						},
+						options: {
+							responsive: false,
+							scales: {
+								y: {
+									beginAtZero: false,
+									ticks: {
+										callback: function(value) { return value + '%'; },
+										size: 16,//POLICE LABELS AXE Y
+									}
+								},
+								x: {
+									title: {
+										display: true,
+										text: 'Mois de l\'année',
+									},
+									 ticks: {
+										font: {
+											size: 16,//POLICE LABELS AXE X
+										}
+									}
+								}
+							},
+							plugins: {
+								legend: {
+									display: true,
+									position: 'bottom',
+								}
+							}
+						}
+					});
+				});
+			</script>
+		</div>
+    </main> 
+{% endblock %}

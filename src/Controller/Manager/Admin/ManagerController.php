@@ -17,11 +17,11 @@ class ManagerController extends AbstractController
     #[Route('/administration-manager', name: 'app_administration_manager')]
     public function viewManager(Request $request, PersonRepository $repository): Response
     {
-        $managers = $repository->findAll() ;;  
+        $managers = $repository->findAll();
 
         return $this->render('manager/admin/manager/manager.html.twig', [
             'page' => 'administration-manager',
-            'managers' => $managers , 
+            'managers' => $managers,
         ]);
     }
 
@@ -46,6 +46,7 @@ class ManagerController extends AbstractController
                 }
             }
         }
+        
         return $this->render('manager/admin/manager/add_manager.html.twig', [
             'page' => 'administration-ajouter-manager',
         ]);
