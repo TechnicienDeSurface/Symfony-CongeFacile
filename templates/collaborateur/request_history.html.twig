@@ -4,41 +4,65 @@
 		{% include 'layout/menu/_header.html.twig' %}
 		<main style="display: flex;">
 			{% include 'layout/menu/_sidebar.html.twig' %}
-            
+
 			<div class="w-full p-8">
 				<div class="flex items-center gap-5">
 					<h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Managers</h1>
 					<button class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Ajouter un manager</button>
 				</div>
 
-				<table class="w-3/4 mt-6">
+				<table class="mt-6">
 					<thead>
 						<tr class="bg-[#F9FAFB] text-white border-x border-t border-[#EAECF0] rounded-lg" style="overflow: hidden;">
-							<td class="py-4 px-6 pr-0 w-1/5">
-								<label for="first_name" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									Prénom :
+							<td class="py-4 px-6 pr-0 w-1/7">
+								<label for="Type_demand" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
+									Type de demande :
 									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
 								</label>
-								<input type="text" id="first_name" name="first_name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+								<input type="text" id="Type_demand" name="Type_demand" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
 							</td>
 
-							<td class="py-4 px-6 pr-0 w-1/5">
-								<label for="last_name" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									Nom de famille :
+							<td class="py-4 px-6 pr-0 w-1/7">
+								<label for="ask_for" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
+									Demandée le :
 									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
 								</label>
-								<input type="text" id="last_name" name="last_name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+								<input type="text" id="ask_for" name="ask_for" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
 							</td>
 
-							<td class="py-4 px-6 pr-0 w-1/5">
-								<label for="department" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									Service rattaché :
+							<td class="py-4 px-6 pr-0 w-1/7">
+								<label for="start_date" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
+									Date de début :
 									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
 								</label>
-								<input type="text" id="department" name="department" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+								<input type="date" id="start_date" name="start_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
 							</td>
 
-							<td class="w-1/5 px-6 pr-0" colspan="3" style="vertical-align: bottom; padding-bottom: 15px;">
+                            <td class="py-4 px-6 pr-0 w-1/7">
+								<label for="start_end" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
+									Date de fin :
+									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
+								</label>
+								<input type="date" id="start_end" name="start_end" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+							</td>
+
+                            <td class="py-4 px-6 pr-0 w-1/7">
+								<label for="nb_days" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
+									Nb de jours :
+									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
+								</label>
+								<input type="text" id="nb_days" name="nb_days" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+							</td>
+
+                            <td class="py-4 px-6 pr-0 w-1/7">
+								<label for="status" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
+									Statut :
+									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
+								</label>
+								<input type="text" id="status" name="status" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+							</td>
+
+							<td class="w-1/7 px-6 pr-6" colspan="3" style="vertical-align: bottom; padding-bottom: 15px;">
 								<div>
 									<button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6">
 										Rechercher
@@ -49,12 +73,16 @@
 					</thead>
 					<tbody>
 
-						{# Chaque résultat doit se présenter sous cette forme : #}
+						{# Chaque résultat doit se présenter sous cette forme : 
+                        Good luck pour le back #}
 
 						<tr class="border-x border-b mt-4">
-							<td class="py-6 px-6">Heddy</td>
-							<td class="py-6 px-6">Mamery</td>
-							<td class="py-6 px-6">Symfony</td>
+							<td class="py-6 px-6">Congé payé</td>
+							<td class="py-6 px-6">10/12/24 8h00</td>
+							<td class="py-6 px-6">01/01/25 8h00</td>
+                            <td class="py-6 px-6">05/04/25 9h00</td>
+                            <td class="py-6 px-6">67 jours</td>
+                            <td class="py-6 px-6">C'est en cours tkt</td>
 							<td class="py-6 px-6">
 								<button class="bg-[#004C6C14] text-white font-bold py-2 px-10 rounded hover:text-white">
 									<span class="text-[#475467]">Détails</span>
