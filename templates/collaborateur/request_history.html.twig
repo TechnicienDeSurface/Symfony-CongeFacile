@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+	<title>
+		{% block title %}Historique des demandes
+		{% endblock %}
+	</title>
 	<body>
 		{% include 'layout/menu/_header.html.twig' %}
 		<main style="display: flex;">
@@ -37,7 +41,7 @@
 								<input type="date" id="start_date" name="start_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
 							</td>
 
-                            <td class="py-4 px-6 pr-0 w-1/7">
+							<td class="py-4 px-6 pr-0 w-1/7">
 								<label for="start_end" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
 									Date de fin :
 									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
@@ -45,7 +49,7 @@
 								<input type="date" id="start_end" name="start_end" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
 							</td>
 
-                            <td class="py-4 px-6 pr-0 w-1/7">
+							<td class="py-4 px-6 pr-0 w-1/7">
 								<label for="nb_days" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
 									Nb de jours :
 									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
@@ -53,7 +57,7 @@
 								<input type="text" id="nb_days" name="nb_days" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
 							</td>
 
-                            <td class="py-4 px-6 pr-0 w-1/7">
+							<td class="py-4 px-6 pr-0 w-1/7">
 								<label for="status" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
 									Statut :
 									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
@@ -73,15 +77,15 @@
 					<tbody>
 
 						{# Chaque résultat doit se présenter sous cette forme : 
-                        Good luck pour le back #}
+						                        Good luck pour le back #}
 
 						<tr class="border-x border-b mt-4">
 							<td class="py-6 px-6">Congé payé</td>
 							<td class="py-6 px-6">10/12/24 8h00</td>
 							<td class="py-6 px-6">01/01/25 8h00</td>
-                            <td class="py-6 px-6">05/04/25 9h00</td>
-                            <td class="py-6 px-6">67 jours</td>
-                            <td class="py-6 px-6">C'est en cours tkt</td>
+							<td class="py-6 px-6">05/04/25 9h00</td>
+							<td class="py-6 px-6">67 jours</td>
+							<td class="py-6 px-6">C'est en cours tkt</td>
 							<td class="py-6 px-6">
 								<button class="bg-[#004C6C14] text-white font-bold py-2 px-10 rounded hover:text-white">
 									<span class="text-[#475467]">Détails</span>

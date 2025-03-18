@@ -1,62 +1,67 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
-    <script src="{{ asset('assets/js/DayCalculated.js') }}"></script>
+	<title>
+		{% block title %}Nouvelle demande
+		{% endblock %}
+	</title>
+	<script src="{{ asset('assets/js/DayCalculated.js') }}"></script>
 
-    <body>
-        {% include 'layout/menu/_header.html.twig' %}
+	<body>
+		{% include 'layout/menu/_header.html.twig' %}
 
-        <main style="display: flex;">
-            {% include 'layout/menu/_sidebar.html.twig' %}
-            <div class="w-full p-8">
-                <h1 class="text-2xl font-bold mb-4">{# {{ user.lastName }} {{ user.firstName }} #}</h1>
+		<main style="display: flex;">
+			{% include 'layout/menu/_sidebar.html.twig' %}
+			<div class="w-full p-8">
+				<h1 class="text-2xl font-bold mb-4">{# {{ user.lastName }} {{ user.firstName }} #}</h1>
 
-                <form method="post" class="space-y-4 w-1/2">
-                {{ form_start(form) }}
-                    <div class="w-1/2 mb-6">
-                        <label for="request_type" class="block text-gray-700 text-sm font-bold mb-2">Type de demande - champ obligatoire</label>
-                        {{ form_widget(form.request_type, {'attr': {'class': 'w-full p-2 border rounded'}}) }}
-                    </div>
+				<form method="post" class="space-y-4 w-1/2">
+					{{ form_start(form) }}
+					<div class="w-1/2 mb-6">
+						<label for="request_type" class="block text-gray-700 text-sm font-bold mb-2">Type de demande - champ obligatoire</label>
+						{{ form_widget(form.request_type, {'attr': {'class': 'w-full p-2 border rounded'}}) }}
+					</div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label for="start_at" class="block text-gray-700 text-sm font-bold mb-2">Date de début - champ obligatoire</label>
-                            {{ form_widget(form.start_at, {'attr': { 'class': 'w-full p-2 border rounded', 'oninput': 'calculerJoursOuvres()'}}) }}
-                        </div>
+					<div class="grid grid-cols-2 gap-4">
+						<div>
+							<label for="start_at" class="block text-gray-700 text-sm font-bold mb-2">Date de début - champ obligatoire</label>
+							{{ form_widget(form.start_at, {'attr': { 'class': 'w-full p-2 border rounded', 'oninput': 'calculerJoursOuvres()'}}) }}
+						</div>
 
-                        <div>
-                            <label for="end_at" class="block text-gray-700 text-sm font-bold mb-2">Date de fin - champ obligatoire</label>
-                            {{ form_widget(form.end_at, {'attr': { 'oninput': 'calculerJoursOuvres()'}}) }}
-                        </div>
-                    </div>
+						<div>
+							<label for="end_at" class="block text-gray-700 text-sm font-bold mb-2">Date de fin - champ obligatoire</label>
+							{{ form_widget(form.end_at, {'attr': { 'oninput': 'calculerJoursOuvres()'}}) }}
+						</div>
+					</div>
 
-                    <div class="w-1/2">
-                        <label for="working_days" class="block text-gray-700 text-sm font-bold mb-2">Nombre de jours ouvrés</label>
-                        {{ form_widget(form.working_days, {'attr': { 'readonly': true}}) }}
-                    </div>
+					<div class="w-1/2">
+						<label for="working_days" class="block text-gray-700 text-sm font-bold mb-2">Nombre de jours ouvrés</label>
+						{{ form_widget(form.working_days, {'attr': { 'readonly': true}}) }}
+					</div>
 
-                    <div class="w-1/2">
-                        <label for="receipt_file" class="block text-gray-700 text-sm font-bold mb-2">Justificatif si applicable</label>
-                        <div class="relative">
-                            {{ form_widget(form.receipt_file, {'attr': {'class': 'w-full p-2 border rounded pl-10'}}) }}
-                            <label for="receipt_file" class="absolute left-0 top-0 mt-2 ml-2">
-                                <img src="{{ asset('assets/image/icon-file.png') }}" alt="Upload Icon" class="w-6 h-6">
-                            </label>
-                        </div>
-                    </div>
+					<div class="w-1/2">
+						<label for="receipt_file" class="block text-gray-700 text-sm font-bold mb-2">Justificatif si applicable</label>
+						<div class="relative">
+							{{ form_widget(form.receipt_file, {'attr': {'class': 'w-full p-2 border rounded pl-10'}}) }}
+							<label for="receipt_file" class="absolute left-0 top-0 mt-2 ml-2">
+								<img src="{{ asset('assets/image/icon-file.png') }}" alt="Upload Icon" class="w-6 h-6">
+							</label>
+						</div>
+					</div>
 
-                    <div class="w-full">
-                        <label for="comment" class="block text-gray-700 text-sm font-bold mb-2">Commentaire</label>
-                        {{ form_widget(form.comment) }}
-                    </div>
+					<div class="w-full">
+						<label for="comment" class="block text-gray-700 text-sm font-bold mb-2">Commentaire</label>
+						{{ form_widget(form.comment) }}
+					</div>
 
-                    <div class="w-1/2">
-                        {{ form_widget(form.Submit, {'label': 'Soumettre ma demande*', 'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
-                    </div>
-                </form>
-                {{ form_end(form) }}
+					<div class="w-1/2">
+						{{ form_widget(form.Submit, {'label': 'Soumettre ma demande*', 'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
+					</div>
+				</form>
+				{{ form_end(form) }}
 
-                <p class="pt-4">*En cas d’erreur de saisie ou de changements, vous pourrez modifier votre demande tant que celle-ci n’a pas été validée par le manager.</p>
-            </div>
-        </main>
-    </body>
+				<p class="pt-4">*En cas d’erreur de saisie ou de changements, vous pourrez modifier votre demande tant que celle-ci n’a pas été validée par le manager.</p>
+			</div>
+		</main>
+	</body>
 {% endblock %}
