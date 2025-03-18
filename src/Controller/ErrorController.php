@@ -26,7 +26,7 @@ class ErrorController extends AbstractController
     public function ErrorNotdenied(): Response
     {
         // Déclenche une erreur HTTP 403.
-        throw new AccessDeniedHttpException("Vous n'avez pas le droit d'accéder à cette page.");
+        return $this->render('bundles/TwigBundle/Exception/error403.html.twig');
     }
 
     // ERREUR 500
