@@ -11,6 +11,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class PreferenceType extends AbstractType
 {
@@ -24,6 +25,11 @@ class PreferenceType extends AbstractType
             ->add('alert_before_vacation', CheckboxType::class, [
                 'label'    => 'Recevoir un rappel par email lorsqu’un congé arrive la semaine prochaine',
                 'required' => false,
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Enregistrer mes préférences', 
+                'attr' => ['class'=>'w-full text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"', 
+                            'style' => 'background-color : #004C6C ; '], 
             ]);
     }
 
