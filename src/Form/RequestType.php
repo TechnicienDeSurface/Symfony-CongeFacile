@@ -42,29 +42,21 @@ class RequestType extends AbstractType
                 // 'attr' => ['class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-100', 'id' => 'working_days', 'readonly' => true],
             ])
             ->add('receipt_file', FileType::class, [
-                'label' => 'Fichier de reçu',
+                'label' => 'Justificatif si applicable',
                 'attr' => ['class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2'],
             ])
             ->add('comment', TextareaType::class, [
                 'label' => 'Commentaire',
-                'attr' => ['class' => 'form-textarea mt-1 block w-full border border-gray-300 rounded-md p-2'],
-            ])
-            ->add('collaborator', EntityType::class, [
-                'class' => Person::class,
-                'choice_label' => 'id',
-                'label' => 'Collaborateur',
-                'attr' => ['class' => 'form-select mt-1 block w-full border border-gray-300 rounded-md p-2'],
+                'attr' => [
+                    'class' => 'form-textarea mt-1 block w-full border border-gray-300 rounded-md p-2',
+                    'placeholder' => 'Si congé exceptionnel ou sans solde, vous pouvez préciser votre demande.',
+                    'rows' => 5, // Augmente la hauteur du champ
+                ],
             ])
             ->add('request_type', EntityType::class, [
                 'class' => RequestTypeEntity::class,
                 'choice_label' => 'id',
                 'label' => 'Type de demande',
-                'attr' => ['class' => 'form-select mt-1 block w-full border border-gray-300 rounded-md p-2'],
-            ])
-            ->add('department', EntityType::class, [
-                'class' => Department::class,
-                'choice_label' => 'id',
-                'label' => 'Département',
                 'attr' => ['class' => 'form-select mt-1 block w-full border border-gray-300 rounded-md p-2'],
             ])
             ->add('Submit', SubmitType::class); 

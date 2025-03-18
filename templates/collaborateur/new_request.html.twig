@@ -1,41 +1,67 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
-     <script>
-        function calculerJoursOuvres() {
-            var date1Element = document.getElementById('request_start_at'); //Quand j'inspecte ces ids apparaissent sans doute un attribut qui génére ça automatiquement
-            var date2Element = document.getElementById('request_end_at');
-            var joursOuvresElement = document.getElementById('request_working_days');
+	<title>
+		{% block title %}Nouvelle demande
+		{% endblock %}
+	</title>
+	<script src="{{ asset('assets/js/DayCalculated.js') }}"></script>
 
-            if (!date1Element || !date2Element || !joursOuvresElement) {
-                console.error("Un ou plusieurs éléments DOM sont introuvables.");
-                return;
-            }
+	<body>
+		{% include 'layout/menu/_header.html.twig' %}
 
-            var date1 = new Date(date1Element.value);
-            var date2 = new Date(date2Element.value);
-            var joursOuvres = 0;
+		<main style="display: flex;">
+			{% include 'layout/menu/_sidebar.html.twig' %}
+			<div class="w-full p-8">
+				<h1 class="text-2xl font-bold mb-4">{# {{ user.lastName }} {{ user.firstName }} #}</h1>
 
-            console.log("Date1:", date1);
-            console.log("Date2:", date2);
+				<form method="post" class="space-y-4 w-1/2">
+					{{ form_start(form) }}
+					<div class="w-1/2 mb-6">
+						<label for="request_type" class="block text-gray-700 text-sm font-bold mb-2">Type de demande - champ obligatoire</label>
+						{{ form_widget(form.request_type, {'attr': {'class': 'w-full p-2 border rounded'}}) }}
+					</div>
 
-            if (date1 && date2 && date1 <= date2) {
-                var currentDate = new Date(date1);
-                while (currentDate <= date2) {
-                    var dayOfWeek = currentDate.getDay();
-                    if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Exclure les dimanches (0) et samedis (6)
-                        joursOuvres++;
-                    }
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
-            }
+					<div class="grid grid-cols-2 gap-4">
+						<div>
+							<label for="start_at" class="block text-gray-700 text-sm font-bold mb-2">Date de début - champ obligatoire</label>
+							{{ form_widget(form.start_at, {'attr': { 'class': 'w-full p-2 border rounded', 'oninput': 'calculerJoursOuvres()'}}) }}
+						</div>
 
-            console.log("Jours ouvrés:", joursOuvres);
-            joursOuvresElement.value = joursOuvres;
-        }
-    </script>
-    {{ form_start(form) }}
-        {{ form_row(form.start_at, {'attr': { 'oninput': 'calculerJoursOuvres()'}}) }}
-        {{ form_row(form.end_at, {'attr': { 'oninput': 'calculerJoursOuvres()'}}) }}
-        {{ form_row(form.working_days, {'attr': { 'readonly': true}}) }}
-    {{ form_end(form) }}
+						<div>
+							<label for="end_at" class="block text-gray-700 text-sm font-bold mb-2">Date de fin - champ obligatoire</label>
+							{{ form_widget(form.end_at, {'attr': { 'oninput': 'calculerJoursOuvres()'}}) }}
+						</div>
+					</div>
+
+					<div class="w-1/2">
+						<label for="working_days" class="block text-gray-700 text-sm font-bold mb-2">Nombre de jours ouvrés</label>
+						{{ form_widget(form.working_days, {'attr': { 'readonly': true}}) }}
+					</div>
+
+					<div class="w-1/2">
+						<label for="receipt_file" class="block text-gray-700 text-sm font-bold mb-2">Justificatif si applicable</label>
+						<div class="relative">
+							{{ form_widget(form.receipt_file, {'attr': {'class': 'w-full p-2 border rounded pl-10'}}) }}
+							<label for="receipt_file" class="absolute left-0 top-0 mt-2 ml-2">
+								<img src="{{ asset('assets/image/icon-file.png') }}" alt="Upload Icon" class="w-6 h-6">
+							</label>
+						</div>
+					</div>
+
+					<div class="w-full">
+						<label for="comment" class="block text-gray-700 text-sm font-bold mb-2">Commentaire</label>
+						{{ form_widget(form.comment) }}
+					</div>
+
+					<div class="w-1/2">
+						{{ form_widget(form.Submit, {'label': 'Soumettre ma demande*', 'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
+					</div>
+				</form>
+				{{ form_end(form) }}
+
+				<p class="pt-4">*En cas d’erreur de saisie ou de changements, vous pourrez modifier votre demande tant que celle-ci n’a pas été validée par le manager.</p>
+			</div>
+		</main>
+	</body>
 {% endblock %}

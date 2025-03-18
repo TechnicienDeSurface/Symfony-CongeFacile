@@ -1,8 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	{% include 'layout/menu/_header.html.twig' %}
 	<title>{% block title %}Connexion{% endblock %}</title>
+
+	<script src="{{ asset('assets/js/ViewPassword.js') }}"></script>
+	{% include 'layout/menu/_header.html.twig' %}
 	
 	<main style="display: flex;">
 		{% include 'layout/menu/_sidebar.html.twig' %}
