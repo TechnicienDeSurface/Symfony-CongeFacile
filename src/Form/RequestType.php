@@ -47,7 +47,11 @@ class RequestType extends AbstractType
             ])
             ->add('comment', TextareaType::class, [
                 'label' => 'Commentaire',
-                'attr' => ['class' => 'form-textarea mt-1 block w-full border border-gray-300 rounded-md p-2'],
+                'attr' => [
+                    'class' => 'form-textarea mt-1 block w-full border border-gray-300 rounded-md p-2',
+                    'placeholder' => 'Si congé exceptionnel ou sans solde, vous pouvez préciser votre demande.',
+                    'rows' => 5, // Augmente la hauteur du champ
+                ],
             ])
             ->add('request_type', EntityType::class, [
                 'class' => RequestTypeEntity::class,
