@@ -21,6 +21,7 @@ class PreferenceType extends AbstractType
             ->add('alert_on_answer', CheckboxType::class, [
                 'label'    => 'Être alerté par email lorsqu’une demande de congé est acceptée ou refusée',
                 'required' => false,
+                'attr' => ['class="sr-only peer relative cursor-point"']
             ])
             ->add('alert_before_vacation', CheckboxType::class, [
                 'label'    => 'Recevoir un rappel par email lorsqu’un congé arrive la semaine prochaine',
