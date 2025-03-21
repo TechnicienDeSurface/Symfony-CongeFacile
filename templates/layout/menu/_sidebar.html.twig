@@ -142,8 +142,8 @@
 			{% endif %}
 		<div class="trait"></div>
 
-		<a href="{{path('app_information_manager')}}">Mes informations</a>
-		<a href="{{path('app_preference_manager')}}">Mes préférences</a>
+		<a href="{{path('app_information_collaborateur')}}">Mes informations</a>
+		<a href="{{path('app_preference_collaborateur')}}">Mes préférences</a>
 			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
 			<div class="dropdown-toggle">
 				<a href="#" class="">Administration
