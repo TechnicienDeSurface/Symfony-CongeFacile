@@ -17,11 +17,11 @@ class ManagerController extends AbstractController
     #[Route('/administration-manager', name: 'app_administration_manager')]
     public function viewManager(Request $request, PersonRepository $repository): Response
     {
-        $managers = $repository->findAll() ;;  
+        $managers = $repository->findAll();
 
         return $this->render('manager/admin/manager/manager.html.twig', [
             'page' => 'administration-manager',
-            'managers' => $managers , 
+            'managers' => $managers,
         ]);
     }
 
@@ -46,31 +46,40 @@ class ManagerController extends AbstractController
                 }
             }
         }
+        
         return $this->render('manager/admin/manager/add_manager.html.twig', [
             'page' => 'administration-ajouter-manager',
         ]);
     }
 
-    //PAGE DETAIL MANAGER VIA ADMINISTRATION MANAGER
-    #[Route('/administration-detail-manager/{id}', name: 'app_administration_detail_manager')]
-    public function editManager(PersonRepository $repository, int $id, ManagerRegistry $registry,Request $request): Response
-    {
-        $manager = $repository->find($id);
-        if(!$manager){
-            throw $this->createNotFoundException('No category found for id ' . $id);
-        }
-        $form = $this->createForm(UserType::class, $manager);
-        $form->handleRequest($request);
+    // //PAGE DETAIL MANAGER VIA ADMINISTRATION MANAGER
+    // #[Route('/administration-detail-manager/{id}', name: 'app_administration_detail_manager')]
+    // public function editManager(PersonRepository $repository, int $id, ManagerRegistry $registry,Request $request): Response
+    // {
+    //     $manager = $repository->find($id);
+    //     if(!$manager){
+    //         throw $this->createNotFoundException('No category found for id ' . $id);
+    //     }
+    //     $form = $this->createForm(UserType::class, $manager);
+    //     $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                $request->cookies->all();
-                // Si valide : j'enregistre les données dans la BDD.
-                $registry->getManager()->flush();
-            } else {
-                // Sinon j'affiche un message d'erreur
-            }
-        }
+    //     if ($form->isSubmitted()) {
+    //         if ($form->isValid()) {
+    //             $request->cookies->all();
+    //             // Si valide : j'enregistre les données dans la BDD.
+    //             $registry->getManager()->flush();
+    //         } else {
+    //             // Sinon j'affiche un message d'erreur
+    //         }
+    //     }
+    //     return $this->render('manager/admin/manager/detail_manager.html.twig', [
+    //         'page' => 'administration-detail-manager',
+    //     ]);
+    // }
+
+    #[Route('/administration-detail-manager', name: 'app_administration_detail_manager')]
+    public function detailManager(): Response
+    {
         return $this->render('manager/admin/manager/detail_manager.html.twig', [
             'page' => 'administration-detail-manager',
         ]);

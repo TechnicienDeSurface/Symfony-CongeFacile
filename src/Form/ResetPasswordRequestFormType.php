@@ -31,7 +31,7 @@ class ResetPasswordRequestFormType extends AbstractType
             ])
             ->add('reset', SubmitType::class, [
                 'label' => 'Demander à réinitialiser le mot de passe',
-                'attr' => ['class' => 'px-6 py-2.5 w-full !mt-8 text-sm bg-[#004C6C] hover:bg-blue-600 text-white rounded active:bg-[#006bff]'],
+                'attr' => ['class' => 'px-6 py-2.5 w-full text-sm bg-[#004C6C] hover:bg-blue-600 text-white rounded active:bg-[#006bff]'],
             ]);
     }
 

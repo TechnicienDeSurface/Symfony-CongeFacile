@@ -1,45 +1,69 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
-    <h1 class="text-2xl font-bold mb-4">{{ user.lastName }} {{ user.firstName }}</h1>
-    
-    <form method="post" class="space-y-4">
-        <div>
-            <label class="block text-sm font-medium">Adresse email - champ obligatoire</label>
-            <input type="email" name="email" value="{{ user.email }}" class="w-full p-2 border rounded" required>
-        </div>
 
-        <div class="grid grid-cols-2 gap-4">
-            <div>
-                <label class="block text-sm font-medium">Nom de famille - champ obligatoire</label>
-                <input type="text" name="lastName" value="{{ user.lastName }}" class="w-full p-2 border rounded" required>
-            </div>
-            <div>
-                <label class="block text-sm font-medium">Prénom - champ obligatoire</label>
-                <input type="text" name="firstName" value="{{ user.firstName }}" class="w-full p-2 border rounded" required>
-            </div>
-        </div>
+	<script src="{{ asset('assets/js/ViewPassword.js') }}"></script>
 
-        <div>
-            <label class="block text-sm font-medium">Direction/Service - champ obligatoire</label>
-            <select name="service" class="w-full p-2 border rounded" required>
-                <option value="BU Symfony" {% if user.service == 'BU Symfony' %}selected{% endif %}>BU Symfony</option>
-            </select>
-        </div>
+	<title>
+		{% block title %}Information du manager
+		{% endblock %}
+	</title>
+	<body>
+		{% include 'layout/menu/_header.html.twig' %}
 
-        <div class="grid grid-cols-2 gap-4">
-            <div>
-                <label class="block text-sm font-medium">Nouveau mot de passe</label>
-                <input type="password" name="password" class="w-full p-2 border rounded">
-            </div>
-            <div>
-                <label class="block text-sm font-medium">Confirmation de mot de passe</label>
-                <input type="password" name="passwordConfirm" class="w-full p-2 border rounded">
-            </div>
-        </div>
+		<main style="display: flex;">
+			{% include 'layout/menu/_sidebar.html.twig' %}
+			<div class="w-full p-8">
+				<h1 class="text-2xl font-bold mb-4">{# {{ user.lastName }} {{ user.firstName }} #}</h1>
 
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Mettre à jour</button>
-    </form>
-</div>
+				<form method="post" class="space-y-4 w-1/2">
+					<div class="mb-6 relative w-1/2">
+						<label for="email" class="block text-gray-700 text-sm font-bold mb-2">Adresse email - champ obligatoire</label>
+						<div class="absolute left-3 mt-5 transform -translate-y-1/2 text-gray-400">
+							<img src="{{ asset('assets/image/icon-enveloppe.svg') }}" alt="Icon Courrier" class="h-5 w-5">
+						</div>
+						<input type="email" value="{# {{ user.email }} #}" id="email" name="email" class="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-500" autocomplete="email" required autofocus>
+					</div>
+
+					<div class="grid grid-cols-2 gap-4">
+						<div>
+							<label class="block text-gray-700 text-sm font-bold mb-2">Nom de famille - champ obligatoire</label>
+							<input type="text" name="lastName" value="{# {{ user.lastName }} #}" class="w-full p-2 border rounded" required>
+						</div>
+						<div>
+							<label class="block text-gray-700 text-sm font-bold mb-2">Prénom - champ obligatoire</label>
+							<input type="text" name="firstName" value="{# {{ user.firstName }} #}" class="w-full p-2 border rounded" required>
+						</div>
+					</div>
+
+					<div class="w-1/2">
+						<label class="block text-gray-700 text-sm font-bold mb-2">Direction/Service - champ obligatoire</label>
+						<select name="service" class="w-full p-2 border rounded" required>
+							<option value="BU Symfony" {# {% if user.service == 'BU Symfony' %} selected {% endif %} #}>BU Symfony</option>
+						</select>
+					</div>
+
+					<div class="grid grid-cols-2 gap-4">
+						<div class="mb-6 relative">
+							<label for="password" class="block text-gray-700 text-sm font-bold mb-2">Mot de passe</label>
+							<input type="password" id="password" name="_password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Mot de passe" autocomplete="current-password" required>
+							<button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-6">
+								<img id="eyeIcon" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
+							</button>
+						</div>
+
+						<div class="mb-6 relative">
+							<label for="confirmPassword" class="block text-gray-700 text-sm font-bold mb-2">Comfirmation de Mot de passe</label>
+							<input type="password" id="comfirmPassword" name="comfirmPassword" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autocomplete="current-password" required>
+							<button type="button" id="toggleComfirmPassword" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-6">
+								<img id="eyeIcon" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
+							</button>
+						</div>
+					</div>
+
+					<button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6">Mettre à jour</button>
+				</form>
+			</div>
+		</main>
+	</body>
 {% endblock %}
