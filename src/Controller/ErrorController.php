@@ -37,26 +37,22 @@ class ErrorController extends AbstractController
         return $this->render('bundles/TwigBundle/Exception/error500.html.twig');
     }
 
-        public function __invoke(\Exception $exception): Response
-        {
-            // Vérifier si l'exception est une instance de HttpExceptionInterface
-            if ($exception instanceof HttpExceptionInterface) {
-                $statusCode = $exception->getStatusCode();
-            } else {
-                // Dans tous les autres cas, définir 500 (erreur serveur interne)
-                $statusCode = 500;
-            }
-                
-            // Gérer les erreurs spécifiques en fonction du code d'état
-            switch ($statusCode) {
-                case 404:
-                    return $this->page404();
-                case 403:
-                    return $this->ErrorNotdenied();
-                case 500:
-                default:
-                    return $this->ErrorServer();
-            }
+    public function __invoke(\Throwable $exception): Response
+    {
+        // Déterminez le code d'état HTTP à partir de l'exception.
+        $statusCode = $exception instanceof HttpExceptionInterface ? $exception->getStatusCode() : 500;
+    
+        // Gérer les erreurs en fonction du code d'état.
+        switch ($statusCode) {
+            case 404:
+                return $this->page404();
+            case 403:
+                return $this->ErrorNotdenied();
+            case 500:
+            default:
+                return $this->ErrorServer();
         }
+    }
+    
         
 }

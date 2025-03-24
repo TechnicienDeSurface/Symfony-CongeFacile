@@ -18,14 +18,16 @@ class InformationController extends AbstractController
     {
         $person = new Person();
         $user = new User() ;
-        $form_person= $this->createForm(InformationFormType::class, $person);
+        $form_person= $this->createForm(InformationFormType::class, $person, [
+            'is_manager' => true,
+        ]);
+
         $form_password = $this->createForm(MotDePasseType::class, $user);
 
         return $this->render('manager/information.html.twig', [
             'page' => 'information-manager',
-            'formInfo' => $form_person,
-            'formMdp' => $form_password,
-            'is_manager' => true,
+            'formInfo' => $form_person->createView(),
+            'formMdp' => $form_password->createView(),
         ]);
     }
 }
