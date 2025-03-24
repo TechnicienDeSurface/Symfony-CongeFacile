@@ -22,7 +22,9 @@ class InformationController extends AbstractController
             'is_manager' => true,
         ]);
 
-        $form_password = $this->createForm(MotDePasseType::class, $user);
+        $form_password = $this->createForm(MotDePasseType::class, $user, [
+            'is_manager' => true,
+        ]);
 
         return $this->render('manager/information.html.twig', [
             'page' => 'information-manager',

@@ -17,10 +17,19 @@ class InformationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $isManager = $options['is_manager'] ?? false;
+
+        $inputClass = $isManager 
+        ? 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2' 
+        : 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200';
+
 
         $builder
         ->add('last_name', TextType::class, [
             'label' => 'Nom de famille',
+            'label_attr' => [
+                'class' => 'block text-gray-700 font-medium',
+            ],
             'attr' => [
                 'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
                 'value' => 'Martins',
@@ -29,6 +38,9 @@ class InformationFormType extends AbstractType
         ])
         ->add('first_name', TextType::class, [
             'label' => 'Prénom',
+            'label_attr' => [
+                'class' => 'block text-gray-700 font-medium',
+            ],
             'attr' => [
                 'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
                 'value' => 'Jeff',
@@ -37,6 +49,9 @@ class InformationFormType extends AbstractType
         ])
         ->add('email', TextType::class, [
             'label' => 'Adresse email du manager',
+            'label_attr' => [
+                'class' => 'block text-gray-700 font-medium',
+            ],
             'mapped' => false,
             'attr' => [
                 'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
@@ -49,16 +64,22 @@ class InformationFormType extends AbstractType
             'class' => Department::class,
             'choice_label' => 'name',
             'label' => 'Direction/Service',
+            'label_attr' => [
+                'class' => 'block text-gray-700 font-medium',
+            ],
             'attr' => [
                 'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
                 'disabled' => 'disabled',
             ],
         ]);
-        if ($options['is_manager']) {
-            $builder->add('position', EntityType::class, [
+        if ($options['is_manager'] == false) {
+            $builder->add('position_id', EntityType::class, [
                 'class' => Position::class,
                 'choice_label' => 'name',
                 'label' => 'Poste',
+                'label_attr' => [
+                    'class' => 'block text-gray-700 font-medium',
+                ],
                 'attr' => [
                     'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
                     'disabled' => 'disabled',
@@ -68,6 +89,9 @@ class InformationFormType extends AbstractType
                 'class' => User::class,
                 'choice_label' => 'firstnamelastname',
                 'label' => 'Manager',
+                'label_attr' => [
+                    'class' => 'block text-gray-700 font-medium',
+                ],
                 'attr' => [
                     'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
                     'disabled' => 'disabled',

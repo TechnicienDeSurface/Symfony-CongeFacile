@@ -15,6 +15,11 @@
                     {{ form_start(formInfo) }}
                         <div class="space-y-6">
                             <div class="grid grid-cols-2 gap-4">
+                                <div class="col-span-1">
+                                    {{ form_row(formInfo.email) }}
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     {{ form_row(formInfo.last_name) }}
                                 </div>
@@ -23,21 +28,8 @@
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-4">
-                                <div class="col-span-1">
-                                    {{ form_row(formInfo.email) }}
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     {{ form_row(formInfo.department_id) }}
-                                </div>
-                                <div class="col-span-1">
-                                    {{ form_row(formInfo.position) }}
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="col-span-1">
-                                    {{ form_row(formInfo.manager_id) }}
                                 </div>
                             </div>
                         </div>
@@ -45,21 +37,21 @@
 
                     <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Réinitialiser mon mot de passe</h2>
                     {{ form_start(formMdp) }}
-                    <div class="grid grid-cols-3 gap-6">
-                        <div>
-                            <label class="block text-gray-700 font-medium">{{ form_label(formMdp.currentPassword) }}</label>
-                            {{ form_widget(formMdp.currentPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md" } }) }}
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="col-span-1">
+                                    {{ form_row(formMdp.currentPassword) }}
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    {{ form_row(formMdp.newPassword) }}
+                                </div>
+                                <div>
+                                    {{ form_row(formMdp.confirmPassword) }}
+                                </div>
+                            </div>
                         </div>
-                        <br>
-                        <div>
-                            <label class="block text-gray-700 font-medium">{{ form_label(formMdp.newPassword) }}</label>
-                            {{ form_widget(formMdp.newPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md" } }) }}
-                        </div>
-                        <div>
-                            <label class="block text-gray-700 font-medium">{{ form_label(formMdp.confirmPassword) }}</label>
-                            {{ form_widget(formMdp.confirmPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md" } }) }}
-                        </div>
-                    </div>
 
                     <div class="mt-6">
                         <button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6">Réinitialiser le mot de passe</button>
