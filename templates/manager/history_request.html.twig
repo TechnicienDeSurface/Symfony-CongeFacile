@@ -19,20 +19,20 @@
             </tr>
         </thead>
         <tbody>
-            {% for demande in demandes %}
+            {% for demand in demands %}
                 <tr>
-                    <td>{{ demande.type }}</td>
-                    <td>{{ demande.collaborateur }}</td>
-                    <td>{{ demande.dateDebut|date('d/m/Y H:i') }}</td>
-                    <td>{{ demande.dateFin|date('d/m/Y H:i') }}</td>
-                    <td>{{ demande.nbJours }} jours</td>
+                    <td>{{ demand.type }}</td>
+                    <td>{{ demand.collaborateur }}</td>
+                    <td>{{ demand.dateDebut|date('d/m/Y H:i') }}</td>
+                    <td>{{ demand.dateFin|date('d/m/Y H:i') }}</td>
+                    <td>{{ demand.nbJours }} jours</td>
                     <td>
-                        <span class="badge {% if demande.statut == 'Validé' %}bg-success{% elseif demande.statut == 'Refusé' %}bg-danger{% else %}bg-warning{% endif %}">
-                            {{ demande.statut }}
+                        <span class="badge {% if demand.statut == 'Validé' %}bg-success{% elseif demand.statut == 'Refusé' %}bg-danger{% else %}bg-warning{% endif %}">
+                            {{ demand.statut }}
                         </span>
                     </td>
                     <td>
-                        <a href="{{ path('demande_details', { id: demande.id }) }}" class="btn btn-secondary btn-sm">Détails</a>
+                        <a href="{{ path('demande_details', { id: demand.id }) }}" class="btn btn-secondary btn-sm">Détails</a>
                     </td>
                 </tr>
             {% else %}
