@@ -1,85 +1,67 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<script>
-    function calculerJoursOuvres() {
-        var date1Element = document.getElementById('request_start_at'); 
-        var date2Element = document.getElementById('request_end_at');
-        var joursOuvresElement = document.getElementById('request_working_days');
+	<title>
+		{% block title %}Nouvelle demande
+		{% endblock %}
+	</title>
+	<script src="{{ asset('assets/js/DayCalculated.js') }}"></script>
 
-        if (!date1Element || !date2Element || !joursOuvresElement) {
-            console.error("Un ou plusieurs éléments DOM sont introuvables.");
-            return;
-        }
+	<body>
+		{% include 'layout/menu/_header.html.twig' %}
 
-        var date1 = new Date(date1Element.value);
-        var date2 = new Date(date2Element.value);
-        var joursOuvres = 0;
-        if (date1 && date2 && date1 <= date2) {
-            var currentDate = new Date(date1);
-            while (currentDate <= date2) {
-                var dayOfWeek = currentDate.getDay();
-                if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Exclure dimanches (0) et samedis (6)
-                    joursOuvres++;
-                }
-                currentDate.setDate(currentDate.getDate() + 1);
-            }
-        }
-        joursOuvresElement.value = joursOuvres;
-    }
-</script>
+		<main style="display: flex;">
+			{% include 'layout/menu/_sidebar.html.twig' %}
+			<div class="w-full p-8">
+				<h1 class="text-2xl font-bold mb-4">{# {{ user.lastName }} {{ user.firstName }} #}</h1>
 
-<body class="bg-gray-100 min-h-screen flex flex-col">
-    {% include 'layout/menu/_header.html.twig' %}
+				<form method="post" class="space-y-4 w-1/2">
+					{{ form_start(form) }}
+					<div class="w-1/2 mb-6">
+						<label for="request_type" class="block text-gray-700 text-sm font-bold mb-2">Type de demande - champ obligatoire</label>
+						{{ form_widget(form.request_type, {'attr': {'class': 'w-full p-2 border rounded'}}) }}
+					</div>
 
-    <main class="flex flex-grow">
-        {% include 'layout/menu/_sidebar.html.twig' %}
+					<div class="grid grid-cols-2 gap-4">
+						<div>
+							<label for="start_at" class="block text-gray-700 text-sm font-bold mb-2">Date de début - champ obligatoire</label>
+							{{ form_widget(form.start_at, {'attr': { 'class': 'w-full p-2 border rounded', 'oninput': 'calculerJoursOuvres()'}}) }}
+						</div>
 
-        <section class="w-full justify-center items-start p-8">
-            <div class="bg-white p-6 rounded-lg shadow-md w-full">
-                <h2 class="text-2xl font-bold text-gray-700 mb-6">Effectuer une nouvelle demande</h2>
+						<div>
+							<label for="end_at" class="block text-gray-700 text-sm font-bold mb-2">Date de fin - champ obligatoire</label>
+							{{ form_widget(form.end_at, {'attr': { 'oninput': 'calculerJoursOuvres()'}}) }}
+						</div>
+					</div>
 
-                {{ form_start(form) }}
+					<div class="w-1/2">
+						<label for="working_days" class="block text-gray-700 text-sm font-bold mb-2">Nombre de jours ouvrés</label>
+						{{ form_widget(form.working_days, {'attr': { 'readonly': true}}) }}
+					</div>
 
-                <div class="mb-4">
-                    {{ form_label(form.request_type, 'Type de demande', {'label_attr': {'class': 'block text-gray-600 font-semibold mb-2'}}) }}
-                    {{ form_widget(form.request_type, {'attr': {'class': 'w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500'}}) }}
-                </div>
+					<div class="w-1/2">
+						<label for="receipt_file" class="block text-gray-700 text-sm font-bold mb-2">Justificatif si applicable</label>
+						<div class="relative">
+							{{ form_widget(form.receipt_file, {'attr': {'class': 'w-full p-2 border rounded pl-10'}}) }}
+							<label for="receipt_file" class="absolute left-0 top-0 mt-2 ml-2">
+								<img src="{{ asset('assets/image/icon-file.png') }}" alt="Upload Icon" class="w-6 h-6">
+							</label>
+						</div>
+					</div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                        {{ form_label(form.start_at, 'Date début', {'label_attr': {'class': 'block text-gray-600 font-semibold mb-2'}}) }}
-                        {{ form_widget(form.start_at, {'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500', 'oninput': 'calculerJoursOuvres()'}}) }}
-                    </div>
-                    <div>
-                        {{ form_label(form.end_at, 'Date fin', {'label_attr': {'class': 'block text-gray-600 font-semibold mb-2'}}) }}
-                        {{ form_widget(form.end_at, {'attr': { 'class': 'w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500', 'oninput': 'calculerJoursOuvres()'}}) }}
-                    </div>
-                </div>
+					<div class="w-full">
+						<label for="comment" class="block text-gray-700 text-sm font-bold mb-2">Commentaire</label>
+						{{ form_widget(form.comment) }}
+					</div>
 
-                <div class="mb-4">
-                    {{ form_label(form.working_days, 'Nombre de jours demandés', {'label_attr': {'class': 'block text-gray-600 font-semibold mb-2'}}) }}
-                    {{ form_widget(form.working_days, {'attr': {'class': 'w-full p-2 border border-gray-300 rounded-lg bg-gray-100', 'readonly': true}}) }}
-                </div>
+					<div class="w-1/2">
+						{{ form_widget(form.Submit, {'label': 'Soumettre ma demande*', 'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
+					</div>
+				</form>
+				{{ form_end(form) }}
 
-                <div class="mb-4">
-                    {{ form_label(form.receipt_file, 'Justificatif (si applicable)', {'label_attr': {'class': 'block text-gray-600 font-semibold mb-2'}}) }}
-                    {{ form_widget(form.receipt_file, {'attr': {'class': 'w-full p-2 border border-gray-300 rounded-lg'}}) }}
-                </div>
-
-                <div class="mb-4">
-                    {{ form_label(form.comment, 'Commentaire supplémentaire', {'label_attr': {'class': 'block text-gray-600 font-semibold mb-2'}}) }}
-                    {{ form_widget(form.comment, {'attr': {'class': 'w-full p-2 border border-gray-300 rounded-lg', 'placeholder': 'Si congé exceptionnel ou sans solde, précisez ici...'}}) }}
-                </div>
-                {# <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition">
-                    Soumettre ma demande*
-                </button> #}
-
-                {{ form_end(form) }}
-            </div>
-        </section>
-    </main>
-</body>
-
-
+				<p class="pt-4">*En cas d’erreur de saisie ou de changements, vous pourrez modifier votre demande tant que celle-ci n’a pas été validée par le manager.</p>
+			</div>
+		</main>
+	</body>
 {% endblock %}
