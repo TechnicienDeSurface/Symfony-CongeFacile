@@ -107,7 +107,7 @@ class Person
         return $this;
     }
 
-    public function getPosition(): ?Position
+    public function getPositionId(): ?Position
     {
         return $this->position;
     }
