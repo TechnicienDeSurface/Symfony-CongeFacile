@@ -4,75 +4,29 @@
 
 {% block body %}
 
-    <style>
-
-        .title {
-            color: #004c6c;
-        }
-
-        .title_h3 {
-            color: #457c93;
-        }
-
-        p {
-            font-size: small;
-        }
-
-        .p_space {
-            margin: 30px 0px;
-        }
-
-        .status {
-            color: #329159;
-            background-color: #daf8e6;
-            padding: 4px 8px;
-            border-radius: 20px;
-            margin-left: 5px;
-            font-weight:700;
-        }
-
-        .textarea {
-            width: 55%;
-            height: 25%;
-            color: #b4c4cf;
-            background-color: #fff;
-            border: solid 1px #dfe4ea;
-            border-radius: 5px;
-            padding: 20px;
-            resize: none;
-        }
-
-        .button_return {
-            color: #004c6c;
-            background-color: #ebf1f4;
-            border: none;
-            border-radius: 5px;
-            width: 300px;
-            height: 35px;
-            font-weight: bolder;
-            margin: 30px 0px;
-            cursor: pointer;
-            display: inherit;
-        }
-
-    </style>
-
     <title>{% block title %}Détails d'une Demande{% endblock %}</title>
 
-    <h1 class="title">Ma demande de congé</h1>
+    {% include 'layout/menu/_header.html.twig' %}
 
-    <h3 class="title_h3">Demande du 10/12/2024</h3>
+    <main style="display: flex;">
 
-    <p>Type de demande : Congé Payé</p>
-    <p>Période : 19/12/2024 08h00 au 23/12/2024 18h00</p>
-    <p>Nombre de jours : 3 jours</p>
+        {% include 'layout/menu/_sidebar.html.twig' %}
 
-    <p class="p_space" >Statut de la demande : <span class="status">Validé</span></p>
+        <div class="w-full p-8 overflow-y-auto">
+            <h1 class="text-left font-bold text-2xl my-4 " style='color : #004C6C'>Ma demande de congé</h1>
+            <h2 class="text-left font-semibold text-m mb-4" style='color : #38738c'>Demande du 10/12/2024</h2>
 
-    <p>Commentaire du manager :</p>
+            <p class="my-2">Type de demande : Congé Payé</p>
+            <p class="my-2">Période : 19/12/2024 08h00 au 23/12/2024 18h00</p>
+            <p class="my-2">Nombre de jours : 3 jours</p>
 
-    <textarea id="" class="textarea" readonly>Profite bien de tes vacances à Mayorque et surtout, n'oublie pas la carte postale !!!</textarea>
+            <p class="my-[30px]" >Statut de la demande : <span class="text-[#329159] bg-[#daf8e6] px-2 py-0 rounded-full ml-1 font-medium">Validé</span></p>
 
-    <button type="submit" class="button_return">Retourner à la liste de mes demandes</button>
+            <p class="my-2">Commentaire du manager :</p>
+            <textarea id="" class="w-[55%] h-[25%] text-[#b4c4cf] bg-white border border-[#dfe4ea] rounded-md p-5 resize-none" readonly>Profite bien de tes vacances à Mayorque et surtout, n'oublie pas la carte postale !!!</textarea>
+
+            <button type="submit" class="text-[#004c6c] bg-[#ebf1f4] border-none rounded-md w-[300px] h-[35px] font-medium my-7 cursor-pointer block">Retourner à la liste de mes demandes</button>
+        </div>
+    </main>
 
 {% endblock %}
