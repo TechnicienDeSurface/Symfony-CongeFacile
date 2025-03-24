@@ -55,11 +55,27 @@ class RequestType extends AbstractType
             ])
             ->add('request_type', EntityType::class, [
                 'class' => RequestTypeEntity::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'label' => 'Type de demande',
-                'attr' => ['class' => 'form-select mt-1 block w-full border border-gray-300 rounded-md p-2'],
+                // 'attr' => ['class' => 'form-select mt-1 block w-full border border-gray-300 rounded-md p-2'],
             ])
-            ->add('Submit', SubmitType::class); 
+            // ->add('collaborator', EntityType::class, [
+            //     'class' => Person::class,
+            //     'choice_label' => 'lastname',
+            //     // 'label' => 'Collaborateur',
+            //     'attr' => ['class' => 'form-select mt-1 block w-full border border-gray-300 rounded-md p-2', 'style' => 'display:none;'],
+            // ])
+            // ->add('department', EntityType::class, [
+            //     'class' => Department::class,
+            //     'choice_label' => 'name',
+            //     // 'label' => 'Département',
+            //     'attr' => ['class' => 'form-select mt-1 block w-full border border-gray-300 rounded-md p-2', 'style' => 'display:none;'],
+            // ])
+            ->add('Submit', SubmitType::class,[
+                'label' => 'Soumettre la demande de congé', 
+                'attr' => ['class'=>'w-full text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"', 
+                            'style' => 'background-color : #004C6C ; '], 
+            ]); 
             }
 
     public function configureOptions(OptionsResolver $resolver): void
