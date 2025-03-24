@@ -95,42 +95,6 @@ class Request
         return $this;
     }
 
-    // public function getRequestTypeId(): ?int
-    // {
-    //     return $this->request_type;
-    // }
-
-    // public function setRequestTypeId(?int $request_type): static
-    // {
-    //     $this->request_type = $request_type;
-
-    //     return $this;
-    // }
-
-    // public function getCollaboratorId(): ?int
-    // {
-    //     return $this->collaborator;
-    // }
-
-    // public function setCollaboratorId(?int $collaborator): static
-    // {
-    //     $this->collaborator = $collaborator;
-
-    //     return $this;
-    // }
-
-    // public function getDepartmentId(): ?int
-    // {
-    //     return $this->department;
-    // }
-
-    // public function setDepartmentId(?int $department): static
-    // {
-    //     $this->department = $department;
-
-    //     return $this;
-    // }
-
     public function getCreatedAt(): ?\DateTime
     {
         return $this->created_at;
