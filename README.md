@@ -20,6 +20,10 @@ Cette solution digitalisée améliore l'efficacité, l'organisation et la satisf
   - Attention : Utilisation de TailWind obligatoire !
 
 ## Documentation 
+
+La documentation que nous avons fournis se trouve sur Github dans la section "Wiki" : https://github.com/TechnicienDeSurface/Symfony-CongeFacile/wiki
+
+
 Lien vers le google drive : https://drive.google.com/drive/folders/1cOEcns99USQY1flzMX9oSofIQXH-dKru?usp=drive_link
 
 - Dictionnaire de données : https://drive.google.com/file/d/1xV23xk4MigbeckaaVO7Q00zv2nOvbDui/view?usp=drive_link
