@@ -26,8 +26,7 @@ class MotDePasseType extends AbstractType
         ->add('confirmPassword', PasswordType::class, [
             'label' => 'Confirmer le nouveau mot de passe',
             'mapped' => false,
-        ])
-        ;
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

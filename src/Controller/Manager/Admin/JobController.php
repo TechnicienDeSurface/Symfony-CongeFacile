@@ -20,10 +20,12 @@ class JobController extends AbstractController
         $postes = $postes->getResult() ; 
         $totalItems = $repository->countAll();
         $totalPages = ceil($totalItems / $limit);
+
         return $this->render('manager/admin/job/job.html.twig', ['jobs'=>$postes, 
         'currentPage' => $currentPage,
         'itemsPerPage' => $limit,
         'totalPages' => $totalPages,
+        'page' => 'administration-job'
         ]);
     }
 
@@ -32,7 +34,7 @@ class JobController extends AbstractController
     public function addJob(): Response
     {
         return $this->render('manager/admin/job/add_job.html.twig', [
-            'page' => 'administration-ajouter-job',
+            'page' => 'administration-job',
         ]);
     }
 
@@ -41,7 +43,7 @@ class JobController extends AbstractController
     public function editJob(): Response
     {
         return $this->render('manager/admin/job/detail_job.html.twig', [
-            'page' => 'administration-detail-job',
+            'page' => 'administration-job',
         ]);
     }
 
