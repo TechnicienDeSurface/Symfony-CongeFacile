@@ -177,21 +177,31 @@ class Person
         return $this->requests;
     }
     
-    //FONCTION EN PHP
+    //FONCTION QUI CALCULE LES JOURS RESTANTS
     public function getTotalLeaveDays(): int
     {
         $totalDays = 0;
-
+    
         foreach ($this->requests as $request) {
             if ($request->getStartAt() && $request->getEndAt()) {
                 $startDate = $request->getStartAt();
                 $endDate = $request->getEndAt();
-                $interval = $startDate->diff($endDate);
-                $totalDays += $interval->days;
+                $currentDate = clone $startDate;
+    
+                // Calculer le nombre total de jours en excluant les weekends
+                while ($currentDate <= $endDate) {
+                    // Si le jour est un samedi (6) ou un dimanche (0), ne pas l'ajouter
+                    if ($currentDate->format('N') < 6) {
+                        $totalDays++;
+                    }
+                    
+                    $currentDate->modify('+1 day');
+                }
             }
         }
-
+    
         return $totalDays;
     }
+    
 
 }
