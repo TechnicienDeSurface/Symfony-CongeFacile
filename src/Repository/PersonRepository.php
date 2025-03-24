@@ -22,13 +22,10 @@ class PersonRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('person');
     
-        // Jointure avec la position
-        $qb->leftJoin('person.position', 'pos');
-    
         // Jointure avec l'entité User pour filtrer par email
         $qb->leftJoin('person.user', 'user');
     
-        $qb->leftJoin('person.department', 'department');
+        $qb->leftJoin('person.position', 'position');
     
         // FILTRE PAR LASTNAME
         if (!empty($filters['last_name'])) {
@@ -50,7 +47,7 @@ class PersonRepository extends ServiceEntityRepository
     
         // FILTRE PAR LE DEPARTEMENT
         if (!empty($filters['name'])) {
-            $qb->andWhere('department.name LIKE :name')
+            $qb->andWhere('position.name LIKE :name')
                ->setParameter('name', '%' . $filters['name'] . '%');
         }
     
