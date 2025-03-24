@@ -16,14 +16,12 @@ class MailerService {
         $this->mailer = $mailer;
     }
 
-    public function sendEmail($to, $subject, $text, $html) {
+    public function sendEmail($to, $subject, $text) {
         $email = (new Email())
-            ->from('demomailtrap.co')
+            ->from('heddy.mameri@gmail.com')
             ->to($to)
             ->subject($subject)
-            ->text($text)
-            ->html($html);
-
+            ->text($text); 
         $this->mailer->send($email);
     }
 

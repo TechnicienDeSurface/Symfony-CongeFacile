@@ -20,15 +20,8 @@ class PreferenceController extends AbstractController
     #[Route('/preference-collaborateur', name: 'app_preference_collaborateur')]
     public function viewPreferenceCollaborateur(ManagerRegistry $registry, PersonRepository $repository, Request $request, MailerService $mailer ): Response
     {
-        try{
-            $mailer->sendEmail('test.valdoise@gmail.com', 'Test Envoie email ', 'Test réussi', '<h1>Bienvenue</h1><p>Merci de vous être inscrit à notre service.</p><p>Cordialement,<br>L\'équipe</p>') ; 
-        }catch(PDOException $e){
-            dd($e) ; 
-        }
-        $id = null ; 
         /** @var User $user */ 
         $user = $this->getUser() ; //récupère l'objet de l'utilisateur connecté  
-
         $userHost = $user->getPerson() ; 
         $id = $userHost->getId();
         
@@ -41,15 +34,9 @@ class PreferenceController extends AbstractController
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                //dd($request->cookies->all());
                 // Si valide : j'enregistre les données dans la BDD.
                 $request->cookies->all();
-                try{
-                    $mailer->sendEmail('test.valdoise@gmail.com', 'Test Envoie email ', 'Test réussi', '<h1>Bienvenue</h1><p>Merci de vous être inscrit à notre service.</p><p>Cordialement,<br>L\'équipe</p>') ; 
-                }catch(PDOException $e){
-                    dd($e) ; 
-                }
-                    $registry->getManager()->flush();
+                $registry->getManager()->flush();
 
                 // Faire une redirection vers le formulaire de modification.
             } else {
