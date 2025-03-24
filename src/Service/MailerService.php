@@ -7,8 +7,6 @@ use App\Entity\User ;
 use App\Repository\UserRepository ; 
 use App\Repository\RequestRepository ; 
 use Symfony\Component\Mime\Email;
-// use App\Event\LeaveReminderEvent;
-// use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class MailerService {
     private $mailer;
@@ -20,7 +18,7 @@ class MailerService {
 
     public function sendEmail($to, $subject, $text, $html) {
         $email = (new Email())
-            ->from('hello@example.com')
+            ->from('demomailtrap.co')
             ->to($to)
             ->subject($subject)
             ->text($text)

@@ -11,13 +11,20 @@ use App\Form\PreferenceType ;
 use App\Entity\Person ;
 use App\Entity\User ;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Service\MailerService ;
+use PDOException;
 
 class PreferenceController extends AbstractController
 {
     //PAGE PREFERENCE "COLLABORATEUR"
     #[Route('/preference-collaborateur', name: 'app_preference_collaborateur')]
-    public function viewPreferenceCollaborateur(ManagerRegistry $registry, PersonRepository $repository, Request $request ): Response
+    public function viewPreferenceCollaborateur(ManagerRegistry $registry, PersonRepository $repository, Request $request, MailerService $mailer ): Response
     {
+        try{
+            $mailer->sendEmail('test.valdoise@gmail.com', 'Test Envoie email ', 'Test réussi', '<h1>Bienvenue</h1><p>Merci de vous être inscrit à notre service.</p><p>Cordialement,<br>L\'équipe</p>') ; 
+        }catch(PDOException $e){
+            dd($e) ; 
+        }
         $id = null ; 
         /** @var User $user */ 
         $user = $this->getUser() ; //récupère l'objet de l'utilisateur connecté  
@@ -37,7 +44,12 @@ class PreferenceController extends AbstractController
                 //dd($request->cookies->all());
                 // Si valide : j'enregistre les données dans la BDD.
                 $request->cookies->all();
-                $registry->getManager()->flush();
+                try{
+                    $mailer->sendEmail('test.valdoise@gmail.com', 'Test Envoie email ', 'Test réussi', '<h1>Bienvenue</h1><p>Merci de vous être inscrit à notre service.</p><p>Cordialement,<br>L\'équipe</p>') ; 
+                }catch(PDOException $e){
+                    dd($e) ; 
+                }
+                    $registry->getManager()->flush();
 
                 // Faire une redirection vers le formulaire de modification.
             } else {
