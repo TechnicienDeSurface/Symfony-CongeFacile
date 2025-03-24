@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Collaborateur;
+namespace App\Controller\Collaborator;
 
 use App\Repository\RequestRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +23,7 @@ class RequestController extends AbstractController
         $form->handleRequest($request_bd); 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                try{
+                try {
                     // Si valide : j'enregistre les données dans la BDD.
                     $registry->getManager()->persist($request);
                     $registry->getManager()->flush();
@@ -31,7 +31,7 @@ class RequestController extends AbstractController
                     return $this->render('accueil/accueil.html.twig', [
                         'page' => 'accueil', //définir la page
                     ]);  
-                }catch(NotFoundHttpException $e ){
+                } catch (NotFoundHttpException $e ){
                     $this->addFlash('error', 'Error to add product') ; 
                 }
                 // Faire une redirection vers le formulaire de modification.
@@ -43,7 +43,7 @@ class RequestController extends AbstractController
             
         }
 
-        return $this->render('collaborateur/new_request.html.twig', [
+        return $this->render('collaborator/new_request.html.twig', [
             'page' => 'new-request',
             'form' => $form->createView(),
         ]);
@@ -53,17 +53,17 @@ class RequestController extends AbstractController
     #[Route('/request-history', name: 'app_request_history')]
     public function viewRequestHistory(): Response
     {
-        return $this->render('collaborateur/request_history.html.twig', [
+        return $this->render('collaborator/request_history.html.twig', [
             'page' => 'request-history',
         ]);
     }
 
     //PAGE DETAILS DES DEMANDES "COLLABORATEUR"
-    #[Route('/detail-request-collaborateur/{id}', name: 'app_detail_request_collaborateur')]
+    #[Route('/detail-request-collaborator/{id}', name: 'app_detail_request_collaborator')]
     public function detailRequest(): Response
     {
-        return $this->render('collaborateur/detail_request.html.twig', [
-            'page' => 'detail-request-collaborateur',
+        return $this->render('collaborator/detail_request.html.twig', [
+            'page' => 'detail-request-collaborator',
         ]);
     }
 

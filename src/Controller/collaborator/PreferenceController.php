@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Collaborateur;
+namespace App\Controller\Collaborator;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,11 +9,11 @@ use Symfony\Component\Routing\Attribute\Route;
 class PreferenceController extends AbstractController
 {
     //PAGE PREFERENCE "COLLABORATEUR"
-    #[Route('/preference-collaborateur', name: 'app_preference_collaborateur')]
+    #[Route('/preference-collaborator', name: 'app_preference_collaborator')]
     public function viewPreferenceCollaborateur(): Response
     {
-        return $this->render('collaborateur/preference.html.twig', [
-            'page' => 'preference-collaborateur',
+        return $this->render('collaborator/preference.html.twig', [
+            'page' => 'preference-collaborator',
         ]);
     }
 }

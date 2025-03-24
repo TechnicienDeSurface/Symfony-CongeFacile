@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Collaborateur;
+namespace App\Controller\Collaborator;
 
 use App\Entity\Person;
 use App\Entity\User;
@@ -28,8 +28,8 @@ class InformationController extends AbstractController
         //     // Handle form submission, e.g., save the data to the database
         // }
 
-        return $this->render('collaborateur/information.html.twig', [
-            'page' => 'information-collaborateur',
+        return $this->render('collaborator/information.html.twig', [
+            'page' => 'information-collaborator',
             'form1' => $form_person,
             'form2' => $form_password, 
         ]);
