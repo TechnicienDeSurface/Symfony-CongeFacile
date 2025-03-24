@@ -2,6 +2,7 @@
 
 namespace App\Controller\Manager;
 
+use App\Entity\User;
 use App\Repository\PersonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,51 +13,43 @@ use App\Repository\RequestRepository as RequestRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Bundle\SecurityBundle\SecurityBundle;
 
 class TeamController extends AbstractController
 {
-    // J'ai mis en commentaire pour pouvoir accéder à la page avec celui du bas
-    // //PAGE DE L'EQUIPE GERER PAR LE MANAGER
-    // #[Route('/team-manager/{page}', name: 'app_team')]
-    // public function viewTeam(Request $request ,PersonRepository $personRepository, int $page = 1): Response 
-    // {
-
-    //     $filters = [
-    //         'last_name'     => $request->query->get('last_name'),
-    //         'first_name'    => $request->query->get('first_name'),
-    //         'email'         => $request->query->get('email'),
-    //         'position_name' => $request->query->get('position_name'),
-    //         //ATTENTION, MANQUE LE FILTRE PAR LE NOMBRE DE CONGE
-    //     ];
-
-
-    //     $query = $personRepository->searchTeamMembers($filters);
-
-    //     // Pagination avec QueryAdapter
-    //     $adapter = new QueryAdapter($query);
-    //     $pagerfanta = new Pagerfanta($adapter);
-    //     $pagerfanta->setMaxPerPage(5);
-
-    //     try{
-    //         $pagerfanta->setCurrentPage($page);
-    //     }
-    //     catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
-    //         throw $this->createNotFoundException('La page demandée n\'existe pas.');
-    //     }
-
-    //     return $this->render('manager/team.html.twig', [
-    //         'pager' => $pagerfanta,
-    //         'team' => $pagerfanta->getCurrentPageResults(),
-    //         'filters' => $filters,
-    //     ]);
-    // }
-
-
-    // J'ai utilisé celui-là pour pouvoir accéder à la page, pour finaliser tu peux suppimer et utiliser celui du haut
-    #[Route('/team-manager', name: 'app_team_default')]
-    public function viewTeamDefault(): Response
+    //PAGE DE L'EQUIPE GERER PAR LE MANAGER
+    #[Route('/team-manager/{page}', name: 'app_team', methods: ['GET', 'POST'])]
+    public function viewTeam(Request $request , PersonRepository $personRepository, int $page = 1): Response 
     {
-        return $this->render('manager/team.html.twig', []);
+
+        $filters = [
+            'last_name'     => $request->query->get('last_name'),
+            'first_name'    => $request->query->get('first_name'),
+            'email'         => $request->query->get('email'),
+            'position_name' => $request->query->get('position_name'),
+            //ATTENTION, MANQUE LE FILTRE PAR LE NOMBRE DE CONGE
+        ];
+
+        $query = $personRepository->searchTeamMembers($filters);
+
+        // Pagination avec QueryAdapter
+        $adapter = new QueryAdapter($query);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage(5);
+
+        try{
+            $pagerfanta->setCurrentPage($page);
+        }
+        catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
+            throw $this->createNotFoundException('La page demandée n\'existe pas.');
+        }
+
+        return $this->render('manager/team.html.twig', [
+            'pager' => $pagerfanta,
+            'team' => $pagerfanta->getCurrentPageResults(),
+            'filters' => $filters,
+        ]);
     }
 
     //PAGE DETAILS DE L'EQUIPE GERER PAR LE MANAGER

@@ -37,7 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $enabled = null;
 
-    #[ORM\ManyToOne(targetEntity: Person::class, cascade: ["persist"])]
+    #[ORM\OneToOne(inversedBy: 'user', targetEntity: Person::class)]
     #[ORM\JoinColumn(nullable: false)]
     private Person $person;
 
@@ -139,7 +139,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getPerson(): ?Person
     {
-        return $this->person; 
+        return $this->person;
     }
 
     public function setPerson(Person $person): static
