@@ -5,15 +5,15 @@ namespace App\Event;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class LeaveReminderEvent extends Event {
-    public const NAME = 'leave.reminder';
+    // public const NAME = 'leave.reminder';
 
-    protected $leave;
+    // protected $leave;
 
-    public function __construct($leave) {
-        $this->leave = $leave;
-    }
+    // public function __construct($leave) {
+    //     $this->leave = $leave;
+    // }
 
-    public function getLeave() {
-        return $this->leave;
-    }
+    // public function getLeave() {
+    //     return $this->leave;
+    // }
 }

@@ -14,13 +14,13 @@ class EventListener {
         $this->mailerService = $mailerService;
     }
 
-    public function onLeaveReminder(LeaveReminderEvent $event) {
-        $leave = $event->getLeave();
-        $email = $leave->getUser()->getEmail();
-        $subject = 'Rappel de congé';
-        $text = 'Votre congé commence dans une semaine.';
-        $html = '<p>Votre congé commence dans une semaine.</p>';
+    // public function onLeaveReminder(LeaveReminderEvent $event) {
+    //     $leave = $event->getLeave();
+    //     $email = $leave->getUser()->getEmail();
+    //     $subject = 'Rappel de congé';
+    //     $text = 'Votre congé commence dans une semaine.';
+    //     $html = '<p>Votre congé commence dans une semaine.</p>';
 
-        $this->mailerService->sendEmail($email, $subject, $text, $html);
-    }
+    //     $this->mailerService->sendEmail($email, $subject, $text, $html);
+    // }
 }

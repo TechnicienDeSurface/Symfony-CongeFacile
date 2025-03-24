@@ -12,7 +12,6 @@ use App\Entity\Person ;
 use App\Entity\User ;
 use Doctrine\Persistence\ManagerRegistry;
 
-
 class PreferenceController extends AbstractController
 {
     //PAGE PREFERENCE "COLLABORATEUR"
