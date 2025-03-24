@@ -21,16 +21,16 @@ class Request
     #[ORM\JoinColumn(nullable: false)]
     private ?RequestType $request_type;
 
-    #[ORM\ManyToOne(targetEntity: Person::class)]
+    #[ORM\ManyToOne(targetEntity: Person::class, inversedBy: 'requests')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Person $collaborator = null ;
+    private ?Person $collaborator = null;
 
     #[ORM\ManyToOne(targetEntity: Department::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Department $department = null ;
+    private ?Department $department = null;
 
     #[ORM\Column]
-    private ?\DateTime $created_at = null ;
+    private ?\DateTime $created_at = null;
     public function __construct()
     {
         $this->created_at = new \DateTime();
