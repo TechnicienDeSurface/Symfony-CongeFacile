@@ -163,8 +163,19 @@
 		<div class="user-info">
 			<img src="avatar.png" alt="User">
 			<div>
-				<strong>Frédéric Salesse</strong><br>
-				Manager
+{% if app.user %}
+    <strong>{{ app.user.person.FirstNameLastName }}</strong><br>
+    {% if is_granted("ROLE_MANAGER") %}
+        Manager
+    {% else %}
+        Collaborateur
+    {% endif %}
+{% else %}
+    <strong>Utilisateur non connecté</strong><br>
+    Invité
+{% endif %}
+
+
 			</div>
 		</div>
 		{% endif %}

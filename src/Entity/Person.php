@@ -141,4 +141,9 @@ class Person
 
         return $this;
     }
+
+    public function getFirstNameLastName() : string
+    {
+        return $this->first_name . " " . $this->last_name;
+    }
 }
