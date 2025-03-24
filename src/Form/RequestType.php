@@ -44,7 +44,7 @@ class RequestType extends AbstractType
             ->add('receipt_file', FileType::class, [ //Input type file 
                 'label' => 'Justificatif si applicable',
                 'attr' => ['class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2'],
-                'require' => false, 
+                'required' => false, 
             ])
             ->add('comment', TextareaType::class, [
                 'label' => 'Commentaire',
@@ -53,7 +53,7 @@ class RequestType extends AbstractType
                     'placeholder' => 'Si congé exceptionnel ou sans solde, vous pouvez préciser votre demande.',
                     'rows' => 5, // Augmente la hauteur du champ
                 ],
-                'require' => false, 
+                'required' => false, 
             ])
             ->add('request_type', EntityType::class, [
                 'class' => RequestTypeEntity::class,
