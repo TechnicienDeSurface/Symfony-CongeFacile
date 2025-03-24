@@ -26,11 +26,11 @@ class Person
 
     #[ORM\ManyToOne(targetEntity: Department::class, cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Department $department = null ;
+    private ?Department $department = null;
 
     #[ORM\ManyToOne(targetEntity: Position::class, cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Position $position = null ;
+    private ?Position $position = null;
 
     #[ORM\Column]
     private ?bool $alert_new_request = null;
