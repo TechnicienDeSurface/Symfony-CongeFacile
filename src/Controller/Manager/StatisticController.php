@@ -13,7 +13,7 @@ class StatisticController extends AbstractController
     #[Route('/statistic-manager', name: 'app_statistic')]
     public function viewStatistic(EntityManagerInterface $entityManagerInterface): Response
     {
-        $requests = $entityManagerInterface->getRepository(RequestEntity::class)->findAll();
+        $requests = $entityManagerInterface->getRepository(RequestEntity::class)->findBy([], []);
         $requestCounts = [];
 
         //GRAPHIQUE EN CAMEMBERT

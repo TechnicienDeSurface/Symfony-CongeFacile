@@ -5,27 +5,24 @@
 	<body>
 		{% include 'layout/menu/_header.html.twig' %}
 
-		<main style="display: flex;">
+		<main class="flex">
 			{% include 'layout/menu/_sidebar.html.twig' %}
 			<div class="w-full p-8">
-				<h1 class="text-left font-bold text-2xl my-4 " style='color : #004C6C !important'>CongéFacile</h1>
-				{#textes affichés gérés en back #}
+				<h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">CongéFacile</h1>
 				<p class="text-left mb-8">
 					CongéFacile est votre nouvel outil dédié à la gestion des congés au sein de l'entreprise.
 					Plus besoin d'échanges interminables ou de formulaires papier : en quelques clics, vous pouvez gérer
 					vos absences en toute transparence et simplicité.
 				</p>
-				<h2 class="text-left font-semibold text-xl mb-4" style='color : #004C6C !important'>Etapes</h2>
+				<h2 class="text-left font-semibold text-xl mb-4 text-[#004C6C]">Etapes</h2>
 				<div class="relative flex justify-between items-start max-w-screen-lg mx-auto">
-					<div class="absolute top-5 left-0 w-full h-1 bgz-0" style="background-color : #004C6C !important"></div>
+					<div class="absolute top-5 left-0 w-full h-1 bg-[#004C6C]"></div>
 
 					<div class="relative z-10 w-1/3 text-center">
 						<div class="flex items-center justify-center">
 							<div
-								class="w-10 h-10 flex items-center justify-center rounded-full" style="border : solid 3px {{blanc}};
-																					color : {{blanc}} !important; background-color : {{bleu}} !important">
-								{#Couleurs des étapes gérées en back via des variables #}
-								<span class="text-sm text-white font-bold">1</span>
+								class="w-10 h-10 flex items-center justify-center rounded-full border-4 border-white text-white bg-[#004C6C]">
+								<span class="text-sm font-bold">1</span>
 							</div>
 						</div>
 						<div class="mr-10 mt-4 bg-gray-100 p-4 rounded-lg ml-10">
@@ -34,19 +31,19 @@
 					</div>
 					<div class="relative z-10 w-1/3 text-center">
 						<div class="flex items-center justify-center">
-							<div class="w-10 h-10 flex items-center justify-center rounded-full" style="border : solid 3px {{blanc}};
-																					color : {{blanc}} !important; background-color : {{bleu}} !important">
-								<span class="text-sm text-white font-bold">2</span>
+							<div
+								class="w-10 h-10 flex items-center justify-center rounded-full border-4 border-white text-white bg-[#004C6C]">
+								<span class="text-sm font-bold">2</span>
 							</div>
 						</div>
-						<div class=" mr-10 mt-4 bg-gray-100 p-4 rounded-lg ml-10">
+						<div class="mr-10 mt-4 bg-gray-100 p-4 rounded-lg ml-10">
 							<p class="text-gray-700">Mon manager valide ou refuse la demande</p>
 						</div>
 					</div>
 					<div class="relative z-10 w-1/3 text-center">
 						<div class="flex items-center justify-center">
-							<div class="w-10 h-10 flex items-center justify-center rounded-full" style="border : solid 3px {{bleu}};
-																				color : {{bleu}} !important; background-color : {{blanc}} !important">
+							<div
+								class="w-10 h-10 flex items-center justify-center rounded-full border-4 border-[#004C6C] text-[#004C6C] bg-white">
 								<span class="text-sm font-bold">3</span>
 							</div>
 						</div>
