@@ -27,11 +27,11 @@ class TeamController extends AbstractController
         $form->handleRequest($request);
 
         $filters = [
-            'last_name'     => $request->query->get('lastname'),
-            'first_name'    => $request->query->get('firstname'),
-            'email'         => $request->query->get('email'),
-            'name'          => $request->query->get('name'),
-            'conges'        => $request->query->get('conges'),
+            'last_name'         => $request->query->get('lastname'),
+            'first_name'        => $request->query->get('firstname'),
+            'email'             => $request->query->get('email'),
+            'name'              => $request->query->get('name'),
+            'totalleavedays'    => $request->query->get('totalleavedays'),
         ];
 
         // Si le formulaire est soumis et valide, on utilise ses données
@@ -41,7 +41,7 @@ class TeamController extends AbstractController
 
         // Recherche dans le repository avec les filtres
         $query = $personRepository->searchTeamMembers($filters);
-
+        
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);
         $pagerfanta = new Pagerfanta($adapter);

@@ -29,12 +29,12 @@ class FilterManagerTeamFormType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
             ])
-            ->add('position', TextType::class, [
+            ->add('name', TextType::class, [
                 'label' => 'Poste :',
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
             ])
-            ->add('nb_holidays', TextType::class, [
+            ->add('totalleavedays', TextType::class, [
                 'label' => 'Nb de congés posés sur l\'année :',
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
