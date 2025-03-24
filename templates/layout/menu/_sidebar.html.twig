@@ -141,7 +141,7 @@
 
 			<a href="{{path('app_history_request')}}">Historique des demandes</a>
 			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
-				{# <a href="{{path('app_team')}}" class="{% if app.request.get('_route') == 'app_team' %}active{% endif %}">Mon équipe</a> #}
+				<a href="{{path('app_team_default')}}" class="{% if app.request.get('_route') == 'app_team' %}active{% endif %}">Mon équipe</a>
 				<a href="{{ path('app_statistic') }}" class="{% if app.request.get('_route') == 'app_statistic' %}active{% endif %}">Statistique</a>
 			{% endif %}
 			<div class="trait"></div>
