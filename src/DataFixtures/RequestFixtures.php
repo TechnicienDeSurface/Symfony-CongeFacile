@@ -18,7 +18,7 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface {
         $request->setDepartment($this->getReference('Symfony', Department::class));
         $request->setCreatedAtValue();
         $request->setStartAt(new \DateTime());
-        $request->setEndAt(new \DateTime());
+        $request->setEndAt(new \DateTime("2025-05-28"));
         $request->setReceiptFile('receiptFile');
         $request->setComment('comment');
         $request->setAnswerComment('answerComment');
@@ -33,7 +33,7 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface {
         $request->setDepartment($this->getReference('Symfony', Department::class));
         $request->setCreatedAtValue();
         $request->setStartAt(new \DateTime());
-        $request->setEndAt(new \DateTime());
+        $request->setEndAt(new \DateTime("2025-06-25"));
         $request->setReceiptFile('receiptFile');
         $request->setComment('comment');
         $request->setAnswerComment('answerComment');
@@ -48,7 +48,7 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface {
         $request->setDepartment($this->getReference('CMS', Department::class));
         $request->setCreatedAtValue();
         $request->setStartAt(new \DateTime());
-        $request->setEndAt(new \DateTime());
+        $request->setEndAt(new \DateTime("2025-06-03"));
         $request->setReceiptFile('receiptFile');
         $request->setComment('comment');
         $request->setAnswerComment('answerComment');
@@ -63,7 +63,7 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface {
         $request->setDepartment($this->getReference('BU Design', Department::class));
         $request->setCreatedAtValue();
         $request->setStartAt(new \DateTime());
-        $request->setEndAt(new \DateTime());
+        $request->setEndAt(new \DateTime("2025-09-03"));
         $request->setReceiptFile('receiptFile');
         $request->setComment('comment');
         $request->setAnswerComment('answerComment');
@@ -78,7 +78,7 @@ class RequestFixtures extends Fixture implements DependentFixtureInterface {
         $request->setDepartment($this->getReference('Marketing', Department::class));
         $request->setCreatedAtValue();
         $request->setStartAt(new \DateTime());
-        $request->setEndAt(new \DateTime());
+        $request->setEndAt(new \DateTime("2025-12-31"));
         $request->setReceiptFile('receiptFile');
         $request->setComment('comment');
         $request->setAnswerComment('answerComment');

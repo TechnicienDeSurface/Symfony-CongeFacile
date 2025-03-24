@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <title>{% block title %}Ajouter un poste{% endblock %}</title>
+	<body>
+		{% include 'layout/menu/_header.html.twig' %}
+
+		<main style="display: flex;">
+			{% include 'layout/menu/_sidebar.html.twig' %}
+
+            <div class="w-full p-8">
+				<h1 class="text-left font-bold text-2xl my-4 " style='color : #004C6C !important'>
+                    Développeur web
+                </h1>
+
+                <form>
+                    <div class="mb-4 w-1/4">
+                        <label for="jobLabel" class="block text-gray-700 text-sm font-bold mb-2">Nom du poste :</label>
+                        <input type="text" id="jobLabel" name="jobLabel" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="flex items-left">
+                        <button type="delete" class="bg-[#E10E0E] hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Supprimer
+                        </button>
+                        <button type="update" class="bg-[#004C6C] hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-2">
+                            Mettre à jour
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </main>
+    </body>
+{% endblock %}
