@@ -14,78 +14,73 @@
 					<h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Mon équipe</h1>
 					<button class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Ajouter un collaborateur</button>
 				</div>
+				<div class="flex w-full justify-center items-center h-max">
+					<table class="w-full mt-6">
+							<thead>
+								{{ form_start(form) }}
+								<tr class="bg-[#F9FAFB] text-gray-700 border-x border-t border-[#EAECF0] rounded-lg">
+									<td class="py-4 px-6 pr-0 w-1/6">
+										{{ form_label(form.last_name, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.last_name, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
 
-				<table class="w-4/5 mt-6">
-					<thead>
-						<tr class="bg-[#F9FAFB] text-white border-x border-t border-[#EAECF0] rounded-lg" style="overflow: hidden;">
-							<td class="py-4 px-6 pr-0 w-1/6">
-								<label for="last_name" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									Nom :
-									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
-								</label>
-								<input type="text" id="last_name" name="last_name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-							</td>
+									<td class="py-4 px-6 pr-0 w-1/6">
+										{{ form_label(form.first_name, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.first_name, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
 
-							<td class="py-4 px-6 pr-0 w-1/6">
-								<label for="first_name" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									Prénom :
-									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
-								</label>
-								<input type="text" id="first_name" name="first_name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-							</td>
+									<td class="py-4 px-6 pr-0 w-1/6">
+										{{ form_label(form.email, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.email, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
 
-							<td class="py-4 px-6 pr-0 w-1/6">
-								<label for="email" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									Adresse email :
-									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
-								</label>
-								<input type="email" id="email" name="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-							</td>
+									<td class="py-4 px-6 pr-0 w-1/6">
+										{{ form_label(form.name, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.name, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
 
-							<td class="py-4 px-6 pr-0 w-1/6">
-								<label for="position" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									Poste :
-									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
-								</label>
-								<input type="text" id="position" name="position" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-							</td>
+									<td class="py-4 px-6 pr-0 w-1/4">
+										{{ form_label(form.totalleavedays, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.totalleavedays, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
 
-							<td class="py-4 px-6 pr-0 w-1/4">
-								<label for="nb_holidays" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									Nb de congés posés sur l'année :
-									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
-								</label>
-								<input type="text" id="nb_holidays" name="nb_holidays" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-							</td>
+									<td class="w-1/6 px-6 pr-6" colspan="3" style="vertical-align: bottom; padding-bottom: 15px;">
+										<div>
+											{{ form_widget(form.submit, {'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
+										</div>
+									</td>
+								</tr>
+								{{ form_end(form) }}
+							</thead>
+						<tbody>
 
-							<td class="w-1/6 px-6 pr-6" colspan="3" style="vertical-align: bottom; padding-bottom: 15px;">
-								<div>
-									<button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6">
-										Rechercher
-									</button>
-								</div>
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-
-						{# Chaque résultat doit se présenter sous cette forme : #}
-						{% for items in team %}
-							<tr class="border-x border-b mt-4">
-								<td class="py-6 px-6">{{items.lastname}}</td>
-								<td class="py-6 px-6">{{items.firstname}}</td>
-								<td class="py-6 px-6">{{ items.user.email|default('Non défini')}}</td>
-								<td class="py-6 px-6">{{items.departmentid.name}}</td>
-								<td class="py-6 px-6">{{items.totalleavedays}} jours</td>
-								<td class="py-6 px-6">
-									<button class="bg-[#004C6C14] text-white font-bold py-2 px-10 rounded hover:text-white">
-										<span class="text-[#475467]">Détails</span>
-									</button>
-								</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+							{# Chaque résultat doit se présenter sous cette forme : #}
+							{% for items in team %}
+								<tr class="border-x border-b mt-4">
+									<td class="py-6 px-6">{{items.lastname}}</td>
+									<td class="py-6 px-6">{{items.firstname}}</td>
+									<td class="py-6 px-6">{{ items.user.email|default('Non défini')}}</td>
+									<td class="py-6 px-6">{{items.departmentid.name}}</td>
+									<td class="py-6 px-6">{{items.totalleavedays}} jours</td>
+									<td class="py-6 px-6">
+										<button class="bg-[#004C6C14] text-white font-bold py-2 px-10 rounded hover:text-white">
+											<span class="text-[#475467]">Détails</span>
+										</button>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<div class="flex w-full justify-center items-center h-max mt-10">
+					{% if pager.hasPreviousPage %}
+						<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path('app_team', { page: pager.previousPage }) }}">Précédent</a>
+					{% endif %}
+						<p>Page {{ pager.currentPage }} sur {{ pager.nbPages }}</p>
+					{% if pager.hasNextPage %}
+						<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path('app_team', { page: pager.nextPage }) }}">Suivant</a>
+					{% endif %}
+				</div>
 			</div>
 		</main>
 	</body>
