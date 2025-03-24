@@ -34,6 +34,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\Column]
+    private ?bool $enabled = null;
+
+    #[ORM\ManyToOne(targetEntity: Person::class, cascade: ["persist"])]
+    #[ORM\JoinColumn(nullable: false)]
+    private Person $person;
+
+    #[ORM\Column]
+    private ?DateTimeImmutable $created_at = null;
+
+    #[ORM\Column]
+    private bool $isVerified = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,18 +64,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    #[ORM\Column]
-    private ?bool $enabled = null;
-
-    #[ORM\ManyToOne(targetEntity: Person::class, cascade: ["persist"])]
-    #[ORM\JoinColumn(nullable: false)]
-    private Person $person;
-
-    #[ORM\Column]
-    private ?DateTimeImmutable $created_at = null;
-
-    #[ORM\Column]
-    private bool $isVerified = false;
     /**
      * A visual identifier that represents this user.
      *

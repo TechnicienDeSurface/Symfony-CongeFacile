@@ -41,9 +41,10 @@ class RequestType extends AbstractType
                 'attr' => ['class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2'],
                 // 'attr' => ['class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-100', 'id' => 'working_days', 'readonly' => true],
             ])
-            ->add('receipt_file', FileType::class, [
+            ->add('receipt_file', FileType::class, [ //Input type file 
                 'label' => 'Justificatif si applicable',
                 'attr' => ['class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2'],
+                'require' => false, 
             ])
             ->add('comment', TextareaType::class, [
                 'label' => 'Commentaire',
@@ -52,6 +53,7 @@ class RequestType extends AbstractType
                     'placeholder' => 'Si congé exceptionnel ou sans solde, vous pouvez préciser votre demande.',
                     'rows' => 5, // Augmente la hauteur du champ
                 ],
+                'require' => false, 
             ])
             ->add('request_type', EntityType::class, [
                 'class' => RequestTypeEntity::class,

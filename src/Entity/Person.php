@@ -22,7 +22,7 @@ class Person
 
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: true)] //Il faut rendre le manager_id nullable sinon on ne peut pas créer de person et de user 
-    private ?User $manager = null ;
+    private ?User $manager = null;
 
     #[ORM\ManyToOne(targetEntity: Department::class, cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]

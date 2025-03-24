@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\User; 
 use App\Entity\Person;
+use Doctrine\ORM\Query ; 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,10 +18,8 @@ class PersonRepository extends ServiceEntityRepository
         parent::__construct($registry, Person::class);
     }
         
-        public function searchTeamMembers(array $filters): \Doctrine\ORM\Query
+        public function searchTeamMembers(array $filters,User $user): Query 
         {
-            $user = $this->security->getUser();
-
             if (!$user) {
                 throw new \Exception('Aucun utilisateur connecté.');
             }
