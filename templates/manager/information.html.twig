@@ -16,7 +16,22 @@
                         <div class="space-y-6">
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="col-span-1">
-                                    {{ form_row(formInfo.email) }}
+                                
+                                    <!-- Label (si tu veux le garder séparé) -->
+                                    {{ form_label(formInfo.email, 'Adresse email du manager', {'label_attr': {'class': 'block text-gray-700 font-medium'}}) }}
+                                    <div class="relative">
+                                        <!-- Icône à gauche -->
+                                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                                             <img src="{{ asset('assets/image/icon-enveloppe.svg') }}" alt="Ico enveloppe" class="w-5 h-5">
+                                        </span>
+
+                                        <!-- Champ email -->
+                                        {{ form_widget(formInfo.email, {'attr': {
+                                            'class': 'pl-10 pr-4 py-2 mt-1 block w-full border border-gray-300 rounded-md bg-gray-200 text-gray-700 focus:ring focus:ring-blue-300'
+                                        }}) }}
+                                    </div>
+                                    <!-- Erreurs (si nécessaire) -->
+                                    {{ form_errors(formInfo.email) }}
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-4">
