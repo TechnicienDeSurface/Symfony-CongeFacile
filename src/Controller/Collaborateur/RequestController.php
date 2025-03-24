@@ -24,7 +24,6 @@ class RequestController extends AbstractController
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 try{
-                    $request_bd->cookies->all();
                     // Si valide : j'enregistre les données dans la BDD.
                     $registry->getManager()->persist($request);
                     $registry->getManager()->flush();
