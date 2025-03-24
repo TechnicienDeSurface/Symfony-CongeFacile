@@ -20,44 +20,60 @@ class PersonRepository extends ServiceEntityRepository
         
     public function searchTeamMembers(array $filters): Query
     {
-    
         $qb = $this->createQueryBuilder('person');
     
-        // Jointure avec la position (nécessaire pour filtrer par position_name)
-        $qb->leftJoin('person.position', 'pos');
+        // Jointure avec l'entité User pour filtrer par email
+        $qb->leftJoin('person.user', 'user');
+    
+        $qb->leftJoin('person.position', 'position');
     
         // FILTRE PAR LASTNAME
         if (!empty($filters['last_name'])) {
-            $qb->andWhere('person.lastName LIKE :last_name')
+            $qb->andWhere('person.last_name LIKE :last_name')
                 ->setParameter('last_name', '%' . $filters['last_name'] . '%');
         }
     
         // FILTRE PAR FIRSTNAME
         if (!empty($filters['first_name'])) {
-            $qb->andWhere('person.firstName LIKE :first_name')
+            $qb->andWhere('person.first_name LIKE :first_name')
                 ->setParameter('first_name', '%' . $filters['first_name'] . '%');
         }
-    
+        
         // FILTRE PAR EMAIL
         if (!empty($filters['email'])) {
             $qb->andWhere('user.email LIKE :email')
                 ->setParameter('email', '%' . $filters['email'] . '%');
         }
     
-        // FILTRE PAR LE POSTE
-        if (!empty($filters['position_name'])) {
-            $qb->andWhere('pos.name = :position_name')
-                ->setParameter('position_name', $filters['position_name']);
+        // FILTRE PAR LE DEPARTEMENT
+        if (!empty($filters['name'])) {
+            $qb->andWhere('position.name LIKE :name')
+               ->setParameter('name', '%' . $filters['name'] . '%');
         }
     
-        // FILTRE PAR NOMBRE DE CONGÉS
-        if (!empty($filters['conges'])) {
-            $qb->andWhere('person.conges = :conges')
-                ->setParameter('conges', $filters['conges']);
-        }
+        // // Tri dynamique par total_leave_days
+        // $qb->addSelect(
+        //     '(
+        //         SELECT COUNT(r.id) 
+        //         FROM App\Entity\Request r 
+        //         WHERE r.collaborator = person
+        //     ) AS total_leave_days'
+        // );
     
+        // // Tri dynamique par autre attributs comme position ou email peut-être
+        // if (!empty($filters['sort_order'])) {
+        //     $sortOrder = $filters['sort_order']; // 'ASC' ou 'DESC'
+        //     $qb->orderBy('total_leave_days', $sortOrder);
+        // } else {
+        //     // Par défaut, on trie par autre critère
+        //     $qb->orderBy('person.last_name', 'ASC');
+        // }
+        
         return $qb->getQuery();
     }
+    
+    
+
     
 
 
