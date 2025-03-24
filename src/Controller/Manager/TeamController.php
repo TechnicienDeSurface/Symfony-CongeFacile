@@ -3,6 +3,7 @@
 namespace App\Controller\Manager;
 
 use App\Entity\User;
+use App\Form\FilterManagerTeamFormType;
 use App\Repository\PersonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,15 +23,23 @@ class TeamController extends AbstractController
     #[Route('/team-manager/{page}', name: 'app_team', methods: ['GET', 'POST'])]
     public function viewTeam(Request $request , PersonRepository $personRepository, int $page = 1): Response 
     {
+        $form = $this->createForm(FilterManagerTeamFormType::class);
+        $form->handleRequest($request);
 
         $filters = [
-            'last_name'     => $request->query->get('last_name'),
-            'first_name'    => $request->query->get('first_name'),
+            'last_name'     => $request->query->get('lastname'),
+            'first_name'    => $request->query->get('firstname'),
             'email'         => $request->query->get('email'),
-            'position_name' => $request->query->get('position_name'),
-            //ATTENTION, MANQUE LE FILTRE PAR LE NOMBRE DE CONGE
+            'name'          => $request->query->get('name'),
+            'conges'        => $request->query->get('conges'),
         ];
 
+        // Si le formulaire est soumis et valide, on utilise ses données
+        if ($form->isSubmitted() && $form->isValid()) {
+            $filters = array_merge($filters, $form->getData());
+        }
+
+        // Recherche dans le repository avec les filtres
         $query = $personRepository->searchTeamMembers($filters);
 
         // Pagination avec QueryAdapter
@@ -49,6 +58,7 @@ class TeamController extends AbstractController
             'pager' => $pagerfanta,
             'team' => $pagerfanta->getCurrentPageResults(),
             'filters' => $filters,
+            'form' => $form->createView(),
         ]);
     }
 
