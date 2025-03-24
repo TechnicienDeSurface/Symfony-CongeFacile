@@ -70,19 +70,20 @@
 					<tbody>
 
 						{# Chaque résultat doit se présenter sous cette forme : #}
-
-						<tr class="border-x border-b mt-4">
-							<td class="py-6 px-6">Mamery</td>
-							<td class="py-6 px-6">Heddy</td>
-							<td class="py-6 px-6">heddy@mamery.com</td>
-							<td class="py-6 px-6">Développeur</td>
-							<td class="py-6 px-6">8</td>
-							<td class="py-6 px-6">
-								<button class="bg-[#004C6C14] text-white font-bold py-2 px-10 rounded hover:text-white">
-									<span class="text-[#475467]">Détails</span>
-								</button>
-							</td>
-						</tr>
+						{% for items in team %}
+							<tr class="border-x border-b mt-4">
+								<td class="py-6 px-6">{{items.lastname}}</td>
+								<td class="py-6 px-6">{{items.firstname}}</td>
+								<td class="py-6 px-6">{{ items.user.email|default('Non défini')}}</td>
+								<td class="py-6 px-6">{{items.departmentid.name}}</td>
+								<td class="py-6 px-6">{{items.totalleavedays}} jours</td>
+								<td class="py-6 px-6">
+									<button class="bg-[#004C6C14] text-white font-bold py-2 px-10 rounded hover:text-white">
+										<span class="text-[#475467]">Détails</span>
+									</button>
+								</td>
+							</tr>
+						{% endfor %}
 					</tbody>
 				</table>
 			</div>

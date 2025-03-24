@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\PersonRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Department;  
+use App\Entity\Department;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: PersonRepository::class)]
 class Person
@@ -31,6 +33,17 @@ class Person
     #[ORM\ManyToOne(targetEntity: Position::class, cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Position $position = null;
+
+    #[ORM\OneToOne(mappedBy: 'person', targetEntity: User::class, cascade: ["persist"])]
+    private ?User $user = null;
+
+    #[ORM\OneToMany(mappedBy: 'collaborator', targetEntity: Request::class)]
+    private Collection $requests;
+
+    public function __construct()
+    {
+        $this->requests = new ArrayCollection();
+    }
 
     #[ORM\Column]
     private ?bool $alert_new_request = null;
@@ -142,8 +155,43 @@ class Person
         return $this;
     }
 
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+        return $this;
+    }
+
     public function getFirstNameLastName() : string
     {
         return $this->first_name . " " . $this->last_name;
     }
+
+    //METHODE POUR RECUPERER LES CONGES
+    public function getRequests(): Collection
+    {
+        return $this->requests;
+    }
+    
+    //FONCTION EN PHP
+    public function getTotalLeaveDays(): int
+    {
+        $totalDays = 0;
+
+        foreach ($this->requests as $request) {
+            if ($request->getStartAt() && $request->getEndAt()) {
+                $startDate = $request->getStartAt();
+                $endDate = $request->getEndAt();
+                $interval = $startDate->diff($endDate);
+                $totalDays += $interval->days;
+            }
+        }
+
+        return $totalDays;
+    }
+
 }
