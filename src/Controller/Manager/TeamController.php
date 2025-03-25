@@ -65,7 +65,7 @@ class TeamController extends AbstractController
     }
 
     //PAGE DETAILS DE L'EQUIPE GERER PAR LE MANAGER
-    #[Route('/detail-team-manager/{id}', name: 'app_detail_team')]
+    #[Route('/detail-team-manager/{id}', name: 'app_detail_team', methods: ['POST'])]
     public function viewDetailTeam(int $id, ManagerRegistry $registry, UserRepository $repository, Request $request): Response
     {
         $user = $repository->find($id);
@@ -74,7 +74,7 @@ class TeamController extends AbstractController
             throw $this->createNotFoundException('No category found for id ' . $id);
         }
 
-        return $this->render('category/form.html.twig', [
+        return $this->render('manager/detail_team.html.twig', [
             'controller_name' => 'Team',
             'user' => $user,
         ]);
