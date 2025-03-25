@@ -1,0 +1,77 @@
+{# templates/collaborateur/information.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <title>{% block title %}Information{% endblock %}</title>
+
+	{% include 'layout/menu/_header.html.twig' %}
+        <main style="display: flex;">
+            {% include 'layout/menu/_sidebar.html.twig' %}
+
+                <div class="w-[50%] p-8">
+                    <div class="flex items-center gap-5">
+					    <h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Mes informations</h1>
+				    </div>
+                    {{ form_start(formInfo) }}
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="col-span-1">
+                                
+                                    <!-- Label (si tu veux le garder séparé) -->
+                                    {{ form_label(formInfo.email, 'Adresse email du manager', {'label_attr': {'class': 'block text-gray-700 font-medium'}}) }}
+                                    <div class="relative">
+                                        <!-- Icône à gauche -->
+                                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
+                                             <img src="{{ asset('assets/image/icon-enveloppe.svg') }}" alt="Ico enveloppe" class="w-5 h-5">
+                                        </span>
+
+                                        <!-- Champ email -->
+                                        {{ form_widget(formInfo.email, {'attr': {
+                                            'class': 'pl-10 pr-4 py-2 mt-1 block w-full border border-gray-300 rounded-md bg-gray-200 text-gray-700 focus:ring focus:ring-blue-300'
+                                        }}) }}
+                                    </div>
+                                    <!-- Erreurs (si nécessaire) -->
+                                    {{ form_errors(formInfo.email) }}
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    {{ form_row(formInfo.last_name) }}
+                                </div>
+                                <div>
+                                    {{ form_row(formInfo.first_name) }}
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    {{ form_row(formInfo.department_id) }}
+                                </div>
+                            </div>
+                        </div>
+                    {{ form_end(formInfo) }}
+
+                    <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Réinitialiser mon mot de passe</h2>
+                    {{ form_start(formMdp) }}
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="col-span-1">
+                                    {{ form_row(formMdp.currentPassword) }}
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    {{ form_row(formMdp.newPassword) }}
+                                </div>
+                                <div>
+                                    {{ form_row(formMdp.confirmPassword) }}
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="mt-6">
+                        <button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6">Réinitialiser le mot de passe</button>
+                    </div> 
+                {{ form_end(formMdp) }}
+                </div>
+            </main>
+{% endblock %}

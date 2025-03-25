@@ -174,4 +174,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->created_at = new DateTimeImmutable(); 
     }
+
+    public function getFirstNameLastName(): string
+    {
+        return $this->person->getFirstNameLastName();
+    }
 }

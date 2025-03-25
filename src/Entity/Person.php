@@ -202,6 +202,11 @@ class Person
     
         return $totalDays;
     }
+
+    public function getRoles() : array
+    {
+        return $this->user ? $this->user->getRoles() : [];
+    }
     
 
 }
