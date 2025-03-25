@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -34,9 +35,14 @@ class FilterManagerTeamFormType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
             ])
-            ->add('totalleavedays', TextType::class, [
+            ->add('totalleavedays', ChoiceType::class, [
                 'label' => 'Nb de congés posés sur l\'année :',
                 'required' => false,
+                'choices' => [
+                    'ASC' => 'ASC',
+                    'DESC' => 'DESC',
+                ],
+                'placeholder' => 'Choisir l\'ordre',
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
             ])
             ->add('submit', SubmitType::class, [

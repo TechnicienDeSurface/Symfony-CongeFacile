@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\RequestType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query;
 
 /**
  * @extends ServiceEntityRepository<RequestType>
@@ -16,28 +17,22 @@ class RequestTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, RequestType::class);
     }
 
-    //    /**
-    //     * @return RequestType[] Returns an array of RequestType objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('r.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function searchTypeOfRequest(array $filters,  string $order = ''): Query
+    {
+        $qb = $this->createQueryBuilder('request_type');
+    
+        // Correction : jointure correcte avec l'entité Request
+        $qb->leftJoin('request_type.requests', 'requests');
+    
+        if (!empty($filters['name'])) {
+            $qb->andWhere('request_type.name LIKE :name')
+               ->setParameter('name', '%' . $filters['name'] . '%');
+        }
 
-    //    public function findOneBySomeField($value): ?RequestType
-    //    {
-    //        return $this->createQueryBuilder('r')
-    //            ->andWhere('r.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($order) {
+            $qb->orderBy('request_type.name', $order);
+        }
+    
+        return $qb->getQuery();
+    }
 }

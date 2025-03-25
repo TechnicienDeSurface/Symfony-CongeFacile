@@ -1,10 +1,8 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
-	<title>
-		{% block title %}Mon équipe
-{% endblock %}
-	</title>
-	<body>
+
+	<title>{% block title %}Mon équipe{% endblock %}</title>
 		{% include 'layout/menu/_header.html.twig' %}
 		<main style="display: flex;">
 			{% include 'layout/menu/_sidebar.html.twig' %}
@@ -12,7 +10,9 @@
 			<div class="w-full p-8">
 				<div class="flex items-center gap-5">
 					<h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Mon équipe</h1>
-					<button class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Ajouter un collaborateur</button>
+					<form method="POST" action="{{ path('app_administration_add_type_of_request') }}"> <!--AUCUNE PAGE AJOUTER COLLABORATEUR(PROVISOIRE)-->
+						<button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Ajouter un collaborateur</button>
+					</form>
 				</div>
 				<div class="flex w-full justify-center items-center h-max">
 					<table class="w-full mt-6">
@@ -61,11 +61,13 @@
 									<td class="py-6 px-6">{{items.firstname}}</td>
 									<td class="py-6 px-6">{{ items.user.email|default('Non défini')}}</td>
 									<td class="py-6 px-6">{{items.positionid.name}}</td>
-									<td class="py-6 px-6">{{items.totalleavedays}} jours</td>
+									<td class="py-6 px-6">{{items.totalleavedays}}
+									{% if items.totalleavedays <= 1 %} jour {% else %} jours {% endif %}
+									</td>
 									<td class="py-6 px-6">
-										<button class="bg-[#004C6C14] text-white font-bold py-2 px-10 rounded hover:text-white">
-											<span class="text-[#475467]">Détails</span>
-										</button>
+										<form method="POST" action="{{ path('app_detail_team', {'id': items.id}) }}">
+											<button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
+										</form>
 									</td>
 								</tr>
 							{% endfor %}
@@ -83,5 +85,4 @@
 				</div>
 			</div>
 		</main>
-	</body>
 {% endblock %}
