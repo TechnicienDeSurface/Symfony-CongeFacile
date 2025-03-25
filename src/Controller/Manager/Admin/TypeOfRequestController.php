@@ -30,7 +30,7 @@ class TypeOfRequestController extends AbstractController
             // Ajoutez d'autres demandes ici
         ];
         return $this->render('manager/admin/type-of-request/type_of_request.html.twig', [
-            'page' => 'administration-type-of-request',
+            'page' => 'administration-type-de-demande',
             'demandes' => $demandes, 
         ]);
     }
@@ -40,7 +40,7 @@ class TypeOfRequestController extends AbstractController
     public function addTypeOfRequest(): Response
     {
         return $this->render('manager/admin/type-of-request/add_type_of_request.html.twig', [
-            'page' => 'administration-ajouter-type-de-demande',
+            'page' => 'administration-type-de-demande',
         ]);
     }
 
@@ -58,6 +58,7 @@ class TypeOfRequestController extends AbstractController
 
         return $this->render('type_demande/form.html.twig', [
             'form' => $form->createView(),
+            'page' => 'administration-type-de-demande',
         ]);
     }
 

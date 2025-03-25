@@ -1,37 +1,38 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="max-w-4xl mx-auto mt-10">
-    <h1 class="text-2xl font-bold mb-4">Types de demandes</h1>
-    
-    <button class="bg-blue-900 text-white px-4 py-2 rounded-lg mb-4">Ajouter un type de demande</button>
-    
-    <div class="bg-white shadow-md rounded-lg overflow-hidden">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-gray-100">
-                    <th class="p-3">Nom du type de demande</th>
-                    <th class="p-3">Nb demandes associées</th>
-                    <th class="p-3">Action</th>
-                </tr>
-                <tr>
-                    <td class="p-3"><input type="text" class="border p-2 w-full" placeholder="Rechercher..."></td>
-                    <td class="p-3"><input type="text" class="border p-2 w-full" placeholder="Nb"></td>
-                    <td></td>
-                </tr>
-            </thead>
-            <tbody>
-                {% for demande in demandes %}
-                    <tr class="border-t">
-                        <td class="p-3">{{ demande.nom }}</td>
-                        <td class="p-3">{{ demande.nb }}</td>
-                        <td class="p-3">
-                            <a href='' ><button class="bg-gray-200 px-3 py-1 rounded">Détails</button></a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
+
+	{% include 'layout/menu/_header.html.twig' %}
+        <main style="display: flex;">
+            {% include 'layout/menu/_sidebar.html.twig' %}
+            <div class="w-full p-8">
+                <div class="flex items-center gap-5">
+                    <h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Mes informations</h1>
+                    <button class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Ajouter un type de demande</button>
+                </div>
+                
+               	<div class="flex w-full justify-center items-center h-max">
+                    <table class="w-full mt-6">
+                        <thead>
+                            <tr class="bg-[#F9FAFB] text-gray-700 border-x border-t border-[#EAECF0] rounded-lg">
+                                <td class="py-4 px-6 pr-0 w-1/6">Nom du type de demande</td>
+                                <td class="py-4 px-6 pr-0 w-1/6">Nb demandes associées</td>
+                                <td class="py-4 px-6 pr-0 w-1/6">Action</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for demande in demandes %}
+                                <tr class="border-t">
+                                    <td class="p-3">{{ demande.nom }}</td>
+                                    <td class="p-3">{{ demande.nb }}</td>
+                                    <td class="p-3">
+                                        <a href='' ><button class="bg-gray-200 px-3 py-1 rounded">Détails</button></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
 {% endblock %}
