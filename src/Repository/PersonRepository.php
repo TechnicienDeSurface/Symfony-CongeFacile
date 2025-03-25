@@ -18,7 +18,7 @@ class PersonRepository extends ServiceEntityRepository
         parent::__construct($registry, Person::class);
     }
         
-    public function searchTeamMembers(array $filters): Query
+    public function searchTeamMembers(array $filters, string $order = ''): Query
     {
         $qb = $this->createQueryBuilder('person');
     
@@ -49,6 +49,10 @@ class PersonRepository extends ServiceEntityRepository
         if (!empty($filters['name'])) {
             $qb->andWhere('position.name LIKE :name')
                ->setParameter('name', '%' . $filters['name'] . '%');
+        }
+
+        if ($order) {
+            $qb->orderBy('person.last_name', $order);
         }
     
         // // Tri dynamique par total_leave_days

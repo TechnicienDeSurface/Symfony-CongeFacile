@@ -17,19 +17,22 @@ class RequestTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, RequestType::class);
     }
 
-    public function searchTypeOfRequest(array $filters): Query
+    public function searchTypeOfRequest(array $filters,  string $order = ''): Query
     {
-        $qb = $this->createQueryBuilder('requestType');
+        $qb = $this->createQueryBuilder('request_type');
     
-        // Jointure avec l'entité requesttype vers request
-        $qb->join('request.requestType', 'request');
-
-        // FILTRE PAR LASTNAME
+        // Correction : jointure correcte avec l'entité Request
+        $qb->leftJoin('request_type.requests', 'requests');
+    
         if (!empty($filters['name'])) {
-            $qb->andWhere('request.name LIKE :name')
-                ->setParameter('name', '%' . $filters['name'] . '%');
+            $qb->andWhere('request_type.name LIKE :name')
+               ->setParameter('name', '%' . $filters['name'] . '%');
         }
 
-        return $qb->getQuery(); // Retourne une Query au lieu du QueryBuilder
+        if ($order) {
+            $qb->orderBy('request_type.name', $order);
+        }
+    
+        return $qb->getQuery();
     }
 }

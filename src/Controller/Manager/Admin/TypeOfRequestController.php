@@ -18,7 +18,7 @@ use Pagerfanta\Pagerfanta;
 class TypeOfRequestController extends AbstractController
 {
     //PAGE TYPE DE DEMANDE VIA ADMINISTRATION MANAGER
-    #[Route('/administration-type-de-demande/{page}', name: 'app_administration_type_of_request')]
+    #[Route('/administration-type-de-demande/{page}', name: 'app_administration_type_of_request', methods:['GET','POST'])]
     public function viewTypeOfRequest(Request $request, RequestTypeRepository $requestTypeRepository, int $page = 1): Response
     {
         $form = $this->createForm(FilterAdminDemandeFormType::class);
@@ -26,7 +26,7 @@ class TypeOfRequestController extends AbstractController
 
         $filters = [
             'name'         => $request->query->get('name'),
-            'totalnbdemande'    => $request->query->get('totalnbdemande'),
+            'orderBy'      => $request->query->get('orderBy'),
         ];
 
         // Si le formulaire est soumis et valide, on utilise ses données
@@ -34,8 +34,10 @@ class TypeOfRequestController extends AbstractController
             $filters = array_merge($filters, $form->getData());
         }
 
+        $order = $filters['totalnbdemande'] ?? '';
+
         // Recherche dans le repository avec les filtres
-        $query = $requestTypeRepository->searchTypeOfRequest($filters);
+        $query = $requestTypeRepository->searchTypeOfRequest($filters, $order);
         
         // Pagination avec QueryAdapter
         $adapter = new ORMQueryAdapter($query);
@@ -58,7 +60,7 @@ class TypeOfRequestController extends AbstractController
     }
 
     //PAGE AJOUTER TYPE DE DEMANDE VIA ADMINISTRATION MANAGER
-    #[Route('/administration-ajouter-type-de-demande', name: 'app_administration_ajouter_type_of_request')]
+    #[Route('/administration-ajouter-type-de-demande', name: 'app_administration_add_type_of_request', methods:['POST'])]
     public function addTypeOfRequest(): Response
     {
         return $this->render('manager/admin/type-of-request/add_type_of_request.html.twig', [
@@ -67,7 +69,7 @@ class TypeOfRequestController extends AbstractController
     }
 
     //PAGE DETAIL TYPE DE DEMANDE VIA ADMINISTRATION MANAGER
-    #[Route('/administration-detail-type-de-demande/{id}', name: 'app_administration_detail_type_of_request')]
+    #[Route('/administration-detail-type-de-demande/{id}', name: 'app_administration_detail_type_of_request', methods:['POST'])]
     public function editRequestType(RequestType $typeDemande, Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(RequestTypeForm::class, $typeDemande);
@@ -75,10 +77,10 @@ class TypeOfRequestController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-            return $this->redirectToRoute('some_route');
+            return $this->redirectToRoute('app_administration_type_of_request');
         }
 
-        return $this->render('type_demande/form.html.twig', [
+        return $this->render('manager/admin/type-of-request/detail_type_of_request.html.twig', [
             'form' => $form->createView(),
             'page' => 'administration-type-de-demande',
         ]);

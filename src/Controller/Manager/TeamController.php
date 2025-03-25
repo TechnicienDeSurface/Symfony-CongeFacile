@@ -39,8 +39,10 @@ class TeamController extends AbstractController
             $filters = array_merge($filters, $form->getData());
         }
 
+        $order = $filters['totalleavedays'] ?? '';
+
         // Recherche dans le repository avec les filtres
-        $query = $personRepository->searchTeamMembers($filters);
+        $query = $personRepository->searchTeamMembers($filters, $order);
         
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);

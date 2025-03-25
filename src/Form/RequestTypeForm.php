@@ -14,7 +14,7 @@ class RequestTypeForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom', TextType::class, [
+            ->add('name', TextType::class, [
                 'label' => 'Nom du type',
                 'attr' => ['class' => 'form-control']
             ])
