@@ -2,29 +2,44 @@
 
 {% block body %}
 
+	<title>{% block title %}Type de demande{% endblock %}</title>
 	{% include 'layout/menu/_header.html.twig' %}
         <main style="display: flex;">
             {% include 'layout/menu/_sidebar.html.twig' %}
             <div class="w-full p-8">
                 <div class="flex items-center gap-5">
-                    <h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Mes informations</h1>
+                    <h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Mes demandes</h1>
                     <button class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Ajouter un type de demande</button>
                 </div>
                 
                	<div class="flex w-full justify-center items-center h-max">
                     <table class="w-full mt-6">
                         <thead>
-                            <tr class="bg-[#F9FAFB] text-gray-700 border-x border-t border-[#EAECF0] rounded-lg">
-                                <td class="py-4 px-6 pr-0 w-1/6">Nom du type de demande</td>
-                                <td class="py-4 px-6 pr-0 w-1/6">Nb demandes associées</td>
-                                <td class="py-4 px-6 pr-0 w-1/6">Action</td>
-                            </tr>
-                        </thead>
+								{{ form_start(form) }}
+								<tr class="bg-[#F9FAFB] text-gray-700 border-x border-t border-[#EAECF0] rounded-lg">
+									<td class="py-4 px-6 pr-0 w-1/6">
+										{{ form_label(form.name, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.name, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
+
+									<td class="py-4 px-6 pr-0 w-1/4">
+										{{ form_label(form.totalleavedays, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.totalleavedays, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
+
+									<td class="w-1/6 px-6 pr-6" colspan="3" style="vertical-align: bottom; padding-bottom: 15px;">
+										<div>
+											{{ form_widget(form.submit, {'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
+										</div>
+									</td>
+								</tr>
+								{{ form_end(form) }}
+							</thead>
                         <tbody>
-                            {% for demande in demandes %}
+                            {% for items in requesttype %}
                                 <tr class="border-t">
-                                    <td class="p-3">{{ demande.nom }}</td>
-                                    <td class="p-3">{{ demande.nb }}</td>
+                                    <td class="p-3">{{ items.name }}</td>
+                                    <td class="p-3">{{ items.totalnbdemande }}</td>
                                     <td class="p-3">
                                         <a href='' ><button class="bg-gray-200 px-3 py-1 rounded">Détails</button></a>
                                     </td>
