@@ -11,6 +11,7 @@ use App\Repository\PositionRepository as PositionRepository;
 use App\Entity\Position;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\EditJobForm;
+use App\Form\AddJobForm;
 use Symfony\Component\Form\FormFactoryInterface;
 
 class JobController extends AbstractController
@@ -37,11 +38,30 @@ class JobController extends AbstractController
 
     //PAGE AJOUTER JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
     #[Route('/administration-ajouter-job', name: 'app_administration_ajouter_job')]
-    public function addJob(): Response
+    public function addJob(Request $request, EntityManagerInterface $entityManager): Response
     {
+        // Créer une nouvelle instance de Position
+        $position = new Position();
+
+        // Créer le formulaire et le traiter
+        $form = $this->createForm(AddJobForm::class, $position);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Sauvegarder la nouvelle position
+            $entityManager->persist($position);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Le poste a été ajouté avec succès.');
+
+            return $this->redirectToRoute('app_administration_job');
+        }
+
         return $this->render('manager/admin/job/add_job.html.twig', [
+            'form' => $form->createView(),
             'page' => 'administration-job',
         ]);
+
     }
 
     //PAGE DETAIL JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
@@ -55,14 +75,14 @@ class JobController extends AbstractController
         if ($form->isSubmitted()) {
             // Si le formulaire est soumis et valide
     
-            if ($form->get('edit')->isSubmitted()) {
+            if ($form->get('edit')->isClicked()) {
                 // Si le bouton "Mettre à jour" a été cliqué
                 if ($form->isValid()) {
                     $entityManager->flush(); // Mettre à jour l'entité
                     $this->addFlash('success', 'Le poste a été mis à jour.');
                     return $this->redirectToRoute('app_administration_detail_job', ['id' => $position->getId()]);
                 }
-            } elseif ($form->get('delete')->isSubmitted()) {
+            } elseif ($form->get('delete')->isClicked()) {
                 // Si le bouton "Supprimer" a été cliqué
                 // Vérifier si la position existe encore
                 if ($position) {
