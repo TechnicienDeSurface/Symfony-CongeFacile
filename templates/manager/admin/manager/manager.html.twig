@@ -19,31 +19,31 @@
 							{{ form_start(form) }}
 							<td class="py-4 px-6 pr-0 w-1/5">
 								<label for="form_prenom" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									{{ form_label(form.prenom) }}
+									{{ form_label(form.FirstName) }}
 									<img id="icon-prenom" src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px; cursor: pointer;">
 								</label>
-								{{ form_widget(form.prenom, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+								{{ form_widget(form.FirstName, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
 							</td>
 
 							<td class="py-4 px-6 pr-0 w-1/5">
 								<label for="form_nom" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									{{ form_label(form.nom) }}
+									{{ form_label(form.LastName) }}
 									<img id="icon-nom" src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px; cursor: pointer;">
 								</label>
-								{{ form_widget(form.nom, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+								{{ form_widget(form.LastName, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
 							</td>
 
 							<td class="py-4 px-6 pr-0 w-1/5">
 								<label for="form_service" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									{{ form_label(form.service) }}
+									{{ form_label(form.Department) }}
 									<img id="icon-service" src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px; cursor: pointer;">
 								</label>
-								{{ form_widget(form.service, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+								{{ form_widget(form.Department, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
 							</td>
 
 							<td class="w-1/5 px-6 pr-0" colspan="3" style="vertical-align: bottom; padding-bottom: 15px;">
 								<div>
-									{{ form_widget(form.valider, {'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
+									{{ form_widget(form.search, {'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
 								</div>
 							</td>
 							{{ form_end(form) }}

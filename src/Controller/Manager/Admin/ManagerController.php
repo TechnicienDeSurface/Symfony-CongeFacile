@@ -3,7 +3,8 @@
 namespace App\Controller\Manager\Admin;
 
 use App\Entity\User; 
-use App\Form\UserType ; 
+use App\Form\UserType;
+use App\Form\FilterManagerFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,7 +19,7 @@ class ManagerController extends AbstractController
     #[Route('/administration-manager', name: 'app_administration_manager')]
     public function viewManager(Request $request, PersonRepository $repository, UserRepository $UserRepository): Response
     {
-        $form = $this->createForm(\App\Form\FilterManagerTeamFormType::class);
+        $form = $this->createForm(FilterManagerFormType::class);
         $form->handleRequest($request);
 
         $Managers = $UserRepository->findAllManagers();
@@ -39,10 +40,17 @@ class ManagerController extends AbstractController
             }
         }
 
+        $filters = [
+            'last_name' => $request->query->get('lastname'),
+            'FirstName' => $request->query->get('FirstName'),
+            'department' => $request->query->get('department'),
+        ];
+
         return $this->render('manager/admin/manager/manager.html.twig', [
             'page' => 'administration-manager',
             'managers' => $Managers,
             'persons' => $persons,
+            'filters' => $filters,
             'form' => $form->createView(),
         ]);
     }

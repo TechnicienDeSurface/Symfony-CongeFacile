@@ -10,26 +10,25 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class FilterManagerTeamFormType extends AbstractType
+class FilterManagerFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            
-            ->add('prenom', TextType::class, [
+            ->add('LastName', TextType::class, [
+                'label' => 'Nom',
+                'required' => false,
+            ])
+            ->add('FirstName', TextType::class, [
                 'label' => 'Prénom',
-                'required' => true,
+                'required' => false,
             ])
-            ->add('nom', TextType::class, [
-                'label' => 'Nom de famille :',
-                'required' => true,
+            ->add('Department', TextType::class, [
+                'label' => 'Service',
+                'required' => false,
             ])
-            ->add('service', TextType::class, [
-                'label' => 'Service rattaché',
-                'required' => true,
-            ])
-            ->add('valider', SubmitType::class, [
-                'label' => 'Rechercher',
+            ->add('search', SubmitType::class, [
+                'label' => 'Valider',
             ]);
     }
 }
