@@ -39,8 +39,6 @@ class ManagerController extends AbstractController
             }
         }
 
-        dump($persons);
-
         return $this->render('manager/admin/manager/manager.html.twig', [
             'page' => 'administration-manager',
             'managers' => $Managers,

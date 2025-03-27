@@ -45,10 +45,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getScalarResult(); // Retourne un tableau simple avec les IDs
     }
 
-    
-
-
-
 
     //    /**
     //     * @return User[] Returns an array of User objects
