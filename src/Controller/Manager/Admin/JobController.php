@@ -20,7 +20,7 @@ use Pagerfanta\Pagerfanta;
 class JobController extends AbstractController
 {
     //PAGE JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
-    #[Route('/administration-job/{page}', name: 'app_administration_job')]
+    #[Route('/administration-job/{page}', name: 'app_administration_job', methods:['GET', 'POST'])]
     public function viewJob(Request $request, PositionRepository $positionRepository, int $page = 1): Response
     {
         $form = $this->createForm(FilterAdminDemandeFormType::class);

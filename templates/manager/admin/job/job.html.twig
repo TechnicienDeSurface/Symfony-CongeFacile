@@ -2,15 +2,15 @@
 
 {% block body %}
 
-	<title>{% block title %}Type de demande{% endblock %}</title>
+	<title>{% block title %}Poste{% endblock %}</title>
 	{% include 'layout/menu/_header.html.twig' %}
         <main style="display: flex;">
             {% include 'layout/menu/_sidebar.html.twig' %}
             <div class="w-full p-8">
                 <div class="flex items-center gap-5">
-                    <h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Mes demandes</h1>
-					<form method="POST" action="{{ path('app_administration_add_type_of_request') }}">
-                        <button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Ajouter un type de demande</button>
+                    <h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Postes</h1>
+					<form method="POST" action="{{ path('app_administration_ajouter_job') }}">
+                        <button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Ajouter un poste</button>
                     </form>
                 </div>
 
