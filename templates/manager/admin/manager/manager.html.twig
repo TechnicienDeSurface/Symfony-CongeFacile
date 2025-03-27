@@ -53,16 +53,18 @@
 
 						{# Chaque résultat doit se présenter sous cette forme : #}
 
-						<tr class="border-x border-b mt-4">
-							<td class="py-6 px-6">Heddy</td>
-							<td class="py-6 px-6">Mamery</td>
-							<td class="py-6 px-6">Symfony</td>
-							<td class="py-6 px-6">
-								<button class="bg-[#004C6C14] text-white font-bold py-2 px-10 rounded hover:text-white">
-									<span class="text-[#475467]">Détails</span>
-								</button>
-							</td>
-						</tr>
+						{% for person in persons %}
+							<tr class="border-x border-b mt-4">
+								<td class="py-6 px-6">{{ person.FirstName }}</td>
+								<td class="py-6 px-6">{{ person.LastName }}</td>
+								<td class="py-6 px-6">{{ person.Department.name }}</td>
+								<td class="py-6 px-6">
+									<button class="bg-[#004C6C14] text-white font-bold py-2 px-10 rounded hover:text-white">
+										<span class="text-[#475467]">Détails</span>
+									</button>
+								</td>
+							</tr>
+						{% endfor %}
 					</tbody>
 				</table>
 			</div>

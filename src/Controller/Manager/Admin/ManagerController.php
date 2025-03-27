@@ -18,6 +18,9 @@ class ManagerController extends AbstractController
     #[Route('/administration-manager', name: 'app_administration_manager')]
     public function viewManager(Request $request, PersonRepository $repository, UserRepository $UserRepository): Response
     {
+        $form = $this->createForm(\App\Form\FilterManagerTeamFormType::class);
+        $form->handleRequest($request);
+
         $Managers = $UserRepository->findAllManagers();
         
         $personIds = [];
@@ -32,7 +35,7 @@ class ManagerController extends AbstractController
         foreach ($personIds as $personId) {
             $person = $repository->find($personId);
             if ($person) {
-            $persons[] = $person;
+                $persons[] = $person;
             }
         }
 
@@ -41,6 +44,8 @@ class ManagerController extends AbstractController
         return $this->render('manager/admin/manager/manager.html.twig', [
             'page' => 'administration-manager',
             'managers' => $Managers,
+            'persons' => $persons,
+            'form' => $form->createView(),
         ]);
     }
 

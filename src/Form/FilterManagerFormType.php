@@ -15,20 +15,21 @@ class FilterManagerTeamFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom', TextType::class, [
-                'label' => 'Nom',
-                'required' => true,
-            ])
+            
             ->add('prenom', TextType::class, [
                 'label' => 'Prénom',
                 'required' => true,
             ])
+            ->add('nom', TextType::class, [
+                'label' => 'Nom de famille :',
+                'required' => true,
+            ])
             ->add('service', TextType::class, [
-                'label' => 'Service',
+                'label' => 'Service rattaché',
                 'required' => true,
             ])
             ->add('valider', SubmitType::class, [
-                'label' => 'Valider',
+                'label' => 'Rechercher',
             ]);
     }
 }
