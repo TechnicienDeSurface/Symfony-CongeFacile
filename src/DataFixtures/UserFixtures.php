@@ -16,7 +16,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface{
     public function load(ObjectManager $manager): void {
 
         $people = [
-            ['name' => 'Alice', 'email' => 'alice@example.com', 'role' => ['ROLE_COLLABORATEUR'], 'password' => 'alice123'],
+            ['name' => 'Alice', 'email' => 'alice@example.com', 'role' => ['ROLE_MANAGER'], 'password' => 'alice123'],
             ['name' => 'Bob', 'email' => 'bob@example.com', 'role' => ['ROLE_COLLABORATEUR'], 'password' => 'bob123'],
             ['name' => 'Charlie', 'email' => 'charlie@example.com', 'role' => ['ROLE_COLLABORATEUR'], 'password' => 'charlie123'],
             ['name' => 'John', 'email' => 'John@example.com', 'role' => ['ROLE_COLLABORATEUR'], 'password' => 'john123'],

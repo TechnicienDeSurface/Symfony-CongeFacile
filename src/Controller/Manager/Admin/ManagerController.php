@@ -8,24 +8,39 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
-use App\Repository\UserRepository as PersonRepository ; 
+use App\Repository\UserRepository; 
+use App\Repository\PersonRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class ManagerController extends AbstractController
 {
     //PAGE MANAGER VIA ADMINISTRATION MANAGER
     #[Route('/administration-manager', name: 'app_administration_manager')]
-    public function viewManager(Request $request, PersonRepository $repository): Response
+    public function viewManager(Request $request, PersonRepository $repository, UserRepository $UserRepository): Response
     {
-        $managers = $repository->findAllManagers();
-        for ($i = 0; $i < count($managers); $i++) {
-            $managers[$i]['person_id'] = $managers[$i]['person_id'];
-            $managers[$i]['user_id'] = $managers[$i]['user_id'];
+        $Managers = $UserRepository->findAllManagers();
+        
+        $personIds = [];
+        $userIds = [];
+
+        foreach ($Managers as $manager) {
+            $personIds[] = $manager['person_id'];
+            $userIds[] = $manager['user_id'];
         }
+
+        $persons = [];
+        foreach ($personIds as $personId) {
+            $person = $repository->find($personId);
+            if ($person) {
+            $persons[] = $person;
+            }
+        }
+
+        dump($persons);
 
         return $this->render('manager/admin/manager/manager.html.twig', [
             'page' => 'administration-manager',
-            'managers' => $managers,
+            'managers' => $Managers,
         ]);
     }
 
@@ -90,7 +105,7 @@ class ManagerController extends AbstractController
 
     //SUPPRIMER MANAGER VIA L'ADMINISTRATION DU PORTAIL MANAGER
     #[Route('/administration-supprimer-manager/{id}', name: 'app_administration_supprimer_manager', methods: ['POST', 'DELETE'])]
-    public function delete(int $id, PersonRepository $productRepository, PersonRepository $repository, ManagerRegistry $registry): Response 
+    public function delete(int $id, UserRepository $productRepository, UserRepository $repository, ManagerRegistry $registry): Response 
     {
         $manager = $repository->find($id);
 
@@ -104,7 +119,7 @@ class ManagerController extends AbstractController
         if ($productCount > 0) {
             $this->addFlash('error', 'Impossible de supprimer ce manager car elle est utilisée par des produits.');
             return $this->redirectToRoute('category/list');
-        }else{
+        } else {
             $entityManager->remove($manager);
             $entityManager->flush();
         }
