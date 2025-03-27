@@ -17,7 +17,11 @@ class ManagerController extends AbstractController
     #[Route('/administration-manager', name: 'app_administration_manager')]
     public function viewManager(Request $request, PersonRepository $repository): Response
     {
-        $managers = $repository->findAll();
+        $managers = $repository->findAllManagers();
+        for ($i = 0; $i < count($managers); $i++) {
+            $managers[$i]['person_id'] = $managers[$i]['person_id'];
+            $managers[$i]['user_id'] = $managers[$i]['user_id'];
+        }
 
         return $this->render('manager/admin/manager/manager.html.twig', [
             'page' => 'administration-manager',
@@ -37,7 +41,6 @@ class ManagerController extends AbstractController
         {
             if($form->isValid()){
                 try{
-                    $request->cookies->all() ; 
                     $registry->getManager()->persist($manager) ; 
                     $registry->getManager()->flush();
                     $this->addFlash('success', 'Success to add manager') ; 

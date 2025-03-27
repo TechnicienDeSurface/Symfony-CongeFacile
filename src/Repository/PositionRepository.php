@@ -28,6 +28,7 @@ class PositionRepository extends ServiceEntityRepository
         return ($query);
     }
 
+
     //    /**
     //     * @return Position[] Returns an array of Position objects
     //     */

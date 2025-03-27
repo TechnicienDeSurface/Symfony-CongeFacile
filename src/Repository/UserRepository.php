@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Entity\Person;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -32,6 +33,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
+
+    public function findAllManagers(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('p.id AS person_id','u.id AS user_id',) // Sélectionner user.id et person.id
+            ->join('u.person', 'p')
+            ->where('u.roles LIKE :role')
+            ->setParameter('role', '%ROLE_MANAGER%')
+            ->getQuery()
+            ->getScalarResult(); // Retourne un tableau simple avec les IDs
+    }
+
+
+
 
     //    /**
     //     * @return User[] Returns an array of User objects
