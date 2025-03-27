@@ -48,28 +48,28 @@ $scheduler->call(function() use ($mailerService, $persons, $requests, $users) {
     foreach ($persons as $row) {
         foreach($requests as $request){
             if($request->collaborator->id == $row->id){
-                $ask = $request ; 
+                $ask = $request; 
             }
         }
         foreach($users as $user){
             if($user->person->id == $row->id){
-                $userPerson = $user ; 
-                $to = $userPerson->email ; 
+                $userPerson = $user; 
+                $to = $userPerson->email; 
             }
         }
         
         // Logique pour chaque personne
         if(isset($to)){
             if($row->alert_before_vacations == true){
-                $startAt = $request->getStartAt() ; 
-                $now = new \DateTime() ;
+                $startAt = $request->getStartAt(); 
+                $now = new \DateTime();
                 $interval = $now->diff($startAt); //Calculer la différence entre 2 dates
                 if ($interval->days == 7 && $interval->invert == 0) {
                     $mailerService->sendEmail($to, 'Rappel de congé', 'Vous prenez vos congé dans 1 semaine. '); 
                 }   
             }
             if($row->alert_on_answer == true){
-                if($request->answer === true){
+                if($ask->answer === true){
                     $mailerService->sendEmail($to, 'Demande de congé - Réponse', 'Votre manager a répondu à votre demande de congé.');
                 } 
             }
