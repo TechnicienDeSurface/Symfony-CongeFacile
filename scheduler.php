@@ -39,9 +39,9 @@ $personRepository = $entityManager->getRepository(Person::class);
 $requestRepository = $entityManager->getRepository(Request::class);
 
 // Récupérer toutes les données des entités
-$users = $userRepository->findAll();
-$persons = $personRepository->findAll();
-$requests = $requestRepository->findAll();
+$users = $userRepository->findBy([],[]);
+$persons = $personRepository->findBy([],[]);
+$requests = $requestRepository->findBy([],[]);
 
 // Planifier l'envoi d'email toutes les minutes
 $scheduler->call(function() use ($mailerService, $persons, $requests, $users) {
