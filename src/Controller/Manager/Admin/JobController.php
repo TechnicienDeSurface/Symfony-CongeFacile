@@ -36,7 +36,7 @@ class JobController extends AbstractController
             $filters = array_merge($filters, $form->getData());
         }
 
-        $order = $filters['nbperson'] ?? '';
+        $order = $filters['totalnbdemande'] ?? '';
 
         // Recherche dans le repository avec les filtres
         $query = $positionRepository->searchTypeOfRequest($filters, $order);
