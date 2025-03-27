@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PositionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PositionRepository::class)]
@@ -15,6 +17,19 @@ class Position
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
+
+    #[ORM\OneToMany(mappedBy: 'person', targetEntity: Position::class, cascade: ["persist", "remove"])]
+    private Collection $persons;
+
+    public function __construct($person) 
+    {
+        $this->persons = new ArrayCollection();
+    }
+
+    public function getPerson(): Collection
+    {
+        return $this->persons;
+    }
 
     public function getId(): ?int
     {
@@ -31,5 +46,10 @@ class Position
         $this->name = $name;
 
         return $this;
+    }
+
+    public function getNbPerson()
+    {
+        return count($this->persons);
     }
 }

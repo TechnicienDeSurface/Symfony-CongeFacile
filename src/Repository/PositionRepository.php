@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Position;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -26,6 +27,25 @@ class PositionRepository extends ServiceEntityRepository
             ->getQuery();
     
         return ($query);
+    }
+
+    public function searchTypeOfRequest(array $filters,  string $order = ''): Query
+    {
+        $qb = $this->createQueryBuilder('position');
+    
+        // Correction : jointure correcte avec l'entité Request
+        $qb->leftJoin('position.persons', 'person');
+    
+        if (!empty($filters['name'])) {
+            $qb->andWhere('position.name LIKE :name')
+               ->setParameter('name', '%' . $filters['name'] . '%');
+        }
+
+        if ($order) {
+            $qb->orderBy('position.name', $order);
+        }
+    
+        return $qb->getQuery();
     }
 
     //    /**

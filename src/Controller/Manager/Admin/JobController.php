@@ -2,6 +2,7 @@
 
 namespace App\Controller\Manager\Admin;
 
+use App\Form\FilterAdminDemandeFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,26 +14,52 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Form\EditJobForm;
 use App\Form\AddJobForm;
 use Symfony\Component\Form\FormFactoryInterface;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 
 class JobController extends AbstractController
 {
     //PAGE JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
-    #[Route('/administration-job', name: 'app_administration_job')]
-    public function viewJob(Request $request, PositionRepository $repository): Response
+    #[Route('/administration-job/{page}', name: 'app_administration_job')]
+    public function viewJob(Request $request, PositionRepository $positionRepository, int $page = 1): Response
     {
-        $limit = 10;
-        $currentPage = $request->query->getInt('page', 1);
-        $postes = $repository->findPagination($currentPage, $limit);
-        $postes = $postes->getResult();
-        $totalItems = $repository->countAll();
-        $totalPages = ceil($totalItems / $limit);
+        $form = $this->createForm(FilterAdminDemandeFormType::class);
+        $form->handleRequest($request);
+ 
+        $filters = [
+            'name'         => $request->query->get('name'),
+            'orderBy'    => $request->query->get('orderBy'),
+        ];
+
+        // Si le formulaire est soumis et valide, on utilise ses données
+        if ($form->isSubmitted() && $form->isValid()) {
+            $filters = array_merge($filters, $form->getData());
+        }
+
+        $order = $filters['nbperson'] ?? '';
+
+        // Recherche dans le repository avec les filtres
+        $query = $positionRepository->searchTypeOfRequest($filters, $order);
+        
+        // Pagination avec QueryAdapter
+        $adapter = new QueryAdapter($query);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage(5);
+
+        try{
+            $pagerfanta->setCurrentPage($page);
+        }
+        catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
+            throw $this->createNotFoundException('La page demandée n\'existe pas.');
+        }
 
         return $this->render('manager/admin/job/job.html.twig', [
-            'jobs' => $postes,
-            'currentPage' => $currentPage,
-            'itemsPerPage' => $limit,
-            'totalPages' => $totalPages,
-            'page' => 'administration-job'
+            'page' => 'administration-job',
+            'form' => $form->createView(),
+            'pager' => $pagerfanta,
+            'requesttype' => $pagerfanta->getCurrentPageResults(),
+            'filters' => $filters,
+            
         ]);
     }
 
