@@ -18,10 +18,10 @@ class Position
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'person', targetEntity: Position::class, cascade: ["persist", "remove"])]
+    #[ORM\OneToMany(mappedBy: 'position', targetEntity: Person::class, cascade: ["persist", "remove"])]
     private Collection $persons;
 
-    public function __construct($person) 
+    public function __construct() 
     {
         $this->persons = new ArrayCollection();
     }
@@ -48,7 +48,7 @@ class Position
         return $this;
     }
 
-    public function getNbPerson()
+    public function getTotalNbDemande(): int
     {
         return count($this->persons);
     }

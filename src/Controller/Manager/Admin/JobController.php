@@ -57,14 +57,14 @@ class JobController extends AbstractController
             'page' => 'administration-job',
             'form' => $form->createView(),
             'pager' => $pagerfanta,
-            'requesttype' => $pagerfanta->getCurrentPageResults(),
+            'jobs' => $pagerfanta->getCurrentPageResults(),
             'filters' => $filters,
             
         ]);
     }
 
     //PAGE AJOUTER JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
-    #[Route('/administration-ajouter-job', name: 'app_administration_ajouter_job')]
+    #[Route('/administration-ajouter-job', name: 'app_administration_ajouter_job', methods:['POST'])]
     public function addJob(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Créer une nouvelle instance de Position
@@ -92,7 +92,7 @@ class JobController extends AbstractController
     }
 
     //PAGE DETAIL JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
-    #[Route('/administration-detail-job/{id}', name: 'app_administration_detail_job')]
+    #[Route('/administration-detail-job/{id}', name: 'app_administration_detail_job', methods: ['POST'])]
     public function editJob(Request $request, Position $position, EntityManagerInterface $entityManager): Response
     {
         // Créer le formulaire et le traiter
