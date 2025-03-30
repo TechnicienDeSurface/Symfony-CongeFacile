@@ -95,7 +95,7 @@ class Person
         return $this;
     }
 
-    public function getDepartmentId(): ?Department
+    public function getDepartment(): ?Department
     {
         return $this->department;
     }
