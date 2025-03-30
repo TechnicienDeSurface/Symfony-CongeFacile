@@ -99,8 +99,8 @@ class PersonRepository extends ServiceEntityRepository
 
         // FILTRE PAR LE DEPARTEMENT
         if (!empty($filters['department'])) {
-            $qb->leftJoin('person.position', 'position')
-               ->andWhere('position.name LIKE :department')
+            $qb->innerJoin('person.department', 'department') // Changer LEFT JOIN en INNER JOIN
+               ->andWhere('department.name LIKE :department')
                ->setParameter('department', '%' . $filters['department'] . '%');
         }
 
