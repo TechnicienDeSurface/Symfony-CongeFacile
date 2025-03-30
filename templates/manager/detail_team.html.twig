@@ -1,0 +1,186 @@
+{# templates/Manager/detail_team.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<style>
+
+    .toggle {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+    }
+    
+    .toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        border-radius: 24px;
+        transition: 0.3s;
+    }
+    
+    .slider::before {
+        content: "";
+        position: absolute;
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        border-radius: 50%;
+        transition: 0.3s;
+    }
+    
+    input:checked + .slider {
+        background-color: #007bff;
+    }
+    
+    input:checked + .slider::before {
+        transform: translateX(26px);
+    }
+
+</style>
+{% endblock %}
+
+{% block body %}
+
+    <title>{% block title %}Manager - Mon équipe - Détails{% endblock %}</title>
+
+    {% include 'layout/menu/_header.html.twig' %}
+
+    <main style="display: flex;">
+
+        {% include 'layout/menu/_sidebar.html.twig' %}
+
+        <div class="w-full p-8 overflow-y-auto">
+
+
+            <h1 class="text-left font-bold text-2xl mb-4 " style='color : #004C6C'>Lucas Dupas</h1>
+
+            <div>
+                <label class="toggle inline-block">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+                
+                <p class="font-sm inline-block mx-3">Profil actif depuis 05/05/2024<p>
+            </div>
+
+            <div class="my-3">
+                <label for=" " class="block text-sm/6 font-medium text-gray-900">Adresse email - champ obligatoire</label>
+                <div class="mt-2">
+                    <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                    <div class="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M64 112c-8.8 0-16 7.2-16 16l0 22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1l0-22.1c0-8.8-7.2-16-16-16L64 112zM48 212.2L48 384c0 8.8 7.2 16 16 16l384 0c8.8 0 16-7.2 16-16l0-171.8L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64l384 0c35.3 0 64 28.7 64 64l0 256c0 35.3-28.7 64-64 64L64 448c-35.3 0-64-28.7-64-64L0 128z"/></svg>
+                    </div>
+                    <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="Email">
+                    <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inline-grid grid-cols-2 gap-3">
+
+                <div class="my-3 ">
+                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Nom de famille - champ obligatoire</label>
+                    <div class="mt-2">
+                        <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                        <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="Nom">
+                        <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                        </div>
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="my-3 ">
+                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Prénom - champ obligatoire</label>
+                    <div class="mt-2">
+                        <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                        <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="Prénom">
+                        <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                        </div>
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="my-3">
+                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Direction/Service - champ obligatoire</label>
+                    <select class="w-80 h-9 border border-gray-300 rounded-md px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
+                        <option value="option1">BU Symfony</option>
+                        <option value="option2">Wordpress</option>
+                        <option value="option3">Option 3</option>
+                    </select>
+                </div> 
+
+                <div class="my-3">
+                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Poste - champ obligatoire</label>
+                    <select class="w-80 h-9 border border-gray-300 rounded-md px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
+                        <option value="option1">Alternant Développeur</option>
+                        <option value="option2">Développeur</option>
+                        <option value="option3">Option 3</option>
+                    </select>
+                </div> 
+            </div>
+
+            <div class="my-3 ">
+                <label for=" " class="block text-sm/6 font-medium text-gray-900">Manager - champ obligatoire</label>
+                <div class="mt-2">
+                    <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-gray-100 pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                        <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 bg-gray-100 text-base text-black-900 placeholder:text-black-900 focus:outline-none sm:text-sm/6 cursor-not-allowed focus:outline-none" placeholder="Nom du Manager" readonly>
+                        <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                        </div>
+                    </div>
+                </div>
+            </div> 
+
+            <div class="inline-grid grid-cols-2 gap-4">
+                <div class="my-3">
+                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Nouveau mot de passe</label>
+                    <div class="mt-2">
+                        <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                            <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="">
+                            <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="my-3">
+                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Confirmation de mot de passe</label>
+                    <div class="mt-2">
+                        <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                            <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="">
+                            <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+
+
+            <div>
+                <button type="submit" class="text-[#ebf1f4] bg-[#E10E0E] rounded-lg w-[216px] h-[35px] font-medium my-7 cursor-pointer inline-block">Supprimer le compte</button>
+                <button type="submit" class="mx-3 text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[154px] h-[35px] font-medium my-7 cursor-pointer inline-block">Mettre à jour</button>
+            </div>
+
+
+
+
+
+
+        </div>
+    </main>
+
+{% endblock %}

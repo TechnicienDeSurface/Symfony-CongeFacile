@@ -30,7 +30,7 @@ class Person
     #[ORM\JoinColumn(nullable: false)]
     private ?Department $department = null;
 
-    #[ORM\ManyToOne(targetEntity: Position::class, cascade: ["persist"])]
+    #[ORM\ManyToOne(targetEntity: Position::class, inversedBy: 'persons', cascade: ["persist"])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Position $position = null;
 
