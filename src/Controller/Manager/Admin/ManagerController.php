@@ -56,7 +56,6 @@ class ManagerController extends AbstractController
                 'department' => $data['Department'] ?? '',
             ];            
 
-            dump($filters);
             $persons = $repository->findByFilters($filters);
         }
 

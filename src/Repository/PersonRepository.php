@@ -80,7 +80,6 @@ class PersonRepository extends ServiceEntityRepository
     public function findByFilters(array $filters): array
     {
         $qb = $this->createQueryBuilder('person');
-        dump($filters);
 
         // Jointure avec l'entité User pour filtrer par rôle
         $qb->leftJoin('person.user', 'user');
