@@ -31,4 +31,11 @@ class FilterManagerFormType extends AbstractType
                 'label' => 'Valider',
             ]);
     }
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => null, // Vérifie que ce n'est pas lié à une entité
+            'method' => 'POST',
+        ]);
+    }
 }

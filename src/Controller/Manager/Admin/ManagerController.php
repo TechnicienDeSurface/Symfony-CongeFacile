@@ -16,10 +16,12 @@ use Doctrine\Persistence\ManagerRegistry;
 class ManagerController extends AbstractController
 {
     //PAGE MANAGER VIA ADMINISTRATION MANAGER
-    #[Route('/administration-manager', name: 'app_administration_manager')]
+    #[Route('/administration-manager', name: 'app_administration_manager', methods: ['GET', 'POST'])]
     public function viewManager(Request $request, PersonRepository $repository, UserRepository $UserRepository): Response
     {
-        $form = $this->createForm(FilterManagerFormType::class);
+        $form = $this->createForm(FilterManagerFormType::class, null, [
+            'method' => 'POST',
+        ]);
         $form->handleRequest($request);
 
         $Managers = $UserRepository->findAllManagers();
@@ -41,10 +43,22 @@ class ManagerController extends AbstractController
         }
 
         $filters = [
-            'last_name' => $request->query->get('lastname'),
-            'FirstName' => $request->query->get('FirstName'),
-            'department' => $request->query->get('department'),
+            'last_name' => '',
+            'first_name' => '',
+            'department' => '',
         ];
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $filters = [
+                'last_name' => $data['LastName'] ?? '',
+                'first_name' => $data['FirstName'] ?? '',
+                'department' => $data['Department'] ?? '',
+            ];            
+
+            dump($filters);
+            $persons = $repository->findByFilters($filters);
+        }
 
         return $this->render('manager/admin/manager/manager.html.twig', [
             'page' => 'administration-manager',

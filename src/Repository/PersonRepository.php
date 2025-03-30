@@ -77,4 +77,31 @@ class PersonRepository extends ServiceEntityRepository
         return $qb->getQuery();
     }
 
+    public function findByFilters(array $filters): array
+    {
+        $qb = $this->createQueryBuilder('person');
+        dump($filters);
+
+        // FILTRE PAR LASTNAME
+        if (!empty($filters['last_name'])) {
+            $qb->andWhere('person.last_name LIKE :last_name')
+               ->setParameter('last_name', '%' . $filters['last_name'] . '%');
+        }
+
+        // FILTRE PAR FIRSTNAME
+        if (!empty($filters['first_name'])) {
+            $qb->andWhere('person.first_name LIKE :first_name')
+               ->setParameter('first_name', '%' . $filters['first_name'] . '%');
+        }
+
+        // FILTRE PAR LE DEPARTEMENT
+        if (!empty($filters['department'])) {
+            $qb->leftJoin('person.position', 'position')
+               ->andWhere('position.name LIKE :department')
+               ->setParameter('department', '%' . $filters['department'] . '%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 }
