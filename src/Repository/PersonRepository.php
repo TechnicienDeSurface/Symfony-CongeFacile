@@ -82,6 +82,9 @@ class PersonRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('person');
         dump($filters);
 
+        // Jointure avec l'entité User pour filtrer par rôle
+        $qb->leftJoin('person.user', 'user');
+
         // FILTRE PAR LASTNAME
         if (!empty($filters['last_name'])) {
             $qb->andWhere('person.last_name LIKE :last_name')
@@ -100,6 +103,10 @@ class PersonRepository extends ServiceEntityRepository
                ->andWhere('position.name LIKE :department')
                ->setParameter('department', '%' . $filters['department'] . '%');
         }
+
+        // FILTRE PAR ROLE MANAGER
+        $qb->andWhere('user.roles LIKE :role')
+           ->setParameter('role', '%ROLE_MANAGER%');
 
         return $qb->getQuery()->getResult();
     }
