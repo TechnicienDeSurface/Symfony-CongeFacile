@@ -25,71 +25,84 @@ class RequestType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('start_at', DateType::class, [
-                'widget' => 'single_text',
-                'label' => 'Date de début',
-                'attr' => ['class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2'],
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'La date de début est obligatoire']),
-                    new Assert\Date(['message' => 'La date de début doit être une date valide']),
-                ],
-            ])
-            ->add('end_at', DateType::class, [
-                'widget' => 'single_text',
-                'label' => 'Date de fin',
-                'attr' => ['class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2'],
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'La date de fin est obligatoire']),
-                    new Assert\Date(['message' => 'La date de fin doit être une date valide']),
-                ],
-            ])
-            ->add('working_days', NumberType::class, [
-                'label' => 'Nombre de jours ouvrés',
-                'mapped' => false,
-                'attr' => ['class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2'],
-                'constraints' => [
-                    new Assert\Positive(['message' => 'Le nombre de jours ouvrés doit être positif']),
-                ],
-            ])
-            ->add('receipt_file', FileType::class, [
-                'label' => 'Justificatif si applicable',
-                'attr' => ['class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2'],
-                'required' => false,
-                'constraints' => [
-                    new Assert\File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'application/pdf',
-                            'application/x-pdf',
-                        ],
-                        'mimeTypesMessage' => 'Veuillez télécharger un fichier PDF valide',
-                    ]),
-                ],
-            ])
-            ->add('comment', TextareaType::class, [
-                'label' => 'Commentaire',
-                'attr' => [
-                    'class' => 'form-textarea mt-1 block w-full border border-gray-300 rounded-md p-2',
-                    'placeholder' => 'Si congé exceptionnel ou sans solde, vous pouvez préciser votre demande.',
-                    'rows' => 5,
-                ],
-                'required' => false,
-            ])
-            ->add('request_type', EntityType::class, [
-                'class' => RequestTypeEntity::class,
-                'choice_label' => 'name',
-                'label' => 'Type de demande',
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le type de demande est obligatoire']),
-                ],
-            ])
-            ->add('Submit', SubmitType::class, [
-                'label' => 'Soumettre la demande de congé',
-                'attr' => [
-                    'class' => 'w-full text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition',
-                    'style' => 'background-color: #004C6C;',
-                ],
-            ]);
+        ->add('start_at', DateType::class, [
+            'widget' => 'single_text',
+            'label' => 'Date de début',
+            'attr' => ['class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2'],
+            'constraints' => [
+                new Assert\NotBlank(['message' => 'La date de début est obligatoire']),
+                new Assert\Date(['message' => 'La date de début doit être une date valide']),
+                new Assert\Type(['type' => 'datetime', 'message' => 'La date de début doit être de type datetime']),
+            ],
+        ])
+        ->add('end_at', DateType::class, [
+            'widget' => 'single_text',
+            'label' => 'Date de fin',
+            'attr' => ['class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2'],
+            'constraints' => [
+                new Assert\NotBlank(['message' => 'La date de fin est obligatoire']),
+                new Assert\Date(['message' => 'La date de fin doit être une date valide']),
+                new Assert\Type(['type' => 'datetime', 'message' => 'La date de fin doit être de type datetime']),
+            ],
+        ])
+        ->add('working_days', NumberType::class, [
+            'label' => 'Nombre de jours ouvrés',
+            'mapped' => false,
+            'attr' => ['class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2'],
+            'constraints' => [
+                new Assert\Positive(['message' => 'Le nombre de jours ouvrés doit être positif']),
+                new Assert\Type(['type' => 'integer', 'message' => 'Le nombre de jours ouvrés doit être un entier']),
+            ],
+        ])
+        ->add('receipt_file', FileType::class, [
+            'label' => 'Justificatif si applicable',
+            'attr' => ['class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2'],
+            'required' => false,
+            'constraints' => [
+                new Assert\File([
+                    'maxSize' => '1024k',
+                    'mimeTypes' => [
+                        'application/pdf',
+                        'application/x-pdf',
+                    ],
+                    'mimeTypesMessage' => 'Veuillez télécharger un fichier PDF valide',
+                ]),
+                new Assert\Type(['type' => 'file', 'message' => 'Le justificatif doit être un fichier']),
+            ],
+        ])
+        ->add('comment', TextareaType::class, [
+            'label' => 'Commentaire',
+            'attr' => [
+                'class' => 'form-textarea mt-1 block w-full border border-gray-300 rounded-md p-2',
+                'placeholder' => 'Si congé exceptionnel ou sans solde, vous pouvez préciser votre demande.',
+                'rows' => 5,
+            ],
+            'required' => false,
+            'constraints' => [
+                new Assert\Type(['type' => 'string', 'message' => 'Le commentaire doit être une chaîne de caractères']),
+                new Assert\Length([
+                    'max' => 1000,
+                    'maxMessage' => 'Le commentaire ne peut pas dépasser 1000 caractères',
+                ]),
+            ],
+        ])
+        ->add('request_type', EntityType::class, [
+            'class' => RequestTypeEntity::class,
+            'choice_label' => 'name',
+            'label' => 'Type de demande',
+            'constraints' => [
+                new Assert\NotBlank(['message' => 'Le type de demande est obligatoire']),
+                new Assert\Type(['type' => 'string', 'message' => 'Le type de demande doit être une chaîne de caractères']),
+            ],
+        ])
+        ->add('Submit', SubmitType::class, [
+            'label' => 'Soumettre la demande de congé',
+            'attr' => [
+                'class' => 'w-full text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition',
+                'style' => 'background-color: #004C6C;',
+            ],
+        ]);
+
 
             }
 
