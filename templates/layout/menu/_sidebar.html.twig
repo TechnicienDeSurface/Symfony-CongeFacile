@@ -128,32 +128,9 @@
 
 			<a href="{{path('app_home')}}" class="{% if app.request.get('_route') == 'app_home' %}active{% endif %}">Accueil</a>
 			{% if app.user and 'ROLE_COLLABORATEUR' in app.user.roles %}
-<<<<<<< HEAD
 				<a href="{{ path('app_new_request') }}" class="{% if app.request.get('_route') == 'app_new_request' %}active{% endif %}">Nouvelle demande</a>
 				<a href="{{ path('app_request_pending') }}" class="{% if app.request.get('_route') == 'app_request_pending' %}active{% endif %}">Demandes en attente
 					<span class="notif">5{#{{nombre}}#}</span>
-=======
-				<a href="{{ path('app_new_request') }}">Nouvelle demande</a>
-				<a href="{{ path('app_request_pending') }}">Demandes en attente <span class="notif">5{#{{nombre}}#}</span></a>
-			{% elseif app.user and 'ROLE_MANAGER' in app.user.roles %}
-				<a href="{{ path('app_new_request') }}">Nouvelle demande</a>
-				<a href="{{ path('app_request_pending') }}">Demandes en attente <span class="notif">5{#{{nombre}}#}</span></a>
-			{% endif %}
-
-		<a href="{{path('app_history_request')}}">Historique des demandes</a>
-			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
-				<a href="{{path('app_team')}}">Mon équipe</a>
-				<a href="{{ path('app_statistic') }}">Statistiques</a>
-			{% endif %}
-		<div class="trait"></div>
-
-		<a href="{{path('app_information_collaborateur')}}">Mes informations</a>
-		<a href="{{path('app_preference_collaborateur')}}">Mes préférences</a>
-			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
-			<div class="dropdown-toggle">
-				<a href="#" class="">Administration
-					<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
->>>>>>> Heddy/Back-Mes-preferences-Alerte-conge-Collaborateur
 				</a>
 			{% elseif app.user and 'ROLE_MANAGER' in app.user.roles %}
 				<a href="{{ path('app_new_request') }}" class="{% if app.request.get('_route') == 'app_statistic' %}active{% endif %}">>Nouvelle demande</a>
@@ -211,10 +188,10 @@
 
 	<script>
 		document.querySelectorAll('.dropdown-toggle').forEach(item => {
-item.addEventListener('click', function () {
-this.classList.toggle('dropdown-open');
-});
-});
+			item.addEventListener('click', function () {
+			this.classList.toggle('dropdown-open');
+			});
+		});
 	</script>
 
 
