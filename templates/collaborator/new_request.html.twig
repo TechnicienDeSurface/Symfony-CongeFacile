@@ -21,27 +21,43 @@
 					<div class="w-1/2 mb-6">
 						<label for="request_type" class="block text-gray-700 text-sm font-bold mb-2">Type de demande - champ obligatoire</label>
 						{{ form_widget(form.request_type, {'attr': {'class': 'w-full p-2 border rounded'}}) }}
-						{{ form_errors(form.request_type) }}
+						{% if form.request_type.vars.errors|length > 0 %}
+							<div class="text-red-500 text-sm mt-1">
+								{{ form_errors(form.request_type) }}
+							</div>
+						{% endif %}
 					</div>
 
 					<div class="grid grid-cols-2 gap-4">
 						<div>
 							<label for="start_at" class="block text-gray-700 text-sm font-bold mb-2">Date de début - champ obligatoire</label>
 							{{ form_widget(form.start_at, {'attr': { 'class': 'w-full p-2 border rounded', 'oninput': 'calculerJoursOuvres()'}}) }}
-							{{ form_errors(form.start_at) }}
+							{% if form.start_at.vars.errors|length > 0 %}
+								<div class="text-red-500 text-sm mt-1">
+									{{ form_errors(form.start_at) }}
+								</div>
+							{% endif %}
 						</div>
 
 						<div>
 							<label for="end_at" class="block text-gray-700 text-sm font-bold mb-2">Date de fin - champ obligatoire</label>
 							{{ form_widget(form.end_at, {'attr': { 'oninput': 'calculerJoursOuvres()'}}) }}
-							{{ form_errors(form.end_at) }}
+							{% if form.end_at.vars.errors|length > 0 %}
+								<div class="text-red-500 text-sm mt-1">
+									{{ form_errors(form.end_at) }}
+								</div>
+							{% endif %}
 						</div>
 					</div>
 
 					<div class="w-1/2">
 						<label for="working_days" class="block text-gray-700 text-sm font-bold mb-2">Nombre de jours ouvrés</label>
 						{{ form_widget(form.working_days, {'attr': { 'readonly': true}}) }}
-						{{ form_errors(form.working_days) }}
+						{% if form.working_days.vars.errors|length > 0 %}
+							<div class="text-red-500 text-sm mt-1">
+								{{ form_errors(form.working_days) }}
+							</div>
+						{% endif %}
 					</div>
 
 					<div class="w-1/2">
@@ -51,14 +67,22 @@
 							<label for="receipt_file" class="absolute left-0 top-0 mt-2 ml-2">
 								<img src="{{ asset('assets/image/icon-file.png') }}" alt="Upload Icon" class="w-6 h-6">
 							</label>
-							{{ form_errors(form.receipt_file) }}
+							{% if form.receipt_file.vars.errors|length > 0 %}
+								<div class="text-red-500 text-sm mt-1">
+									{{ form_errors(form.receipt_file) }}
+								</div>
+							{% endif %}
 						</div>
 					</div>
 
 					<div class="w-full">
 						<label for="comment" class="block text-gray-700 text-sm font-bold mb-2">Commentaire</label>
 						{{ form_widget(form.comment) }}
-						{{ form_errors(form.comment) }}
+						{% if form.comment.vars.errors|length > 0 %}
+							<div class="text-red-500 text-sm mt-1">
+								{{ form_errors(form.comment) }}
+							</div>
+						{% endif %}
 					</div>
 
 					<div class="w-1/2">
@@ -66,6 +90,7 @@
 					</div>
 					{{ form_end(form) }}
 				</form>
+
 				<p class="pt-4">*En cas d’erreur de saisie ou de changements, vous pourrez modifier votre demande tant que celle-ci n’a pas été validée par le manager.</p>
 			</div>
 		</main>
