@@ -5,7 +5,7 @@ namespace App\Controller\Manager;
 use App\Entity\User;
 use App\Form\InformationFormType;
 use App\Form\MotDePasseType;
-use Proxies\__CG__\App\Entity\Person;
+use App\Entity\Person;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
