@@ -17,7 +17,8 @@ class InformationController extends AbstractController
     public function viewInformationManager(): Response
     {
         $person = new Person();
-        $user = new User() ;
+        $user = new User();
+        
         $form_person= $this->createForm(InformationFormType::class, $person, [
             'is_manager' => true,
         ]);
