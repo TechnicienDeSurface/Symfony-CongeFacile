@@ -45,7 +45,7 @@ class PreferenceController extends AbstractController
             }
         }
 
-        return $this->render('collaborateur/preference.html.twig', [
+        return $this->render('collaborator/preference.html.twig', [
             'page' => 'preference-collaborateur',
             'form' => $form , 
         ]);
