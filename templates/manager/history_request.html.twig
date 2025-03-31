@@ -3,44 +3,90 @@
 {% block title %}Historique des demandes{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h2 class="mb-4">Historique des demandes</h2>
+<title>{% block title %}Mon équipe{% endblock %}</title>
+		{% include 'layout/menu/_header.html.twig' %}
+		<main style="display: flex;">
+			{% include 'layout/menu/_sidebar.html.twig' %}
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Type de demande</th>
-                <th>Collaborateur</th>
-                <th>Date de début</th>
-                <th>Date de fin</th>
-                <th>Nb jours</th>
-                <th>Statut</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for demand in demands %}
-                <tr>
-                    <td>{{ demand.type }}</td>
-                    <td>{{ demand.collaborateur }}</td>
-                    <td>{{ demand.dateDebut|date('d/m/Y H:i') }}</td>
-                    <td>{{ demand.dateFin|date('d/m/Y H:i') }}</td>
-                    <td>{{ demand.nbJours }} jours</td>
-                    <td>
-                        <span class="badge {% if demand.statut == 'Validé' %}bg-success{% elseif demand.statut == 'Refusé' %}bg-danger{% else %}bg-warning{% endif %}">
-                            {{ demand.statut }}
-                        </span>
-                    </td>
-                    <td>
-                        <a href="{{ path('demande_details', { id: demand.id }) }}" class="btn btn-secondary btn-sm">Détails</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="7" class="text-center">Aucune demande trouvée.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+			<div class="w-full p-8">
+				<div class="flex items-center gap-5">
+					<h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Historique des demandes</h1>
+				</div>
+
+                <div class="flex w-full justify-center items-center h-max">
+					<table class="w-full mt-6">
+                        <thead>
+								{{ form_start(form) }}
+								<tr class="bg-[#F9FAFB] text-gray-700 border-x border-t border-[#EAECF0] rounded-lg">
+									<td class="py-4 px-6 pr-0 w-1/6">
+										{{ form_label(form.request_type, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.request_type, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
+
+									<td class="py-4 px-6 pr-0 w-1/6">
+										{{ form_label(form.collaborator, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.collaborator, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
+
+									<td class="py-4 px-6 pr-0 w-1/6">
+										{{ form_label(form.start_at, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.start_at, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
+
+									<td class="py-4 px-6 pr-0 w-1/6">
+										{{ form_label(form.end_at, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.end_at, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
+
+									<td class="py-4 px-6 pr-0 w-1/4">
+										{{ form_label(form.nbdays, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.nbdays, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
+                                    <td class="py-4 px-6 pr-0 w-1/4">
+										{{ form_label(form.answer, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.answer, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
+
+									<td class="w-1/6 px-6 pr-6" colspan="3" style="vertical-align: bottom; padding-bottom: 15px;">
+										<div>
+											{{ form_widget(form.submit, {'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
+										</div>
+									</td>
+								</tr>
+								{{ form_end(form) }}
+							</thead>
+                        <tbody>
+                            {% for requests in request %}
+                                <tr>
+                                    <td class="py-6 px-6">{{ requests.type }}</td>
+                                    <td class="py-6 px-6">{{ requests.collaborateur }}</td>
+                                    <td class="py-6 px-6">{{ requests.dateDebut|date('d/m/Y H:i') }}</td>
+                                    <td class="py-6 px-6">{{ requests.dateFin|date('d/m/Y H:i') }}</td>
+                                    <td class="py-6 px-6">{{ requests.nbJours }} jours</td>
+                                    <td class="py-6 px-6">{{ requests.statut }}</td>
+                                    <td class="py-6 px-6">class="py-6 px-6">
+                                        <form method="POST" action="{{ path('app_detail_request_pending', {'id': items.id}) }}">
+                                            <button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="7" class="text-center">Aucune demande trouvée.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="flex w-full justify-center items-center h-max mt-10">
+					{% if pager.hasPreviousPage %}
+						<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path('app_history_request', { page: pager.previousPage }) }}">Précédent</a>
+					{% endif %}
+						<p>Page {{ pager.currentPage }} sur {{ pager.nbPages }}</p>
+					{% if pager.hasNextPage %}
+						<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path('app_history_request', { page: pager.nextPage }) }}">Suivant</a>
+					{% endif %}
+				</div>
+			</div>
+		</main>
 {% endblock %}
