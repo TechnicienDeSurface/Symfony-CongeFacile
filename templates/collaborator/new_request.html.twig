@@ -21,23 +21,27 @@
 					<div class="w-1/2 mb-6">
 						<label for="request_type" class="block text-gray-700 text-sm font-bold mb-2">Type de demande - champ obligatoire</label>
 						{{ form_widget(form.request_type, {'attr': {'class': 'w-full p-2 border rounded'}}) }}
+						{{ form_errors(form.request_type) }}
 					</div>
 
 					<div class="grid grid-cols-2 gap-4">
 						<div>
 							<label for="start_at" class="block text-gray-700 text-sm font-bold mb-2">Date de début - champ obligatoire</label>
 							{{ form_widget(form.start_at, {'attr': { 'class': 'w-full p-2 border rounded', 'oninput': 'calculerJoursOuvres()'}}) }}
+							{{ form_errors(form.start_at) }}
 						</div>
 
 						<div>
 							<label for="end_at" class="block text-gray-700 text-sm font-bold mb-2">Date de fin - champ obligatoire</label>
 							{{ form_widget(form.end_at, {'attr': { 'oninput': 'calculerJoursOuvres()'}}) }}
+							{{ form_errors(form.end_at) }}
 						</div>
 					</div>
 
 					<div class="w-1/2">
 						<label for="working_days" class="block text-gray-700 text-sm font-bold mb-2">Nombre de jours ouvrés</label>
 						{{ form_widget(form.working_days, {'attr': { 'readonly': true}}) }}
+						{{ form_errors(form.working_days) }}
 					</div>
 
 					<div class="w-1/2">
@@ -47,20 +51,21 @@
 							<label for="receipt_file" class="absolute left-0 top-0 mt-2 ml-2">
 								<img src="{{ asset('assets/image/icon-file.png') }}" alt="Upload Icon" class="w-6 h-6">
 							</label>
+							{{ form_errors(form.receipt_file) }}
 						</div>
 					</div>
 
 					<div class="w-full">
 						<label for="comment" class="block text-gray-700 text-sm font-bold mb-2">Commentaire</label>
 						{{ form_widget(form.comment) }}
+						{{ form_errors(form.comment) }}
 					</div>
 
 					<div class="w-1/2">
 						{{ form_widget(form.Submit, {'label': 'Soumettre ma demande*', 'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
 					</div>
+					{{ form_end(form) }}
 				</form>
-				{{ form_end(form) }}
-
 				<p class="pt-4">*En cas d’erreur de saisie ou de changements, vous pourrez modifier votre demande tant que celle-ci n’a pas été validée par le manager.</p>
 			</div>
 		</main>
