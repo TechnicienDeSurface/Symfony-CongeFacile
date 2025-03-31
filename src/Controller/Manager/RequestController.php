@@ -32,7 +32,7 @@ class RequestController extends AbstractController
     }
 
     //PAGE HISTORIQUE DES DEMANDES
-    #[Route('/history-request/{page}', name: 'app_history_request', methods: ['GET', 'POST'])]
+    #[Route('/history-request', name: 'app_history_request', methods: ['GET', 'POST'])]
     public function viewRequestHistory(Request $request, int $page = 1, RequestRepository $requestRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_MANAGER' || 'ROLE_COLLABORATEUR');
