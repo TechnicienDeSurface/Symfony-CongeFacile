@@ -3,23 +3,60 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container mx-auto p-6">
-        <h1 class="text-2xl font-bold mb-4">Directions/Services</h1>
-        <button class="bg-blue-600 text-white px-4 py-2 rounded">Ajouter une direction/service</button>
-        
-        <div class="mt-4">
-            <input type="text" placeholder="Nom de la direction ou du service" class="border p-2 w-full rounded">
+
+    <title>{% block title %}Administration - Directions/Services{% endblock %}</title>
+
+    {% include 'layout/menu/_header.html.twig' %}
+
+    <main style="display: flex;">
+
+        {% include 'layout/menu/_sidebar.html.twig' %}
+
+        <div class=" p-8 overflow-y-auto">
+
+            <h1 class="text-left font-bold text-2xl mb-2 inline-block" style='color : #004C6C'>Directions/Services</h1>
+            <button type="submit" class="mx-2 text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[220px] h-[35px] font-medium my-7 cursor-pointer inline-block">Ajouter directions/services</button>
+
+            <div class="w-[700px] justify-center items-center h-max">
+                <table class=" mt-2 bg-[#F9FAFB]">
+                    <thead class="rounded-lg">
+                        
+                        <tr class="text-gray-700 border-x border-t border-[#EAECF0] ">
+                            <td class="py-4 px-6 pr-0 w-1/6">
+
+                                <div class="my-2 ">
+                                    <label for="" class="block text-sm/6 font-medium text-[#004C6C]">Nom de la direction ou du service</label>
+                                    <div class="mt-2">
+                                        <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                                            <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="Nom">
+                                            <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+
+                            </td>
+                        </tr>
+                    </thead>
+
+                    <tbody class="bg-white">
+                        {% set services = ['BU Symfony', 'BU Wordpress', 'BU Applications mobiles', 'BU Marketing', 'Autre'] %}
+                        
+                        {% for service in services %}
+                            <tr class="border-x border-b mt-4 overflow-x-auto">
+                                <td class="w-[80%] py-6 px-6 ">{{ service }}</td>
+                                <td class="py-6 px-6">
+                                    <form method="POST" action="">
+                                        <button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
         </div>
-        
-        <div class="mt-6 bg-white shadow-md rounded-lg overflow-hidden">
-            {% set services = ['BU Symfony', 'BU Wordpress', 'BU Applications mobiles', 'BU Marketing', 'Autre'] %}
-            
-            {% for service in services %}
-                <div class="flex justify-between items-center p-4 border-b last:border-b-0">
-                    <span>{{ service }}</span>
-                    <button class="bg-gray-200 text-gray-800 px-4 py-1 rounded">Détails</button>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
+    </main>
 {% endblock %}
