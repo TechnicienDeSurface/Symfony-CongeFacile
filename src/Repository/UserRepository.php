@@ -45,6 +45,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getScalarResult(); // Retourne un tableau simple avec les IDs
     }
 
+    public function findPersonById(int $id): ?array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('p') // Sélectionner toutes les informations de la personne
+            ->join('u.person', 'p')
+            ->where('p.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult(); // Retourne une seule personne ou null
+    }
+
     
 
 
