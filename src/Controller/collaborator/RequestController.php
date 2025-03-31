@@ -44,9 +44,6 @@ class RequestController extends AbstractController
                 $registry->getManager()->persist($data);
                 $registry->getManager()->flush();
                 $this->addFlash('success', 'Success to add product');
-                return $this->render('accueil/accueil.html.twig', [
-                    'page' => 'accueil', //définir la page
-                ]);
             } catch (NotFoundHttpException $e) {
                 $this->addFlash('error', 'Error to add request');
             }
@@ -56,7 +53,7 @@ class RequestController extends AbstractController
 
         return $this->render('collaborator/new_request.html.twig', [
             'page' => 'new-request',
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
