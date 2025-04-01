@@ -87,27 +87,26 @@ class PersonRepository extends ServiceEntityRepository
         // FILTRE PAR LASTNAME
         if (!empty($filters['last_name'])) {
             $qb->andWhere('person.last_name LIKE :last_name')
-               ->setParameter('last_name', '%' . $filters['last_name'] . '%');
+                ->setParameter('last_name', '%' . $filters['last_name'] . '%');
         }
 
         // FILTRE PAR FIRSTNAME
         if (!empty($filters['first_name'])) {
             $qb->andWhere('person.first_name LIKE :first_name')
-               ->setParameter('first_name', '%' . $filters['first_name'] . '%');
+                ->setParameter('first_name', '%' . $filters['first_name'] . '%');
         }
 
         // FILTRE PAR LE DEPARTEMENT
         if (!empty($filters['department'])) {
             $qb->innerJoin('person.department', 'department') // Changer LEFT JOIN en INNER JOIN
-               ->andWhere('department.name LIKE :department')
-               ->setParameter('department', '%' . $filters['department'] . '%');
+                ->andWhere('department.name LIKE :department')
+                ->setParameter('department', '%' . $filters['department'] . '%');
         }
 
         // FILTRE PAR ROLE MANAGER
         $qb->andWhere('user.roles LIKE :role')
-           ->setParameter('role', '%ROLE_MANAGER%');
+            ->setParameter('role', '%ROLE_MANAGER%');
 
         return $qb->getQuery()->getResult();
     }
-
 }

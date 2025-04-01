@@ -37,22 +37,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function findAllManagers(): array
     {
         return $this->createQueryBuilder('u')
-            ->select('p.id AS person_id','u.id AS user_id',) // Sélectionner user.id et person.id
+            ->select('p.id AS person_id', 'u.id AS user_id',) // Sélectionner user.id et person.id
             ->join('u.person', 'p')
             ->where('u.roles LIKE :role')
             ->setParameter('role', '%ROLE_MANAGER%')
             ->getQuery()
             ->getScalarResult(); // Retourne un tableau simple avec les IDs
-    }
-
-    public function findPersonById(int $id): ?array
-    {
-        return $this->createQueryBuilder('u')
-            ->select('p') // Sélectionner toutes les informations de la personne
-            ->join('u.person', 'p')
-            ->where('p.id = :id')
-            ->setParameter('id', $id)
-            ->getQuery()
-            ->getOneOrNullResult(); // Retourne une seule personne ou null
     }
 }
