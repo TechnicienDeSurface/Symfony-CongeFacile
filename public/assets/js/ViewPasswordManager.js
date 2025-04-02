@@ -1,5 +1,6 @@
+
+// Pour les informations managers
 document.addEventListener('DOMContentLoaded', function () {
-    console.log("Script chargé");
 
     function togglePasswordVisibility(buttonId, inputId, iconId) {
         const toggleButton = document.getElementById(buttonId);
