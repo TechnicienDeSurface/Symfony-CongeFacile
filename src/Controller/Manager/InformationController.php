@@ -4,7 +4,6 @@ namespace App\Controller\Manager;
 
 use App\Entity\User;
 use App\Entity\Person;
-use App\Repository\PersonRepository;
 use App\Form\InformationFormType;
 use App\Form\MotDePasseType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class InformationController extends AbstractController
 {
     #[Route('/information-manager', name: 'app_information_manager')]
-    public function viewInformationManager(Security $security, PersonRepository $personRepository): Response
+    public function viewInformationManager(Security $security): Response
     {
         // Récupérer l'utilisateur connecté
         $user = $security->getUser();
@@ -24,8 +23,7 @@ class InformationController extends AbstractController
             // Dans certains cas, elle peut aussi retourner un autre type d'objet (comme une UserInterface générique).
             // Cette vérification évite d'accéder à la méthode getId() sur un objet qui ne serait pas un User (et donc éviter une erreur fatale).
         }
-
-        $userId = $user->getId(); // Fonctionne
+        
 
         // Accéder à la Person directement depuis l'objet User
         $person = $user->getPerson();
@@ -38,6 +36,8 @@ class InformationController extends AbstractController
         $form_person = $this->createForm(InformationFormType::class, $person, [
             'is_manager' => true,
             'data_class' => Person::class, // Ensure the form expects a Person object
+            'user' => $user, 
+            'person' => $person,
         ]);
         
         $form_password = $this->createForm(MotDePasseType::class, $user, [

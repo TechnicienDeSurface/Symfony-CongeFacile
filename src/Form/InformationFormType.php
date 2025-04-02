@@ -28,23 +28,23 @@ class InformationFormType extends AbstractType
         ->add('last_name', TextType::class, [
             'label' => 'Nom de famille',
             'label_attr' => [
-                'class' => 'block text-gray-700 font-medium',
+            'class' => 'block text-gray-700 font-medium',
             ],
             'attr' => [
-                'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
-                'value' => 'Martins',
-                'disabled' => 'disabled'
+            'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
+            'value' => $options['person']->getLastName(),
+            'disabled' => 'disabled'
             ],
         ])
         ->add('first_name', TextType::class, [
             'label' => 'Prénom',
             'label_attr' => [
-                'class' => 'block text-gray-700 font-medium',
+            'class' => 'block text-gray-700 font-medium',
             ],
             'attr' => [
-                'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
-                'value' => 'Jeff',
-                'disabled' => 'disabled'
+            'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
+            'value' => $options['person']->getFirstName(),
+            'disabled' => 'disabled'
             ],
         ])
         ->add('email', TextType::class, [
@@ -56,7 +56,7 @@ class InformationFormType extends AbstractType
             'attr' => [
                 'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
                 'readonly' => true,
-                'value'=>'email.example@gmail.com',
+                'value' => $options['user']->getEmail(),
                 'disabled' => 'disabled'
             ],
         ])
@@ -106,5 +106,8 @@ class InformationFormType extends AbstractType
             'data_class' => Person::class,
             'is_manager' => false, //SERT POUR DIRE SI C'EST INFORMATION MANAGER OU PAS
         ]);
+
+        $resolver->setDefined('user');
+        $resolver->setDefined('person'); // Définis user comme une option (sinon ça marche pas)
     }
 }
