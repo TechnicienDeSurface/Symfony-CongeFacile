@@ -28,10 +28,11 @@ class RequestType extends AbstractType
             ->add('collaborator', EntityType::class, [
                 'class' => Person::class,
                 'choice_label' => 'first_name',
-                'label' => 'Collaborateur',
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'Le collaborateur est obligatoire']),
                 ],
+                'attr' => ['style' => 'display:none'],
+                'label_attr' => ['style' => 'display:none;']
             ])
             ->add('start_at', DateType::class, [
                 'widget' => 'single_text',
@@ -102,11 +103,12 @@ class RequestType extends AbstractType
             ->add('department', EntityType::class, [
                 'class' => Department::class,
                 'choice_label' => 'name',
-                'label' => 'Département',
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'Le département est obligatoire']),
                     //new Assert\Type(['type' => \RequestType, 'message' => 'Le type de demande doit être une chaîne de caractères']),
                 ],
+                'attr' => ['style' => 'display:none'],
+                'label_attr' => ['style' => 'display:none;']
             ])
             ->add('Submit', SubmitType::class, [
                 'label' => 'Soumettre la demande de congé',

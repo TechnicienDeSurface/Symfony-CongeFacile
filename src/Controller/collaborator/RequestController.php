@@ -12,25 +12,31 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request as RequestFondation;
 use App\Entity\Request ; 
 use App\Entity\Person ; 
+use App\Entity\User ; 
 use App\Form\RequestType ; 
+use Symfony\Bundle\SecurityBundle\Security; 
 
 class RequestController extends AbstractController
 { 
 
     //PAGE NOUVELLE DEMANDE "COLLABORATEUR"
     #[Route('/new-request', name: 'app_new_request')]
-    public function viewNewRequest(RequestFondation $request_bd, RequestRepository $repository, ManagerRegistry $registry, PersonRepository $personRepository): Response
+    public function viewNewRequest(Security $security, RequestFondation $request_bd, RequestRepository $repository, ManagerRegistry $registry, PersonRepository $personRepository): Response
     {
         $request = new Request();
         
         // Récupérez l'utilisateur connecté
-        $user = $this->getUser();
+        $user = New User() ; 
+        $user = $security->getUser() ;
         $persons = $personRepository->findBy([],[]);
         $person = New Person() ; 
         foreach ($persons as $row) {
-            $person = $row ; 
+            if($user == $row->getUser()){
+                $person = $row ; 
+            }
         }
         $request->setCollaborator($person);
+        $request->setDepartment($person->getDepartment());
 
         // Créez le formulaire avec l'instance de Request
         $form = $this->createForm(RequestType::class, $request);
