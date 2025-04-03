@@ -26,12 +26,12 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
-                    {% if form.vars.value.department_id is defined %}
-                            {{ form.vars.value.department_id }}
-                        {% else %}
-                            <p>La propriété department_id n'existe pas.</p>
-                        {% endif %}
-
+                        <div class="col-span-1">
+                            {{ form_row(form1.department)}}
+                        </div>
+                        <div class="col-span-1">
+                            {{ form_row(form1.position_id)}}
+                        </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-1">
@@ -43,50 +43,52 @@
 
             <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Réinitialiser mon mot de passe</h2>
             {% include 'layout/_addFlash.html.twig'%}
-            <form method="post">
-            {{ form_start(form2) }}
-                <div class="grid grid-cols-3 gap-6">
-                    <div>
-                        <label class="block font-medium">{{ form_label(form2.currentPassword) }}</label>
-                        <div class="relative">
-                            {{ form_widget(form2.currentPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md pr-10" } }) }}
-                            <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-1">
-                                <img id="eyeIcon" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" 
-                                data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
-                            </button>
+                <form method="post">
+                <div class="space-y-6">
+                {{ form_start(form2) }}
+                    <div class="grid grid-cols-1 gap-6">
+                        <div class="w-1/4">
+                            <label class="block font-medium">{{ form_label(form2.currentPassword) }}</label>
+                            <div class="relative">
+                                {{ form_widget(form2.currentPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md pr-10" } }) }}
+                                <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-1">
+                                    <img id="eyeIcon" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" 
+                                    data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
+                                </button>
+                            </div>
+                            <h3 class="text-red-500 mt-10">{{ form_errors(form2.currentPassword) }}</h3>
                         </div>
-                        <h3 class="text-red-500 mt-10">{{ form_errors(form2.currentPassword) }}</h3>
-                    </div>
-                    <br>
-                    <div>
-                        <label class="block font-medium">{{ form_label(form2.newPassword) }}</label>
-                        <div class="relative">
-                            {{ form_widget(form2.newPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md pr-10" } }) }}
-                            <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-1">
-                                <img id="eyeIcon" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" 
-                                data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
-                            </button>
+                        <br>
+                        <div class="grid grid-cols-2 gap-x-1 gap-y-6">
+                            <div class ="w-1/2">
+                                <label class="block font-medium">{{ form_label(form2.newPassword) }}</label>
+                                <div class="relative">
+                                    {{ form_widget(form2.newPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md pr-10" } }) }}
+                                    <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-1">
+                                        <img id="eyeIcon" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" 
+                                        data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
+                                    </button>
+                                </div>
+                                <h3 class="text-red-500 text-sm mt-1">{{ form_errors(form2.newPassword) }}</h3>
+                            </div>
+                            <div class ="w-1/2">
+                                <label class="block font-medium">{{ form_label(form2.confirmPassword) }}</label>
+                                <div class="relative">
+                                    {{ form_widget(form2.confirmPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md pr-10" } }) }}
+                                    <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-1">
+                                        <img id="eyeIcon" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" 
+                                        data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
+                                    </button>
+                                </div>
+                                <h3 class="text-red-500 text-sm mt-1">{{ form_errors(form2.confirmPassword) }}</h3>
+                            </div>
                         </div>
-                        <h3 class="text-red-500 text-sm mt-1">{{ form_errors(form2.newPassword) }}</h3>
-                    </div>
-                    <div>
-                        <label class="block font-medium">{{ form_label(form2.confirmPassword) }}</label>
-                        <div class="relative">
-                            {{ form_widget(form2.confirmPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md pr-10" } }) }}
-                            <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-1">
-                                <img id="eyeIcon" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" 
-                                data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
-                            </button>
-                        </div>
-                        <h3 class="text-red-500 text-sm mt-1">{{ form_errors(form2.confirmPassword) }}</h3>
+                    <div class="mt-6">
+                        {{ form_widget(form2.Submit, {'label': 'Réinitialiser le mot de passe', 'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
                     </div>
                 </div>
-                <div class="mt-6">
-                    {{ form_widget(form2.Submit, {'label': 'Réinitialiser le mot de passe', 'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
-                </div>
-
-            {{ form_end(form2) }}
-            </form>
+                {{ form_end(form2) }}
+                </form>
 		</div>
 	</main>
 {% endblock %}
