@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{# {% extends 'base.html.twig' %}
 
 {% block title %}Historique des demandes{% endblock %}
 
@@ -21,10 +21,10 @@
         <tbody>
             {% for demand in demands %}
                 <tr>
-                    <td>{{ demand.type }}</td>
-                    <td>{{ demand.collaborateur }}</td>
-                    <td>{{ demand.dateDebut|date('d/m/Y H:i') }}</td>
-                    <td>{{ demand.dateFin|date('d/m/Y H:i') }}</td>
+                    <td>{{ demand.reques_type }}</td>
+                    <td>{{ demand.collaborator}}</td>
+                    <td>{{ demand.startAt|date('d/m/Y H:i') }}</td>
+                    <td>{{ demand.endAt|date('d/m/Y H:i') }}</td>
                     <td>{{ demand.nbJours }} jours</td>
                     <td>
                         <span class="badge {% if demand.statut == 'Validé' %}bg-success{% elseif demand.statut == 'Refusé' %}bg-danger{% else %}bg-warning{% endif %}">
@@ -43,4 +43,65 @@
         </tbody>
     </table>
 </div>
+{% endblock %} #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Historique des demandes{% endblock %}
+
+{% block body %}
+
+{% include 'layout/menu/_header.html.twig' %}
+	
+	<main style="display: flex;">
+		{% include 'layout/menu/_sidebar.html.twig' %}
+
+		<div class="w-full p-8">
+            <table class="min-w-full border-collapse border border-gray-200 shadow-sm rounded-lg">
+                <thead class="bg-gray-100 text-gray-700">
+                    <tr>
+                        <th class="px-4 py-2 text-left">Type de demande</th>
+                        <th class="px-4 py-2 text-left">Collaborateur</th>
+                        <th class="px-4 py-2 text-left">Date de début</th>
+                        <th class="px-4 py-2 text-left">Date de fin</th>
+                        <th class="px-4 py-2 text-left">Nb jours</th>
+                        <th class="px-4 py-2 text-left">Statut</th>
+                        <th class="px-4 py-2 text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                   {% for request in requests %} 
+                        <tr class="border-t border-b"> 
+                            <td class="px-4 py-6">{{ request.requestType.name }}</td>
+                            <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.collaborator.firstName }} {{ request.collaborator.lastName}}</td>
+                            <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.startAt|date('d/m/Y H\hi') }}</td>
+                            <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.endAt|date('d/m/Y H\hi') }}</td>
+                            <td class="px-4 py-6 border-t border-b border-gray-300"> jours</td>
+                            <td class="px-4 py-6 border-t border-b border-gray-300">
+                                <div class="{% if request.answer is null %}{% elseif request.answer == 1 %}{% else %}{% endif %}">
+                                    {% if request.answer is null %}
+                                        En attente
+                                    {% elseif request.answer == 1 %}
+                                        Validé
+                                    {% else %}
+                                        Refusé
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="px-4 py-2 border-t border-b border-gray-300">
+                                <a href="" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded">
+                                    Détails
+                                </a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="px-4 py-2 text-center text-gray-500">Aucune demande trouvée</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
 {% endblock %}
