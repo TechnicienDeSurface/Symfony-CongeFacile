@@ -57,7 +57,7 @@ class InformationController extends AbstractController
                             $collaborator->setPassword($password) ; 
                             $entityManager->flush(); // Mettre à jour l'entité
 
-                            $this->addFlash('success', 'Mot de passe modifié');
+                            $this->addFlash('success', 'Mot de passe modifié'); //Création d'un message flash de succès
                         }else{
                             $this->addFlash('error', 'Le nouveau mot passe est le même que l\'actuel');
                         }
@@ -65,7 +65,7 @@ class InformationController extends AbstractController
                         $this->addFlash('error', 'La confirmation du nouveau mot de passe ne correspond pas au nouveau mot de passe');
                     }   
                 }else{
-                    $this->addFlash('error', 'Le mot de passe actuel est incorrect');   
+                    $this->addFlash('error', 'Le mot de passe actuel est incorrect'); //Création d'un message flash erreur 
                 }
             }
         }
