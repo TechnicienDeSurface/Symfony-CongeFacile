@@ -146,8 +146,8 @@
 			{% endif %}
 			<div class="trait"></div>
 
-			<a href="{{path('app_information_manager')}}" class="{% if app.request.get('_route') == 'app_information_manager' %}active{% endif %}">Mes informations</a>
-			<a href="{{path('app_preference_manager')}}" class="{% if app.request.get('_route') == 'app_preference_manager' %}active{% endif %}">Mes préférences</a>
+			<a href="{{path('app_information_collaborateur')}}" class="{% if app.request.get('_route') == 'app_information_manager' %}active{% endif %}">Mes informations</a>
+			<a href="{{path('app_preference_collaborateur')}}" class="{% if app.request.get('_route') == 'app_preference_manager' %}active{% endif %}">Mes préférences</a>
 			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
 				<div class="dropdown-toggle">
 					<a href="#" class="">Administration

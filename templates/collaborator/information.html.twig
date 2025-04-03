@@ -42,11 +42,10 @@
             {{ form_end(form1) }}
 
             <h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Réinitialiser mon mot de passe</h2>
-
+            {% include 'layout/_addFlash.html.twig'%}
             <form method="post">
             {{ form_start(form2) }}
                 <div class="grid grid-cols-3 gap-6">
-                 {% include 'layout/_addFlash.html.twig'%}
                     <div>
                         <label class="block font-medium">{{ form_label(form2.currentPassword) }}</label>
                         <div class="relative">

@@ -30,6 +30,11 @@ class InformationController extends AbstractController
         $user = new User() ;
         $collaborator = New User() ; 
         $collaborator = $security->getUser() ;
+        if (!$collaborator instanceof \App\Entity\User) {
+            throw new \LogicException('L\'utilisateur connecté n\'est pas une instance de App\Entity\User.');
+        }
+    
+
         $form_person= $this->createForm(InformationFormType::class, $person);
         $form_password = $this->createForm(MotDePasseType::class, $user);
         $form_password->handleRequest($request);
@@ -37,16 +42,21 @@ class InformationController extends AbstractController
         if ($form_password->isSubmitted()){
             if($form_password->isValid()) {
                 $data = $form_password->getData() ; 
-                $currentPassword = $data->currentPassword ; 
+                // $currentPassword = $data['currentPassword'] ;                 
+                // $newPassword = $data['newPassword'] ; 
+                // $confirmPassword = $data['confirmPassword'] ; 
+                $currentPassword = $form_password->get('currentPassword')->getData();
+                $newPassword = $form_password->get('newPassword')->getData();
+                $confirmPassword = $form_password->get('confirmPassword')->getData();
+
                 $verifHash = $this->passwordHasher->hashPassword($user, $currentPassword) ;
-                $newPassword = $data->newPassword ; 
-                $confirmPassword = $data->confirmPassword ; 
-                if($verifHash == $collaborator->password){
+                if ($hash->isPasswordValid($collaborator, $currentPassword)) {
                     if($newPassword == $confirmPassword){
-                        if($data->newPassword || $data->confirmPassword != $currentPassword){
+                        if($newPassword || $confirmPassword != $currentPassword){
                             $password = $this->passwordHasher->hashPassword($user, $newPassword) ; 
-                            $user->setPassword($password) ; 
-                            $registry->getManager()->flush(); // Mettre à jour l'entité
+                            $collaborator->setPassword($password) ; 
+                            $entityManager->flush(); // Mettre à jour l'entité
+
                             $this->addFlash('success', 'Mot de passe modifié');
                         }else{
                             $this->addFlash('error', 'Le nouveau mot passe est le même que l\'actuel');
