@@ -28,22 +28,6 @@ class MotDePasseType extends AbstractType
                 new Assert\NotBlank([
                     'message' => 'Le mot de passe ne peut pas être vide.',
                 ]),
-                // new Assert\Length([
-                //     'min' => 8,
-                //     'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
-                // ]),
-                // new Assert\Regex([
-                //     'pattern' => '/[A-Z]/',
-                //     'message' => 'Le mot de passe doit contenir au moins une lettre majuscule.',
-                // ]),
-                // new Assert\Regex([
-                //     'pattern' => '/[a-z]/',
-                //     'message' => 'Le mot de passe doit contenir au moins une lettre minuscule.',
-                // ]),
-                // new Assert\Regex([
-                //     'pattern' => '/\d/',
-                //     'message' => 'Le mot de passe doit contenir au moins un chiffre.',
-                // ]),
             ],
             'label' => 'Mot de passe actuel',
             'label_attr' => [
@@ -64,7 +48,7 @@ class MotDePasseType extends AbstractType
                         'message' => 'Le mot de passe ne peut pas être vide.',
                     ]),
                     new Assert\Length([
-                        'min' => 8,
+                        'min' => 10,
                         'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
                     ]),
                     new Assert\Regex([
@@ -99,7 +83,7 @@ class MotDePasseType extends AbstractType
                     'message' => 'Le mot de passe ne peut pas être vide.',
                 ]),
                 new Assert\Length([
-                    'min' => 8,
+                    'min' => 10,
                     'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
                 ]),
                 new Assert\Regex([
