@@ -2,6 +2,7 @@
 
 namespace App\Controller\Manager;
 
+use App\Form\FilterManagerFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -9,6 +10,7 @@ use App\Repository\RequestRepository ;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
+use App\Form\FilterManagerHistoDemandeType;
 
 class RequestController extends AbstractController
 {
@@ -35,9 +37,14 @@ class RequestController extends AbstractController
     public function viewRequestHistory(Request $request, RequestRepository $repository, int $page = 1 ): Response
     {
         $requests = $repository->findBy([],[]) ;
+
+        $form = $this->createForm(FilterManagerHistoDemandeType::class);
+        $form->handleRequest($request);
+
         return $this->render('manager/history_request.html.twig', [
             'page' => 'history-request',
             'requests' => $requests,
+            'form' => $form,  
         ]);
     }
 }

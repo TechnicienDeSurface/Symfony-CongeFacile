@@ -10,6 +10,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 
 class FilterManagerHistoDemandeType extends AbstractType
 {
@@ -19,7 +22,7 @@ class FilterManagerHistoDemandeType extends AbstractType
             // ->add('created_at', null, [
             //     'widget' => 'single_text',
             // ])
-            ->add('start_at', null, [
+            ->add('start_at',null, [
                 'widget' => 'single_text',
             ])
             ->add('end_at', null, [
@@ -34,15 +37,15 @@ class FilterManagerHistoDemandeType extends AbstractType
             // ])
             ->add('request_type', EntityType::class, [
                 'class' => RequestType::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
             ->add('collaborator', EntityType::class, [
                 'class' => Person::class,
-                'choice_label' => 'id',
+                'choice_label' => 'last_name',
             ])
             ->add('department', EntityType::class, [
                 'class' => Department::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
             ])
         ;
     }
