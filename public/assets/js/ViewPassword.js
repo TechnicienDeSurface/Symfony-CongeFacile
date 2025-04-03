@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (toggleButton && passwordField && eyeIcon) {
         toggleButton.addEventListener('click', function () { // Toggle password visibility
     if (passwordField.type === 'password') {
-        passwordField.type = 'text';
+        passwordField.type = 'text'; 
         eyeIcon.src = eyeIcon.dataset.eyeOpen;
-    } else {
+    }else {
         passwordField.type = 'password';
         eyeIcon.src = eyeIcon.dataset.eyeClosed; // Eye closed
     }

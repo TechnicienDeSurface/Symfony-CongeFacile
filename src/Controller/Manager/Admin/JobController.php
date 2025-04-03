@@ -102,14 +102,14 @@ class JobController extends AbstractController
         if ($form->isSubmitted()) {
             // Si le formulaire est soumis et valide
     
-            if ($form->get('edit')->isClicked()) {
+            if ($form->get('edit')) {
                 // Si le bouton "Mettre à jour" a été cliqué
                 if ($form->isValid()) {
                     $entityManager->flush(); // Mettre à jour l'entité
                     $this->addFlash('success', 'Le poste a été mis à jour.');
                     return $this->redirectToRoute('app_administration_detail_job', ['id' => $position->getId()]);
                 }
-            } elseif ($form->get('delete')->isClicked()) {
+            } elseif ($form->get('delete')) {
                 // Si le bouton "Supprimer" a été cliqué
                 // Vérifier si la position existe encore
                 if ($position) {

@@ -60,7 +60,7 @@ class InformationFormType extends AbstractType
                 'disabled' => 'disabled'
             ],
         ])
-        ->add('department_id', EntityType::class, [
+        ->add('department', EntityType::class, [
             'class' => Department::class,
             'choice_label' => 'name',
             'label' => 'Direction/Service',
