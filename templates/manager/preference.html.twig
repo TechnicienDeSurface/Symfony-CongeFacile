@@ -1,0 +1,85 @@
+{# templates/Manager/preference.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<style>
+
+    .toggle {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 24px;
+    }
+    
+    .toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        border-radius: 24px;
+        transition: 0.3s;
+    }
+    
+    .slider::before {
+        content: "";
+        position: absolute;
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        border-radius: 50%;
+        transition: 0.3s;
+    }
+    
+    input:checked + .slider {
+        background-color: #004C6C;
+    }
+    
+    input:checked + .slider::before {
+        transform: translateX(26px);
+    }
+
+</style>
+{% endblock %}
+
+{% block body %}
+
+    <title>{% block title %}Manager - Mes préférences{% endblock %}</title>
+
+    {% include 'layout/menu/_header.html.twig' %}
+
+    <main style="display: flex;">
+
+        {% include 'layout/menu/_sidebar.html.twig' %}
+
+        <div class="w-full p-8 overflow-y-auto">
+
+            <h1 class=" font-medium text-2xl my-3" style='color : #004C6C'>Mes préférences</h1>
+            
+            <div class="mt-7">
+                <label class="toggle my-3 inline-block">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+                
+                <p class="font-sm inline-block mx-3 my-3">Être alerté par email lorsqu'une demande de congé arrive<p>
+            </div>
+
+            <div>
+                <button type="submit" class="mx-0 my-3 text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[274px] h-[40px] font-medium my-7 cursor-pointer inline-block">Enregistrer mes préférences</button>
+            </div>
+
+        </div>
+    </main>
+{% endblock %}
