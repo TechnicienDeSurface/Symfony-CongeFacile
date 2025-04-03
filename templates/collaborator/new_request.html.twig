@@ -14,8 +14,6 @@
 			{% include 'layout/menu/_sidebar.html.twig' %}
 			<div class="w-full p-8">
 				<h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Effectuer une nouvelle demande</h1>
-
-
 				<form method="post" class="space-y-4 w-1/2">
 					{{ form_start(form) }}
 					<div class="w-1/2 mb-6">
@@ -86,7 +84,7 @@
 					</div>
 
 					<div class="w-1/2">
-						{{ form_widget(form.Submit, {'label': 'Soumettre ma demande*', 'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
+						{{ form_widget(form.Submit, {'label': 'Soumettre ma demande', 'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
 					</div>
 					{{ form_end(form) }}
 				</form>

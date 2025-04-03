@@ -49,7 +49,7 @@ class RequestController extends AbstractController
                 $data = $form->getData();
                 $registry->getManager()->persist($data);
                 $registry->getManager()->flush();
-                $this->addFlash('success', 'Success to add product');
+                $this->addFlash('success', 'La demande a été créée');
             } catch (NotFoundHttpException $e) {
                 $this->addFlash('error', 'Error to add request');
             }

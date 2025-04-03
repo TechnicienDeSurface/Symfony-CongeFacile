@@ -1,0 +1,8 @@
+{% for type, messages in app.flashes %}
+    {% for message in messages %}
+        {% set color = type == 'success' ? 'green' : 'red'%}
+        <div class="p-4 mb-4 text-sm text-{{color}}-800 rounded-lg bg-{{color}}-50 dark:bg-gray-800 dark:text-{{color}}-400" role="alert">
+            <span class="font-medium">{{ message }}</span> Change a few things up and try submitting again.
+        </div>
+    {% endfor %}
+{% endfor %}
