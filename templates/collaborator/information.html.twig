@@ -3,7 +3,7 @@
 {% block body %}
 	<title>{% block title %}Mes informations{% endblock %}</title>
 
-	<script src="{{ asset('assets/js/ViewPassword.js') }}"></script>
+	<script src="{{ asset('assets/js/ViewPasswordCollaborateur.js') }}"></script>
 	{% include 'layout/menu/_header.html.twig' %}
 	
 	<main style="display: flex;">
@@ -50,7 +50,7 @@
                         <div class="w-1/2">
                             <label class="block font-medium">{{ form_label(form2.currentPassword) }}</label>
                             <div class="relative">
-                                {{ form_widget(form2.currentPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md pr-10" } }) }}
+                                {{ form_widget(form2.currentPassword, { attr: { id: 'password', class: "w-full mt-1 p-2 border border-gray-300 rounded-md pr-10" } }) }}
                                 <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-1">
                                     <img id="eyeIcon" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" 
                                     data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
@@ -64,7 +64,7 @@
                                 <label class="block font-medium">{{ form_label(form2.newPassword) }}</label>
                                 <div class="relative">
                                     {{ form_widget(form2.newPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md pr-10" } }) }}
-                                    <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-1">
+                                    <button type="button" id="togglePassword2" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-1">
                                         <img id="eyeIcon" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" 
                                         data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
                                     </button>
@@ -75,7 +75,7 @@
                                 <label class="block font-medium">{{ form_label(form2.confirmPassword) }}</label>
                                 <div class="relative">
                                     {{ form_widget(form2.confirmPassword, { attr: { class: "w-full mt-1 p-2 border border-gray-300 rounded-md pr-10" } }) }}
-                                    <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-1">
+                                    <button type="button" id="togglePassword3" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-1">
                                         <img id="eyeIcon" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" 
                                         data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
                                     </button>
