@@ -67,13 +67,13 @@ class InformationController extends AbstractController
                 $entityManager->flush();
                 $this->addFlash('success', 'Mot de passe modifié avec succès.');
                 } else {
-                $this->addFlash('error', 'Le nouveau mot de passe ne peut pas être identique à l\'ancien.');
+                $this->addFlash('error_repeat', 'Le nouveau mot de passe ne peut pas être identique à l\'ancien.');
                 }
             } else {
-                $this->addFlash('error', 'La confirmation du mot de passe ne correspond pas.');
+                $this->addFlash('error_comfirm', 'La confirmation du mot de passe ne correspond pas.');
             }
             } else {
-            $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
+            $this->addFlash('error_current', 'Le mot de passe actuel est incorrect.');
             }
         }
 

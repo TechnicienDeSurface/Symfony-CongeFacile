@@ -66,8 +66,14 @@
 						<button type="button" id="togglePassword" class="absolute inset-y-0 right-3 flex items-center">
 							<img id="eyeIcon" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
 						</button>
-						<!-- Display errors for currentPassword -->
-						{{ form_errors(formMdp.currentPassword) }}
+						{% for label, messages in app.flashes('error_current') %}
+							{% for message in messages %}
+								<div class="alert alert-{{ label }}">
+									{{ message }}
+								</div>
+							{% endfor %}
+						{% endfor %}
+
 					</div>
 				</div>
 				<div class="grid grid-cols-2 gap-4">
@@ -76,16 +82,27 @@
 						<button type="button" id="togglePasswordNew" class="absolute inset-y-0 right-3 flex items-center">
 							<img id="eyeIconNew" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
 						</button>
-						<!-- Display errors for newPassword -->
-						{{ form_errors(formMdp.newPassword) }}
+						{% for label, messages in app.flashes('error_repeat') %}
+							{% for message in messages %}
+								<div class="alert alert-{{ label }}">
+									{{ message }}
+								</div>
+							{% endfor %}
+						{% endfor %}
 					</div>
 					<div class="relative">
 						{{ form_widget(formMdp.confirmPassword, { 'attr': {'id': 'confirmPassword'} }) }}
 						<button type="button" id="togglePasswordConfirm" class="absolute inset-y-0 right-3 flex items-center">
 							<img id="eyeIconConfirm" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
 						</button>
-						<!-- Display errors for confirmPassword -->
-						{{ form_errors(formMdp.confirmPassword) }}
+						{# Vérifie si les messages Flash existent #}
+						{% for label, messages in app.flashes('error_comfirm') %}
+							{% for message in messages %}
+								<div class="alert alert-danger">
+									<span>{{ message }}</span>
+								</div>
+							{% endfor %}
+						{% endfor %}
 					</div>
 					<div class="mt-6">
 						<button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6">Réinitialiser le mot de passe</button>
@@ -95,5 +112,4 @@
 		</div>
 		{{ form_end(formMdp) }}
 	</div>
-</main>
-{% endblock %}
+</main>{% endblock %}
