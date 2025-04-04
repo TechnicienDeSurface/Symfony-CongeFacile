@@ -59,7 +59,7 @@
 		<div class="w-full p-8">
             <table class="min-w-full border-collapse border border-gray-200 shadow-sm rounded-lg">
                 <thead class="bg-gray-100 text-gray-700">
-                    <tr>
+                    {# <tr>
                         <th class="px-4 py-2 text-left">Type de demande</th>
                         <th class="px-4 py-2 text-left">Collaborateur</th>
                         <th class="px-4 py-2 text-left">Date de début</th>
@@ -67,16 +67,51 @@
                         <th class="px-4 py-2 text-left">Nb jours</th>
                         <th class="px-4 py-2 text-left">Statut</th>
                         <th class="px-4 py-2 text-left">Actions</th>
-                    </tr>
+                    </tr> #}
+                    {{ form_start(form) }}
+                        <tr class="bg-[#F9FAFB] text-gray-700 border-x border-t border-[#EAECF0] rounded-lg">
+                            <td class="py-4 px-6 pr-0 w-1/6">
+                                {{ form_label(form.request_type, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.request_type, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                            </td>
+                            <td class="py-4 px-6 pr-0 w-1/6">
+                                {{ form_label(form.collaborator, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.collaborator, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                            </td>
+                            <td class="py-4 px-6 pr-0 w-1/6">
+                                {{ form_label(form.start_at, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.start_at, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                            </td>
+                                <td class="py-4 px-6 pr-0 w-1/6">
+                                {{ form_label(form.end_at, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.end_at, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                            </td>
+                            <td class="py-4 px-6 pr-0 w-1/4">
+                                {{ form_label(form.totalnbdemande, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.totalnbdemande, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                            </td>
+                            <td class="w-1/6 px-6 pr-6" colspan="3" style="vertical-align: bottom; padding-bottom: 15px;">
+                                <div>
+                                    {{ form_widget(form.submit, {'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
+                                </div>
+                            </td>
+                        </tr>
+                    {{ form_end(form) }}
                 </thead>
                 <tbody>
                    {% for request in requests %} 
                         <tr class="border-t border-b"> 
                             <td class="px-4 py-6">{{ request.requestType.name }}</td>
                             <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.collaborator.firstName }} {{ request.collaborator.lastName}}</td>
-                            <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.startAt|date('d/m/Y H\hi') }}</td>
-                            <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.endAt|date('d/m/Y H\hi') }}</td>
-                            <td class="px-4 py-6 border-t border-b border-gray-300"> jours</td>
+                            <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.startAt|date('d/m/Y') }}</td>
+                            <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.endAt|date('d/m/Y') }}</td>
+                            <td class="px-4 py-6 border-t border-b border-gray-300">
+                                {% set date1 = request.startAt | date("Y-m-d") %}
+                                {% set date2 = request.endAt | date("Y-m-d") %}
+
+                                {% set diff = (date2|date_modify("-" ~ date1|date("U") ~ " seconds"))|date("U") / 86400 %}
+                                {{ diff }} jours
+                            </td>
                             <td class="px-4 py-6 border-t border-b border-gray-300">
                                 <div class="{% if request.answer is null %}{% elseif request.answer == 1 %}{% else %}{% endif %}">
                                     {% if request.answer is null %}

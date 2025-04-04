@@ -41,6 +41,7 @@ class RequestController extends AbstractController
         $form = $this->createForm(FilterManagerHistoDemandeType::class);
         $form->handleRequest($request);
 
+        // dd($requests) ; 
         return $this->render('manager/history_request.html.twig', [
             'page' => 'history-request',
             'requests' => $requests,
