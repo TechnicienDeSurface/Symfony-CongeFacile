@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Request;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Request>
@@ -40,6 +41,31 @@ class RequestRepository extends ServiceEntityRepository
                 ->getQuery()
                 ->getResult() ; 
        }
+
+       public function searchTypeOfRequest(array $filters,  string $order = ''): Query
+    {
+        $qb = $this->createQueryBuilder('request');
+    
+        // Correction : jointure correcte avec l'entité person
+        $qb->leftJoin('request.collaborator', 'collaborator');
+    
+        if (!empty($filters['collaborator'])) {
+            $qb->andWhere('collaborator.last_name LIKE :last_name')
+               ->setParameter('last_name', '%' . $filters['collaborator'] . '%');
+        }
+        if(!empty($filters['start_at']) && !empty($filters['end_at'])){
+            $qb->where('e.start_at BETWEEN :startDate AND :endDate AND e.end_at BETWEEN :startDate AND :endDate ')
+            ->setParameter('startDate', $filters['star_at'])
+            ->setParameter('endDate', $filters['end_at']); 
+
+        }
+
+        if ($order) {
+            $qb->orderBy('request.*', $order);
+        }
+    
+        return $qb->getQuery();
+    }
 
     //    public function findOneBySomeField($value): ?Request
     //    {

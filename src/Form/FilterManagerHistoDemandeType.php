@@ -25,9 +25,11 @@ class FilterManagerHistoDemandeType extends AbstractType
             // ])
             ->add('start_at',null, [
                 'widget' => 'single_text',
+                'required'=>false, 
             ])
             ->add('end_at', null, [
                 'widget' => 'single_text',
+                'required'=>false, 
             ])
             // ->add('receipt_file')
             // ->add('comment')
@@ -47,6 +49,7 @@ class FilterManagerHistoDemandeType extends AbstractType
             ->add('totalnbdemande', ChoiceType::class, [
                 'label' => 'Nb demandes associées :',
                 'required' => false,
+                'mapped' => false,
                 'choices' => [
                     'Croissant' => 'ASC',
                     'Décroissant' => 'DESC',

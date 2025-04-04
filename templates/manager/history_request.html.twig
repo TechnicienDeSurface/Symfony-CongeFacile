@@ -103,15 +103,16 @@
                         <tr class="border-t border-b"> 
                             <td class="px-4 py-6">{{ request.requestType.name }}</td>
                             <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.collaborator.firstName }} {{ request.collaborator.lastName}}</td>
-                            <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.startAt|date('d/m/Y') }}</td>
-                            <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.endAt|date('d/m/Y') }}</td>
+                            <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.startAt|date('d/m/Y H:i') }}</td>
+                            <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.endAt|date('d/m/Y H:i') }}</td>
                             <td class="px-4 py-6 border-t border-b border-gray-300">
-                                {% set date1 = request.startAt | date("Y-m-d") %}
-                                {% set date2 = request.endAt | date("Y-m-d") %}
-
-                                {% set diff = (date2|date_modify("-" ~ date1|date("U") ~ " seconds"))|date("U") / 86400 %}
+                                {% set date1 = request.startAt|date('U') %}
+                                {% set date2 = request.endAt|date('U') %}
+                                
+                                {% set diff = (date2 - date1) / 86400 %}
                                 {{ diff }} jours
                             </td>
+
                             <td class="px-4 py-6 border-t border-b border-gray-300">
                                 <div class="{% if request.answer is null %}{% elseif request.answer == 1 %}{% else %}{% endif %}">
                                     {% if request.answer is null %}
