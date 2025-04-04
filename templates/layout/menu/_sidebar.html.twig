@@ -142,10 +142,6 @@
 				{% endif %}
 			<div class="trait"></div>
 
-			<pre>
-				{{ dump(app.user.roles) }}
-			</pre>
-
 			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
 				<a href="{{path('app_information_manager')}}" class="{% if app.request.get('_route') == 'app_information_manager' %}active{% endif %}">Mes informations</a>
 			{% elseif app.user and 'ROLE_COLLABORATEUR' in app.user.roles %}
