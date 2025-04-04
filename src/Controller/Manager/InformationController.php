@@ -10,11 +10,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
+    
 class InformationController extends AbstractController
 {
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+    }
     #[Route('/information-manager', name: 'app_information_manager')]
-    public function viewInformationManager(Security $security): Response
+    public function viewInformationManager(Security $security,UserPasswordHasherInterface $hash,EntityManagerInterface $entityManager, Request $request): Response
     {
         // Récupérer l'utilisateur connecté
         $user = $security->getUser();
@@ -24,7 +33,6 @@ class InformationController extends AbstractController
             // Cette vérification évite d'accéder à la méthode getId() sur un objet qui ne serait pas un User (et donc éviter une erreur fatale).
         }
         
-
         // Accéder à la Person directement depuis l'objet User
         $person = $user->getPerson();
 
@@ -44,6 +52,30 @@ class InformationController extends AbstractController
             'is_manager' => true,
             'data_class' => User::class, // Ensure the form expects a User object
         ]);
+
+        $form_password->handleRequest($request);
+        if ($form_password->isSubmitted() && $form_password->isValid()) {
+            $currentPassword = $form_password->get('currentPassword')->getData();
+            $newPassword = $form_password->get('newPassword')->getData();
+            $confirmPassword = $form_password->get('confirmPassword')->getData();
+
+            if ($hash->isPasswordValid($user, $currentPassword)) {
+            if ($newPassword === $confirmPassword) {
+                if ($newPassword !== $currentPassword) {
+                $password = $this->passwordHasher->hashPassword($user, $newPassword);
+                $user->setPassword($password);
+                $entityManager->flush();
+                $this->addFlash('success', 'Mot de passe modifié avec succès.');
+                } else {
+                $this->addFlash('error', 'Le nouveau mot de passe ne peut pas être identique à l\'ancien.');
+                }
+            } else {
+                $this->addFlash('error', 'La confirmation du mot de passe ne correspond pas.');
+            }
+            } else {
+            $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
+            }
+        }
 
         // Rendu du template avec les formulaires
         return $this->render('manager/information.html.twig', [
