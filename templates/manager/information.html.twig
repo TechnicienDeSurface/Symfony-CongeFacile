@@ -103,7 +103,7 @@
 						{% endfor %}
 					</div>
 					<div class="mt-6">
-						<button type="submit" class="w-full bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-3 px-6">Réinitialiser le mot de passe</button>
+						{{ form_widget(formMdp.Submit, { 'attr': {'class': 'w-full bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-3 px-6'} }) }}
 					</div>
 				</div>
 			</div>
