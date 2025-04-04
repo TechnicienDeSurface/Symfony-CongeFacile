@@ -10,7 +10,7 @@ use App\Repository\RequestRepository ;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
-use App\Form\FilterManagerHistoDemandeType;
+use App\Form\FilterHistoRequestType;
 
 class RequestController extends AbstractController
 {
@@ -38,39 +38,32 @@ class RequestController extends AbstractController
     {
         $requests = $repository->findBy([],[]) ;
 
-        $form = $this->createForm(FilterManagerHistoDemandeType::class);
+        $form = $this->createForm(FilterHistoRequestType::class);
         $form->handleRequest($request);
 
-        $filters = [
+        $filters = json_decode($request->getContent(), true) ?? [
+            'request_type'=>$request->query->get('request_type'),
             'start_at'=> $request->query->get('start_at'),
             'end_at'=> $request->query->get('end_at'),
             'totalnbdemande' => $request->query->get('totalnbdemande'),
-            'collaborator' => $request->query->get('collaborator')
+            'collaborator' => $request->query->get('collaborator'),
         ];
-
         // Si le formulaire est soumis et valide, on utilise ses données
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
-            // Vérifiez si $formData est un tableau, sinon convertissez-le
-            if (is_array($formData)) {
-                $filters = array_merge($filters, $formData);
-            } else {
-                // Convertir l'objet en tableau si nécessaire
-                $formDataArray = (array) $formData;
-                $filters = array_merge($filters, $formDataArray);
-            }
+            $filters = array_merge($filters, $formData);    
+            
         }
 
         $order = $filters['totalnbdemande'] ?? '';
 
         // Recherche dans le repository avec les filtres
         $query = $repository->searchTypeOfRequest($filters, $order);
-
+        
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage(10);
-
         try{
             $pagerfanta->setCurrentPage($page);
             // dd($pagerfanta) ; 
