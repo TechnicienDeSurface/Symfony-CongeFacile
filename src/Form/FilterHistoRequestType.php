@@ -48,9 +48,9 @@ class FilterHistoRequestType extends AbstractType
                 'required' => false,
                 'mapped' => false,
                 'choices' => [
-                    'Validé' => 'Validé',
-                    'Refusé' => 'Refusé',
-                    'En attente' => 'En attente',
+                    'Validé' => true,
+                    'Refusé' => false,
+                    'En attente' => null,
                 ],
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'],
                 'placeholder' => 'Choisir l\'ordre',

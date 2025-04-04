@@ -64,6 +64,11 @@ class RequestRepository extends ServiceEntityRepository
                 ->setParameter('name', '%'.$filters['request_type'].'%'); 
             }
 
+            if(!empty($filters['answer'])){
+                $qb->andWhere('request.answer LIKE :answer')
+                ->setParameter('answer',$filters['answer']); 
+            }
+
             if (!empty($order)) {
                 $qb->orderBy('request.id', $order);
             }
