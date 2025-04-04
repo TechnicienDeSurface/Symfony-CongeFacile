@@ -34,6 +34,16 @@ class PositionFixtures extends Fixture {
         $manager->persist($position5);
         $this->addReference("Recruteur", $position5);
 
+        $position6 = new Position();
+        $position6->setName("Chef de projet");
+        $manager->persist($position6);
+        $this->addReference("Chef de projet", $position6);
+
+        $position7 = new Position();
+        $position7->setName("Directeur");
+        $manager->persist($position7);
+        $this->addReference("Directeur", $position7);
+
 
         $manager->flush();
     }

@@ -39,7 +39,28 @@ class DepartmentFixtures extends Fixture {
 
         $manager->flush();
 
-        // Fixture 2
+        // Fixture 6
+        $department6 = new Department();
+        $department6->setName("Comptabilité");
+        $this->addReference("Comptabilité", $department6);
+        $manager->persist($department6);
+        $manager->flush();
+
+        // Fixtures 7
+        $department7 = new Department();
+        $department7->setName("Service commerciale");
+        $this->addReference("Commerciale", $department7);
+        $manager->persist($department7);
+        $manager->flush();
+
+        // Fixture 8
+        $department8 = new Department();
+        $department8->setName("");
+        $this->addReference('', $department8);
+        $manager->persist($department8);
+
+        $manager->flush();
+
     }
     public function getDependencies()
     {

@@ -79,6 +79,21 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $this->addReference("Charlie", $person5);
 
         $manager->flush();
+
+        // Fixture 5
+        $person5 = new Person();
+        $person5->setFirstName("Adrien");
+        $person5->setLastName("Martin");
+        $person5->setManager(NULL);
+        $person5->setDepartment($this->getReference('BU Design', Department::class));
+        $person5->setPosition($this->getReference('Graphiste', Position::class));
+        $person5->setAlertNewRequest(true);
+        $person5->setAlertOnAnswer(false);
+        $person5->setAlertBeforeVacation(false);
+        $manager->persist($person5);
+        $this->addReference("Adrien", $person5);
+
+        $manager->flush();
     }
     public function getDependencies() : array
     {
