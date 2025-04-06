@@ -90,7 +90,6 @@ class ManagerController extends AbstractController
         }
         $form = $this->createForm(ManagerType::class) ; 
         $form->handleRequest($request) ; 
-        
         if($form->isSubmitted())
         {
             if($form->isValid()){
@@ -147,40 +146,37 @@ class ManagerController extends AbstractController
         }
         $form = $this->createForm(ManagerType::class);
         $form->handleRequest($request);
+        $users = $user_repository->findBy([],[]);
+        foreach($users as $row){
+            if($row->getPerson()->getId() === $id){
+                $user = $row;
+            }
+        }
         if($form->isSubmitted())
         {
             if($form->isValid()){
                 try{
                     $formData = $form->getData();
-                    $new_manager= new Person();
+                    $new_manager=$manager;
                     $new_manager->setFirstName($formData['first_name']);
                     $new_manager->setLastName($formData['last_name']);
                     $new_manager->setDepartment($formData['department']);
-                    $new_manager->setAlertBeforeVacation(false);
-                    $new_manager->setAlertNewRequest(false);
-                    $new_manager->setAlertOnAnswer(true);
-                    $new_manager->setPosition($formData['position']);
-                    $new_manager->setManager(null);
                     $registry->getManager()->persist($new_manager);
                     $registry->getManager()->flush();
-                    $this->addFlash('success', 'Succès pour ajouter le manager');
+                    $this->addFlash('success', 'Succès pour la mise à jour le manager');
                 }catch(\Exception $e){
-                    $this->addFlash('error', 'Erreur pour l\'ajout de manager'); 
+                    $this->addFlash('error', 'Erreur pour la mise à jour de manager'); 
                 }try{
-                    $person = $registry->getManager()->getRepository(Person::class)->find($new_manager->getId());
-                    $new_user = New User();
+                    $new_user = $user;
                     $new_user->setEmail($formData['email']);
                     $password_hash = $this->passwordHasher->hashPassword($new_user, $formData['newPassword']) ;
                     $new_user->setPassword($password_hash);
-                    $new_user->setPerson($person);
                     $new_user->setRoles([1 => "ROLE_MANAGER"]);
-                    $new_user->setIsVerified(true);
-                    $new_user->setEnabled(true);
                     $registry->getManager()->persist($new_user);
                     $registry->getManager()->flush();
-                    $this->addFlash('success', 'Succès pour ajouter l\'utilisateur');
+                    $this->addFlash('success', 'Succès pour la mise à jour l\'utilisateur');
                 }catch(\Exception $e ){
-                    $this->addFlash('error', 'Erreur pour l\'ajout utilisateur'); 
+                    $this->addFlash('error', 'Erreur pour la mise à jour utilisateur'); 
                 }
             }
         }
