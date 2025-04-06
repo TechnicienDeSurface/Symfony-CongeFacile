@@ -75,11 +75,19 @@
                     </div>
                 </div>
 
-                <div class="mt-6">
-                    {{ form_widget(form.submit)}}
+                <div class="grid grid-cols-2 mt-6">
+					<div class="w-1/2 text-white font-semibold py-2 px-4 rounded-lg">
+                    	{{ form_widget(form.submit)}}
+					</div>
                 </div>
-
                 {{ form_end(form) }}
+					{% if page == "administration-detail-manager" %}
+						<div class="w-1/2 bg-red-700 text-white tex-center font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition">
+							<form action="{{ path('app_administration_supprimer_manager', {'id': manager.id}) }}">
+								<button type="submit" class="w-full text-white font-semibold py-2 px-4 rounded-lg">Supprimer</button>
+							</form>
+						</div>
+					{% endif %}
             </div>
 		</main>
 	</body>

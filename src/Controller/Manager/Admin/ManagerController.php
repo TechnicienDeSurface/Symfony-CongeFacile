@@ -199,28 +199,81 @@ class ManagerController extends AbstractController
     // }
 
     //SUPPRIMER MANAGER VIA L'ADMINISTRATION DU PORTAIL MANAGER
-    // #[Route('/administration-supprimer-manager/{id}', name: 'app_administration_supprimer_manager', methods: ['POST', 'DELETE'])]
-    // public function delete(int $id, UserRepository $productRepository, UserRepository $repository, ManagerRegistry $registry): Response 
-    // {
-    //     $manager = $repository->find($id);
+    #[Route('/administration-supprimer-manager/{id}', name: 'app_administration_supprimer_manager', methods: ['POST', 'GET'])]
+    public function delete(Request $request, int $id, UserRepository $repository_user, PersonRepository $repository, ManagerRegistry $registry, UserRepository $user_repository): Response 
+    {
+        $managerRecup = $repository->find($id);
+        $form = $this->createForm(FilterManagerFormType::class, null, [
+            'method' => 'POST',
+        ]);
+        $form->handleRequest($request);
 
-    //     if (!$manager) {
-    //         throw $this->createNotFoundException('No category found for id ' . $id);
-    //     }
-
-    //     $entityManager = $registry->getManager();
-    //     $productCount = $productRepository->countByCategory($manager->getId());
-
-    //     if ($productCount > 0) {
-    //         $this->addFlash('error', 'Impossible de supprimer ce manager car elle est utilisée par des produits.');
-    //         return $this->redirectToRoute('category/list');
-    //     } else {
-    //         $entityManager->remove($manager);
-    //         $entityManager->flush();
-    //     }
+        $Managers = $repository_user->findAllManagers();
         
-    //     return $this->render('manager/admin/manager/manager.html.twig', [
-    //         'page' => 'administration-manager',
-    //     ]);
-    // }
+        $personIds = [];
+        $userIds = [];
+
+        foreach ($Managers as $manager) {
+            $personIds[] = $manager['person_id'];
+            $userIds[] = $manager['user_id'];
+        }
+
+        $persons = [];
+        foreach ($personIds as $personId) {
+            $person = $repository->find($personId);
+            if ($person) {
+                $persons[] = $person;
+            }
+        }
+
+        $filters = [
+            'last_name' => '',
+            'first_name' => '',
+            'department' => '',
+        ];
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $filters = [
+                'last_name' => $data['LastName'] ?? '',
+                'first_name' => $data['FirstName'] ?? '',
+                'department' => $data['Department'] ?? '',
+            ];            
+
+            $persons = $repository->findByFilters($filters);
+        }
+        $users = $user_repository->findBy([],[]);
+        foreach($users as $row){
+            if($row->getPerson()->getId() === $id){
+                $user = $row;
+            }
+        }
+        if (!$managerRecup) {
+            throw $this->createNotFoundException('Pas de manager trouvé pour cet id : ' . $id);
+        }
+
+        $entityManager = $registry->getManager();
+        // $productCount = $productRepository->countByCategory($manager->getId());
+        try{
+            $entityManager->remove($user);
+            $entityManager->flush();
+            $this->addFlash('success', 'Utilisateur supprimé avec succès.');
+        }catch(\Exception $e){
+            $this->addFlash('error', 'Erreur de suppression de l\'utilisateur');
+        }
+        try{
+            $entityManager->remove($managerRecup);
+            $entityManager->flush();
+            $this->addFlash('success', 'Manager supprimé avec succès.');
+        }catch(\Exception $e){
+            $this->addFlash('error', 'Erreur de suppression du manager');
+        }
+        
+        return $this->render('manager/admin/manager/manager.html.twig', [
+            'page' => 'administration-manager',
+            'manager'=>$manager,
+            'form'=>$form,
+            'persons'=>$persons, 
+            'filters' => $filters,
+        ]);
+    }
 }
