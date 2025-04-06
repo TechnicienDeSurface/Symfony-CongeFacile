@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Position; 
 use App\Entity\Department; 
+use App\Repository\PositionRepository; 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -53,7 +55,16 @@ class ManagerType extends AbstractType
                     new Assert\NotBlank(['message' => 'Le département est obligatoire']),
                 ],
             ])
-
+            ->add('position', EntityType::class, [
+                'class' => Position::class,
+                'choice_label' => 'name',
+                'label' => 'Direction/Service',
+                'label_attr' => ['class' => $labelClass],
+                'attr' => ['class' => $inputClass,],
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'Le département est obligatoire']),
+                ],
+            ])
             // Adresse email
             ->add('email', EmailType::class, [
                 'label' => 'Adresse email',
@@ -69,7 +80,6 @@ class ManagerType extends AbstractType
                 'label' => 'Nouveau mot de passe',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
-                'mapped' => false,
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'Le mot de passe ne peut pas être vide.']),
                     new Assert\Length([
@@ -96,7 +106,6 @@ class ManagerType extends AbstractType
                 'label' => 'Confirmation de mot de passe',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
-                'mapped' => false,
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'Le mot de passe ne peut pas être vide.']),
                     new Assert\Length([

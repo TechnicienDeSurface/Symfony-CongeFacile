@@ -9,7 +9,7 @@
 
             <div class="w-full p-8">
                 {# <h1 class="text-2xl font-bold text-gray-800 mb-6">{{ manager.first_name ~ ' ' ~ manager.last_name }}</h1> #}
-
+                {% include 'layout/_addFlash.html.twig'%} {# include pour appeler le message flash dans le formulaire#}
                 {{ form_start(form) }}
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
