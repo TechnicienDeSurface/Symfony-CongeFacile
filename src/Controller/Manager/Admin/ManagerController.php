@@ -136,62 +136,95 @@ class ManagerController extends AbstractController
         ]);
     }
 
-    // //PAGE DETAIL MANAGER VIA ADMINISTRATION MANAGER
-    // #[Route('/administration-detail-manager/{id}', name: 'app_administration_detail_manager')]
-    // public function editManager(PersonRepository $repository, int $id, ManagerRegistry $registry,Request $request): Response
-    // {
-    //     $manager = $repository->find($id);
-    //     if(!$manager){
-    //         throw $this->createNotFoundException('No category found for id ' . $id);
-    //     }
-    //     $form = $this->createForm(UserType::class, $manager);
-    //     $form->handleRequest($request);
+    //PAGE DETAIL MANAGER VIA ADMINISTRATION MANAGER
+    #[Route('/administration-detail-manager/{id}', name: 'app_administration_detail_manager', methods: ['GET','POST'])]
+    public function editManager(PersonRepository $repository, int $id, ManagerRegistry $registry,Request $request,UserRepository $user_repository): Response
+    {
+        $manager = $repository->find($id);
+        $user = $user_repository->find($manager);
+        if(!$manager){
+            throw $this->createNotFoundException('No category found for id ' . $id);
+        }
+        $form = $this->createForm(ManagerType::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted())
+        {
+            if($form->isValid()){
+                try{
+                    $formData = $form->getData();
+                    $new_manager= new Person();
+                    $new_manager->setFirstName($formData['first_name']);
+                    $new_manager->setLastName($formData['last_name']);
+                    $new_manager->setDepartment($formData['department']);
+                    $new_manager->setAlertBeforeVacation(false);
+                    $new_manager->setAlertNewRequest(false);
+                    $new_manager->setAlertOnAnswer(true);
+                    $new_manager->setPosition($formData['position']);
+                    $new_manager->setManager(null);
+                    $registry->getManager()->persist($new_manager);
+                    $registry->getManager()->flush();
+                    $this->addFlash('success', 'Succès pour ajouter le manager');
+                }catch(\Exception $e){
+                    $this->addFlash('error', 'Erreur pour l\'ajout de manager'); 
+                }try{
+                    $person = $registry->getManager()->getRepository(Person::class)->find($new_manager->getId());
+                    $new_user = New User();
+                    $new_user->setEmail($formData['email']);
+                    $password_hash = $this->passwordHasher->hashPassword($new_user, $formData['newPassword']) ;
+                    $new_user->setPassword($password_hash);
+                    $new_user->setPerson($person);
+                    $new_user->setRoles([1 => "ROLE_MANAGER"]);
+                    $new_user->setIsVerified(true);
+                    $new_user->setEnabled(true);
+                    $registry->getManager()->persist($new_user);
+                    $registry->getManager()->flush();
+                    $this->addFlash('success', 'Succès pour ajouter l\'utilisateur');
+                }catch(\Exception $e ){
+                    $this->addFlash('error', 'Erreur pour l\'ajout utilisateur'); 
+                }
+            }
+        }
+        return $this->render('manager/admin/manager/detail_manager.html.twig', [
+            'page' => 'administration-detail-manager',
+            'form'=>$form, 
+            'manager'=>$manager,
+            'user'=>$user,
+        ]);
+    }
 
-    //     if ($form->isSubmitted()) {
-    //         if ($form->isValid()) {
-    //             $request->cookies->all();
-    //             // Si valide : j'enregistre les données dans la BDD.
-    //             $registry->getManager()->flush();
-    //         } else {
-    //             // Sinon j'affiche un message d'erreur
-    //         }
-    //     }
+    // #[Route('/administration-detail-manager', name: 'app_administration_detail_manager')]
+    // public function detailManager(): Response
+    // {
     //     return $this->render('manager/admin/manager/detail_manager.html.twig', [
     //         'page' => 'administration-detail-manager',
+    //         'user'=>'',
+            
     //     ]);
     // }
 
-    #[Route('/administration-detail-manager', name: 'app_administration_detail_manager')]
-    public function detailManager(): Response
-    {
-        return $this->render('manager/admin/manager/detail_manager.html.twig', [
-            'page' => 'administration-detail-manager',
-        ]);
-    }
-
     //SUPPRIMER MANAGER VIA L'ADMINISTRATION DU PORTAIL MANAGER
-    #[Route('/administration-supprimer-manager/{id}', name: 'app_administration_supprimer_manager', methods: ['POST', 'DELETE'])]
-    public function delete(int $id, UserRepository $productRepository, UserRepository $repository, ManagerRegistry $registry): Response 
-    {
-        $manager = $repository->find($id);
+    // #[Route('/administration-supprimer-manager/{id}', name: 'app_administration_supprimer_manager', methods: ['POST', 'DELETE'])]
+    // public function delete(int $id, UserRepository $productRepository, UserRepository $repository, ManagerRegistry $registry): Response 
+    // {
+    //     $manager = $repository->find($id);
 
-        if (!$manager) {
-            throw $this->createNotFoundException('No category found for id ' . $id);
-        }
+    //     if (!$manager) {
+    //         throw $this->createNotFoundException('No category found for id ' . $id);
+    //     }
 
-        $entityManager = $registry->getManager();
-        $productCount = $productRepository->countByCategory($manager->getId());
+    //     $entityManager = $registry->getManager();
+    //     $productCount = $productRepository->countByCategory($manager->getId());
 
-        if ($productCount > 0) {
-            $this->addFlash('error', 'Impossible de supprimer ce manager car elle est utilisée par des produits.');
-            return $this->redirectToRoute('category/list');
-        } else {
-            $entityManager->remove($manager);
-            $entityManager->flush();
-        }
+    //     if ($productCount > 0) {
+    //         $this->addFlash('error', 'Impossible de supprimer ce manager car elle est utilisée par des produits.');
+    //         return $this->redirectToRoute('category/list');
+    //     } else {
+    //         $entityManager->remove($manager);
+    //         $entityManager->flush();
+    //     }
         
-        return $this->render('manager/admin/manager/manager.html.twig', [
-            'page' => 'administration-manager',
-        ]);
-    }
+    //     return $this->render('manager/admin/manager/manager.html.twig', [
+    //         'page' => 'administration-manager',
+    //     ]);
+    // }
 }

@@ -14,33 +14,35 @@
 		<main style="display: flex;">
 			{% include 'layout/menu/_sidebar.html.twig' %}
 			<div class="w-full p-8">
-				<h1 class="text-2xl font-bold mb-4">{# {{ user.lastName }} {{ user.firstName }} #}</h1>
-
+				<h1 class="text-2xl font-bold mb-4">{{ manager.lastName }} {{ manager.firstName }}</h1>
 				<form method="post" class="space-y-4 w-1/2">
 					<div class="mb-6 relative w-1/2">
-						<label for="email" class="block text-gray-700 text-sm font-bold mb-2">Adresse email - champ obligatoire</label>
+						{# <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Adresse email - champ obligatoire</label>
 						<div class="absolute left-3 mt-5 transform -translate-y-1/2 text-gray-400">
 							<img src="{{ asset('assets/image/icon-enveloppe.svg') }}" alt="Icon Courrier" class="h-5 w-5">
-						</div>
-						<input type="email" value="{# {{ user.email }} #}" id="email" name="email" class="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-500" autocomplete="email" required autofocus>
+						</div> #}
+						{# <input type="email" value="{{ user.email }}" id="email" name="email" class="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-500" autocomplete="email" required autofocus> #}
 					</div>
 
 					<div class="grid grid-cols-2 gap-4">
 						<div>
 							<label class="block text-gray-700 text-sm font-bold mb-2">Nom de famille - champ obligatoire</label>
-							<input type="text" name="lastName" value="{# {{ user.lastName }} #}" class="w-full p-2 border rounded" required>
+							<input type="text" name="lastName" value="{{ manager.lastName }}" class="w-full p-2 border rounded" required>
 						</div>
 						<div>
 							<label class="block text-gray-700 text-sm font-bold mb-2">Prénom - champ obligatoire</label>
-							<input type="text" name="firstName" value="{# {{ user.firstName }} #}" class="w-full p-2 border rounded" required>
+							<input type="text" name="firstName" value="{{ manager.firstName }}" class="w-full p-2 border rounded" required>
 						</div>
 					</div>
 
 					<div class="w-1/2">
 						<label class="block text-gray-700 text-sm font-bold mb-2">Direction/Service - champ obligatoire</label>
-						<select name="service" class="w-full p-2 border rounded" required>
-							<option value="BU Symfony" {# {% if user.service == 'BU Symfony' %} selected {% endif %} #}>BU Symfony</option>
-						</select>
+						{{ form_widget(form.department, {'attr': {'class': 'w-full p-2 border rounded'}}) }}
+						{% if form.department.vars.errors|length > 0 %}
+							<div class="text-red-500 text-sm mt-1">
+								{{ form_errors(form.department) }}
+							</div>
+						{% endif %}
 					</div>
 
 					<div class="grid grid-cols-2 gap-4">
@@ -60,7 +62,6 @@
 							</button>
 						</div>
 					</div>
-
 					<button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6">Mettre à jour</button>
 				</form>
 			</div>

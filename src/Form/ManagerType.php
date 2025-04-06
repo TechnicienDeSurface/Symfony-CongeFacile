@@ -62,7 +62,7 @@ class ManagerType extends AbstractType
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass,],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le département est obligatoire']),
+                    new Assert\NotBlank(['message' => 'Le poste est obligatoire']),
                 ],
             ])
             // Adresse email
