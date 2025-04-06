@@ -3,15 +3,19 @@
 namespace App\Controller\Manager\Admin;
 
 use App\Entity\User; 
-use App\Form\UserType;
+use App\Entity\Person; 
+use App\Form\ManagerType;
+use App\Repository\UserRepository; 
 use App\Form\FilterManagerFormType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\PersonRepository;
+use App\Repository\PositionRepository; 
+use App\Repository\DepartmentRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bundle\SecurityBundle\Security; 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\Request;
-use App\Repository\UserRepository; 
-use App\Repository\PersonRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ManagerController extends AbstractController
 {
@@ -70,27 +74,44 @@ class ManagerController extends AbstractController
 
     //PAGE AJOUTER MANAGER VIA ADMINISTRATION MANAGER
     #[Route('/administration-ajouter-manager', name: 'app_administration_ajouter_manager')]
-    public function addManager(ManagerRegistry $registry,Request $request): Response
+    public function addManager(ManagerRegistry $registry, Security $security,Request $request, PositionRepository $position_repository, PersonRepository $person_repository, DepartmentRepository $department_repository, UserRepository $user_repository): Response
     {
-        $manager = new User() ; 
-        $form = $this->createForm(UserType::class, $manager) ; 
+        $manager = New User() ; 
+        $manager = $security->getUser() ;
+        if (!$manager instanceof \App\Entity\User) {
+            throw new \LogicException('L\'utilisateur connecté n\'est pas une instance de App\Entity\User.');
+        }
+        $form = $this->createForm(ManagerType::class) ; 
         $form->handleRequest($request) ; 
         
         if($form->isSubmitted())
         {
             if($form->isValid()){
                 try{
-                    $registry->getManager()->persist($manager) ; 
+                    $formData = $form->getData();
+                    $department= $department_repository->findBy($formData['department']);
+                    $managerData = [
+                        'first_name'=>$formData['first_name'],
+                        'last_name'=>$formData['last_name'],
+                    ];
+                    $userData=[
+                        'email' => $formData['email'],
+                        'newPassword'=>$formData['newPassword'],
+                    ];
+                    $position = $position_repository->findBy(['manager']); 
+                    $registry->getManager()->persist($manager); 
                     $registry->getManager()->flush();
-                    $this->addFlash('success', 'Success to add manager') ; 
+                    $this->addFlash('success', 'Manager ajouter avec succès'); 
                 }catch(\Exception $e ){
-                    $this->addFlash('error', 'Error to add manager') ; 
+                    $this->addFlash('error', 'Erreur pour ajouter le manager'); 
                 }
             }
         }
         
         return $this->render('manager/admin/manager/add_manager.html.twig', [
             'page' => 'administration-ajouter-manager',
+            'manager'=>$manager,
+            'form'=>$form,
         ]);
     }
 
