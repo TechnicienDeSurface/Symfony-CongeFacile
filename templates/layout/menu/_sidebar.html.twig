@@ -148,7 +148,13 @@
 				<a href="{{path('app_information_collaborateur')}}" class="{% if app.request.get('_route') == 'app_information_collaborateur' %}active{% endif %}">Mes informations</a>
 			{% endif %}
 
-			<a href="{{path('app_preference_collaborateur')}}" class="{% if app.request.get('_route') == 'app_preference_manager' %}active{% endif %}">Mes préférences</a>
+			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
+				<a href="{{path('app_preference_manager')}}" class="{% if app.request.get('_route') == 'app_preference_manager' %}active{% endif %}">Mes préférences</a>
+			{% elseif app.user and 'ROLE_COLLABORATEUR' in app.user.roles %}
+				<a href="{{path('app_preference_collaborateur')}}" class="{% if app.request.get('_route') == 'app_preference_manager' %}active{% endif %}">Mes préférences</a>
+			{% endif %}
+
+			
 			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
 				<div class="dropdown-toggle">
 					<a href="#" class="">Administration
