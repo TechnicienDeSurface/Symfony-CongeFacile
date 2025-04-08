@@ -1,85 +1,48 @@
-{# templates/Manager/preference.html.twig #}
-
 {% extends 'base.html.twig' %}
-
-{% block stylesheets %}
-<style>
-
-    .toggle {
-        position: relative;
-        display: inline-block;
-        width: 50px;
-        height: 24px;
-    }
-    
-    .toggle input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-    
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        border-radius: 24px;
-        transition: 0.3s;
-    }
-    
-    .slider::before {
-        content: "";
-        position: absolute;
-        height: 18px;
-        width: 18px;
-        left: 3px;
-        bottom: 3px;
-        background-color: white;
-        border-radius: 50%;
-        transition: 0.3s;
-    }
-    
-    input:checked + .slider {
-        background-color: #004C6C;
-    }
-    
-    input:checked + .slider::before {
-        transform: translateX(26px);
-    }
-
-</style>
-{% endblock %}
 
 {% block body %}
 
-    <title>{% block title %}Manager - Mes préférences{% endblock %}</title>
+    {% if is_granted('ROLE_MANAGER') %}
+        <title>{% block title %}Manager - Mes préférences{% endblock %}</title>
 
-    {% include 'layout/menu/_header.html.twig' %}
+        {% include 'layout/menu/_header.html.twig' %}
 
-    <main style="display: flex;">
+        <main class="flex">
 
-        {% include 'layout/menu/_sidebar.html.twig' %}
+            {% include 'layout/menu/_sidebar.html.twig' %}
 
-        <div class="w-full p-8 overflow-y-auto">
+            <div class="w-full p-8 overflow-y-auto">
 
-            <h1 class=" font-medium text-2xl my-3" style='color : #004C6C'>Mes préférences</h1>
-            
-            <div class="mt-7">
-                <label class="toggle my-3 inline-block">
-                    <input type="checkbox">
-                    <span class="slider"></span>
-                </label>
+                <h1 class="font-medium text-2xl my-3 text-[#004C6C]">Mes préférences</h1>
                 
-                <p class="font-sm inline-block mx-3 my-3">Être alerté par email lorsqu'une demande de congé arrive<p>
-            </div>
+                {{ form_start(form) }}
 
-            <div>
-                <button type="submit" class="mx-0 my-3 text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[274px] h-[40px] font-medium my-7 cursor-pointer inline-block">Enregistrer mes préférences</button>
-            </div>
+                <div class="mt-7 flex items-center">
+                    <label class="relative inline-block w-12 h-6">
+                        {{ form_widget(form.alert_new_request, { 
+                            'attr': { 
+                                'class': 'sr-only peer' 
+                            } 
+                        }) }}
+                        <span class="absolute cursor-pointer inset-0 bg-gray-300 rounded-full transition peer-checked:bg-[#004C6C]"></span>
+                        <span class="absolute left-1 bottom-1 w-4 h-4 bg-white rounded-full transition peer-checked:translate-x-6"></span>
+                    </label>
+                    <p class="ml-3 text-sm">Être alerté par email lorsqu'une demande de congé arrive</p>
+                </div>
 
-        </div>
-    </main>
+                <div class="mt-7">
+                    {{ form_widget(form.submit, { 
+                        'attr': { 
+                            'class': 'text-white bg-[#004C6C] rounded-lg w-64 h-10 font-medium cursor-pointer hover:bg-[#00334a] transition' 
+                        } 
+                    }) }}
+                </div>
+
+                {{ form_end(form) }}
+
+            </div>
+        </main>
+    {% else %}
+        <p>Vous n'avez pas les permissions nécessaires pour accéder à cette page.</p>
+    {% endif %}
 {% endblock %}

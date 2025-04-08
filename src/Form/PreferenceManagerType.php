@@ -18,7 +18,7 @@ class PreferenceManagerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('alert_new_demand', CheckboxType::class, [
+            ->add('alert_new_request', CheckboxType::class, [
                 'label'    => 'Être alerté par email lorsqu’une demande de congé est acceptée ou refusée',
                 'required' => false,
                 'attr' => ['class="sr-only peer relative cursor-point"']
