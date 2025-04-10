@@ -14,7 +14,180 @@
 
         <div class="w-full p-8 overflow-y-auto">
 
+            <div class="flex items-center gap-5">
+                <h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Demandes en attente</h1>
+            </div>
 
+            <div class="flex w-full justify-center items-center h-max">
+                <table class="w-full mt-6">
+                    <thead>
+                        {# {{ form_start(form) }} #}
+                        <tr class="bg-[#F9FAFB] text-gray-700 border-x border-t border-[#EAECF0] rounded-lg">
+                            <td class="py-4 px-6 pr-0 w-1/6">
+                                {# {{ form_label(form.last_name, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.last_name, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }} #}
+                                <div class="my-3 ">
+                                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Type de demande</label>
+                                    <div class="mt-2">
+                                        <div class="flex w-40 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                                        <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="">
+                                            <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </td>
+
+                            <td class="py-4 px-6 pr-0 w-1/6">
+                                {# {{ form_label(form.first_name, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.first_name, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }} #}
+                                <div class="my-3 ">
+                                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Demandée le</label>
+                                    <div class="mt-2">
+                                        <div class="flex w-40 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                                        <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="">
+                                            <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="py-4 px-6 pr-0 w-1/6">
+                                {# {{ form_label(form.email, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.email, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }} #}
+                                <div class="my-3 ">
+                                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Collaborateur</label>
+                                    <div class="mt-2">
+                                        <div class="flex w-40 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                                        <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="">
+                                            <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="py-4 px-6 pr-0 w-1/6">
+                                {# {{ form_label(form.name, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.name, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }} #}
+                                <div class="my-3 ">
+                                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Date de début</label>
+                                    <div class="mt-2">
+                                        <div class="flex w-40 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                                        <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="">
+                                            <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="py-4 px-6 pr-0 w-1/4">
+                                {# {{ form_label(form.totalleavedays, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.totalleavedays, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }} #}
+                                <div class="my-3 ">
+                                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Date de fin</label>
+                                    <div class="mt-2">
+                                        <div class="flex w-40 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                                        <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="">
+                                            <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="py-4 px-6 pr-0 w-1/4">
+                                {# {{ form_label(form.totalleavedays, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.totalleavedays, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }} #}
+                                <div class="my-3 ">
+                                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Nb Jours</label>
+                                    <div class="mt-2">
+                                        <div class="flex w-40 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                                        <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="">
+                                            <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="w-1/6 px-6 pr-6" colspan="3" style="vertical-align: bottom; padding-bottom: 15px;">
+                                <div>
+                                    {# {{ form_widget(form.submit, {'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }} #}
+                                </div>
+                            </td>
+                        </tr>
+                        {# {{ form_end(form) }} #}
+                    </thead>
+
+                    <tbody>
+
+                        {# {% for items in team %} #}
+                            <tr class="border-x border-b mt-4 text-gray-600">
+                                <td class="py-6 px-6">Congé sans solde {#{{items.lastname}} #}</td>
+                                <td class="py-6 px-6">10/04/25 13h00{#{{items.firstname}}#}</td>
+                                <td class="py-6 px-6">Lucas Dupas {#{{ items.user.email|default('Non défini')}}#}</td>
+                                <td class="py-6 px-6">12/04/25 13h00 {#{{items.positionid.name}}#}</td>
+                                <td class="py-6 px-6">14/04/25 13h00 {#{{items.totalleavedays}}
+                                {% if items.totalleavedays <= 1 %} jour {% else %} jours {% endif %}#}
+                                </td>
+                                <td class="py-6 px-6">0,5 jours {#{{items.positionid.name}}#}</td>
+                                <td class="py-6 px-6">
+                                    <form method="POST" action=" {#{{ path('app_detail_team', {'id': items.id}) }}#}">
+                                        <button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
+                                    </form>
+                                </td>
+                            </tr>
+
+                        {# Exemple Test Provisoire > A enlever ↓↓↓ #}
+                            <tr class="border-x border-b mt-4 text-gray-600">
+                                <td class="py-6 px-6">Congé payé {#{{items.lastname}} #}</td>
+                                <td class="py-6 px-6">10/04/25 13h00{#{{items.firstname}}#}</td>
+                                <td class="py-6 px-6">Jeff Martins {#{{ items.user.email|default('Non défini')}}#}</td>
+                                <td class="py-6 px-6">12/04/25 13h00 {#{{items.positionid.name}}#}</td>
+                                <td class="py-6 px-6">14/04/25 13h00 {#{{items.totalleavedays}}
+                                {% if items.totalleavedays <= 1 %} jour {% else %} jours {% endif %}#}
+                                </td>
+                                <td class="py-6 px-6">3 jours {#{{items.positionid.name}}#}</td>
+                                <td class="py-6 px-6">
+                                    <form method="POST" action=" {#{{ path('app_detail_team', {'id': items.id}) }}#}">
+                                        <button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
+                                    </form>
+                                </td>
+                            </tr>
+
+                            <tr class="border-x border-b mt-4 text-gray-600">
+                                <td class="py-6 px-6">Congé maladie {#{{items.lastname}} #}</td>
+                                <td class="py-6 px-6">10/04/25 13h00{#{{items.firstname}}#}</td>
+                                <td class="py-6 px-6">Adrien Dupas {#{{ items.user.email|default('Non défini')}}#}</td>
+                                <td class="py-6 px-6">12/04/25 13h00 {#{{items.positionid.name}}#}</td>
+                                <td class="py-6 px-6">14/04/25 13h00 {#{{items.totalleavedays}}
+                                {% if items.totalleavedays <= 1 %} jour {% else %} jours {% endif %}#}
+                                </td>
+                                <td class="py-6 px-6">2 jours {#{{items.positionid.name}}#}</td>
+                                <td class="py-6 px-6">
+                                    <form method="POST" action=" {#{{ path('app_detail_team', {'id': items.id}) }}#}">
+                                        <button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {# Fin Exemple Test Provisoire > A enlever ▲▲▲ ↑ #}
+
+                        {# {% endfor %} #}
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex w-full justify-center items-center h-max mt-10">
+                {# {% if pager.hasPreviousPage %} #}
+                    <a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{#{{ path('app_team', { page: pager.previousPage }) }}#}">Précédent</a>
+                {# {% endif %} #}
+                    <p>Page 1* sur 1*{#{{ pager.currentPage }} sur {{ pager.nbPages }}#}</p>
+                {# {% if pager.hasNextPage %} #}
+                    <a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{#{{ path('app_team', { page: pager.nextPage }) }}#}">Suivant</a>
+                {# {% endif %} #}
+            </div>
 
         </div>
     </main>
