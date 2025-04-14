@@ -6,7 +6,7 @@
 	{% include 'layout/menu/_header.html.twig' %}
         <main style="display: flex;">
             {% include 'layout/menu/_sidebar.html.twig' %}
-            <div class="w-full p-8">
+            <div class="flex-grow w-full p-8">
                 <div class="flex items-center gap-5">
                     <h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Mes demandes</h1>
 					<form method="POST" action="{{ path('app_administration_add_type_of_request') }}">
@@ -23,7 +23,7 @@
 										{{ form_label(form.name, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
 										{{ form_widget(form.name, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
 									</td>
-
+									
 									<td class="py-4 px-6 pr-0 w-1/4">
 										{{ form_label(form.totalnbdemande, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
 										{{ form_widget(form.totalnbdemande, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
@@ -47,7 +47,7 @@
 									</td>
                                     <td class="p-3">
                                     <form method="POST" action="{{ path('app_administration_detail_type_of_request', {'id': items.id}) }}">
-                                        <button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
+                                        <button type="submit" class="text-gray-600 bg-[#ecf3f9] px-5 font-medium py-2 rounded">Détails</button>
                                     </form>
                                     </td>
                                 </tr>
