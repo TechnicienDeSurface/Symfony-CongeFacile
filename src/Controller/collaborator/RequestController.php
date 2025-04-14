@@ -84,7 +84,7 @@ class RequestController extends AbstractController
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);
         $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(2);
+        $pagerfanta->setMaxPerPage(5);
 
         try{
             $pagerfanta->setCurrentPage($page);

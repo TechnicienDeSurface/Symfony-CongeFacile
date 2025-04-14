@@ -66,6 +66,38 @@ class RequestRepository extends ServiceEntityRepository
                 $qb->andWhere("CONCAT(person.first_name, ' ', person.last_name) = :collaborator")
                    ->setParameter('collaborator', $filters['collaborator']->getFirstNameLastName());
             }
+
+            // FILTRE PAR DATE DE CRÉATION
+            if (!empty($filters['created_at'])) {
+                // INSTANCIATION D'UN OBJET DATETIME
+                if ($filters['created_at'] instanceof \DateTime) {
+                    // Set l'heure à 00:00:00 pour ne pas tenir compte de l'heure
+                    $filters['created_at']->setTime(0, 0, 0);
+                    // Définir la fin de la journée à 23:59:59
+                    $endOfDay = clone $filters['created_at'];
+                    $endOfDay->setTime(23, 59, 59);
+                    
+                    //FILTRE DÉBUT DE JOURNE
+                    $qb->andWhere('request.created_at BETWEEN :start_date AND :end_date')
+                        ->setParameter('start_date', $filters['created_at'])
+                        ->setParameter('end_date', $endOfDay);
+                } else {
+                    $createdAt = \DateTime::createFromFormat('Y-m-d', $filters['created_at']);
+                    if ($createdAt) {
+                        // Set l'heure à 00:00:00 pour éviter de comparer les heures
+                        $createdAt->setTime(0, 0, 0);
+                        // Définir la fin de la journée à 23:59:59
+                        $endOfDay = clone $createdAt;
+                        $endOfDay->setTime(23, 59, 59);
+                        
+                        //FILTRE DÉBUT DE JOURNE
+                        $qb->andWhere('request.created_at BETWEEN :start_date AND :end_date')
+                            ->setParameter('start_date', $createdAt)
+                            ->setParameter('end_date', $endOfDay);
+                    }
+                }
+            }
+
    
             // FILTRE PAR DATE DE DEPART
             if (!empty($filters['start_at'])) {
