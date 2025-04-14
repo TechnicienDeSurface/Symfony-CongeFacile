@@ -1,100 +1,98 @@
 {% extends 'base.html.twig' %}
+
 {% block body %}
-	<title>
-		{% block title %}Historique des demandes
-		{% endblock %}
-	</title>
-	<body>
+	<title>{% block title %}Historique des demandes{% endblock %}</title>
 		{% include 'layout/menu/_header.html.twig' %}
 		<main style="display: flex;">
 			{% include 'layout/menu/_sidebar.html.twig' %}
 
 			<div class="w-full p-8">
 				<div class="flex items-center gap-5">
-					<h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Managers</h1>
+					<h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Historique des demandes</h1>
 				</div>
 
-				<table class="mt-6">
-					<thead>
-						<tr class="bg-[#F9FAFB] text-white border-x border-t border-[#EAECF0] rounded-lg" style="overflow: hidden;">
-							<td class="py-4 px-6 pr-0 w-1/7">
-								<label for="type_request" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									Type de demande :
-									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
-								</label>
-								<input type="text" id="type_request" name="type_request" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-							</td>
+                <div class="flex w-full justify-center items-center h-max">
+					<table class="w-full mt-6">
+                        <thead>
+								{{ form_start(form) }}
+								<tr class="bg-[#F9FAFB] text-gray-700 border-x border-t border-[#EAECF0] rounded-lg">
+									<td class="py-4 px-6 pr-0 w-1/6">
+										{{ form_label(form.request_type, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.request_type, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
 
-							<td class="py-4 px-6 pr-0 w-1/7">
-								<label for="ask_for" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									Demandée le :
-									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
-								</label>
-								<input type="text" id="ask_for" name="ask_for" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-							</td>
+									<td class="py-4 px-6 pr-0 w-1/6">
+										{{ form_label(form.created_at, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.created_at, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
 
-							<td class="py-4 px-6 pr-0 w-1/7">
-								<label for="start_date" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									Date de début :
-									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
-								</label>
-								<input type="date" id="start_date" name="start_date" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-							</td>
+									<td class="py-4 px-6 pr-0 w-1/6">
+										{{ form_label(form.start_at, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.start_at, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
 
-							<td class="py-4 px-6 pr-0 w-1/7">
-								<label for="start_end" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									Date de fin :
-									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
-								</label>
-								<input type="date" id="start_end" name="start_end" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-							</td>
+									<td class="py-4 px-6 pr-0 w-1/6">
+										{{ form_label(form.end_at, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.end_at, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
 
-							<td class="py-4 px-6 pr-0 w-1/7">
-								<label for="nb_days" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									Nb de jours :
-									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
-								</label>
-								<input type="text" id="nb_days" name="nb_days" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-							</td>
+									<td class="py-4 px-6 pr-0 w-1/4">
+										{{ form_label(form.nbdays, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.nbdays, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
+                                    <td class="py-4 px-6 pr-0 w-1/4">
+										{{ form_label(form.answer, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+										{{ form_widget(form.answer, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+									</td>
 
-							<td class="py-4 px-6 pr-0 w-1/7">
-								<label for="status" class="block text-gray-700 text-sm font-bold mb-2 flex items-center justify-start">
-									Statut :
-									<img src="{{ asset('assets/image/Icon-arrow-filter.png') }}" alt="Icon" class="ml-2 text-gray-700" style="width: 15px; height: 20px;">
-								</label>
-								<input type="text" id="status" name="status" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-							</td>
-
-							<td class="w-1/7 px-6 pr-6" colspan="3" style="vertical-align: bottom; padding-bottom: 15px;">
-								<div>
-									<button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6">
-										Rechercher
-									</button>
-								</div>
-							</td>
-						</tr>
-					</thead>
-					<tbody>
-
-						{# Chaque résultat doit se présenter sous cette forme : 
-						                        Good luck pour le back #}
-
-						<tr class="border-x border-b mt-4">
-							<td class="py-6 px-6">Congé payé</td>
-							<td class="py-6 px-6">10/12/24 8h00</td>
-							<td class="py-6 px-6">01/01/25 8h00</td>
-							<td class="py-6 px-6">05/04/25 9h00</td>
-							<td class="py-6 px-6">67 jours</td>
-							<td class="py-6 px-6">C'est en cours tkt</td>
-							<td class="py-6 px-6">
-								<button class="bg-[#004C6C14] text-white font-bold py-2 px-10 rounded hover:text-white">
-									<span class="text-[#475467]">Détails</span>
-								</button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+									<td class="w-1/6 px-6 pr-6" colspan="3" style="vertical-align: bottom; padding-bottom: 15px;">
+										<div>
+											{{ form_widget(form.submit, {'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
+										</div>
+									</td>
+								</tr>
+								{{ form_end(form) }}
+							</thead>
+                        <tbody>
+                            {% for requests in request %}
+                                <tr>
+                                    <td class="py-6 px-6">{{ requests.requesttype.name }}</td>
+                                    <td class="py-6 px-6">{{ requests.createdat|date('d/m/Y H:i') }}</td>
+                                    <td class="py-6 px-6">{{ requests.startat|date('d/m/Y H:i') }}</td>
+                                    <td class="py-6 px-6">{{ requests.endat|date('d/m/Y H:i') }}</td>
+                                    <td class="py-6 px-6">{{ requests.nbdays }} jours</td>
+                                    <td class="py-6 px-6">
+										{% if requests.answer is null %}
+											En attente
+										{% elseif requests.answer == true %}
+											Validé
+										{% elseif requests.answer == false %}
+											Refusé
+										{% endif %}
+									</td>
+                                    <td class="py-6 px-6">
+                                        <form method="POST" action="{{ path('app_detail_request_pending', {'id': requests.id}) }}">
+                                            <button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="7" class="text-center">Aucune demande trouvée.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="flex w-full justify-center items-center h-max mt-10">
+					{% if pager.hasPreviousPage %}
+						<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path('app_request_history_collaborator', { page: pager.previousPage }) }}">Précédent</a>
+					{% endif %}
+						<p>Page {{ pager.currentPage }} sur {{ pager.nbPages }}</p>
+					{% if pager.hasNextPage %}
+						<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path('app_request_history_collaborator', { page: pager.nextPage }) }}">Suivant</a>
+					{% endif %}
+				</div>
 			</div>
 		</main>
-	</body>
 {% endblock %}

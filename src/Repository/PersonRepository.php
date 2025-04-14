@@ -55,25 +55,6 @@ class PersonRepository extends ServiceEntityRepository
             $qb->orderBy('person.last_name', $order);
         }
 
-
-        // // Tri dynamique par total_leave_days
-        // $qb->addSelect(
-        //     '(
-        //         SELECT COUNT(r.id) 
-        //         FROM App\Entity\Request r 
-        //         WHERE r.collaborator = person
-        //     ) AS total_leave_days'
-        // );
-
-        // // Tri dynamique par autre attributs comme position ou email peut-être
-        // if (!empty($filters['sort_order'])) {
-        //     $sortOrder = $filters['sort_order']; // 'ASC' ou 'DESC'
-        //     $qb->orderBy('total_leave_days', $sortOrder);
-        // } else {
-        //     // Par défaut, on trie par autre critère
-        //     $qb->orderBy('person.last_name', 'ASC');
-        // }
-
         return $qb->getQuery();
     }
 

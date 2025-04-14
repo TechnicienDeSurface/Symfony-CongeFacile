@@ -18,22 +18,34 @@ class FilterManagerTeamFormType extends AbstractType
             ->add('last_name', TextType::class, [
                 'label' => 'Nom :',
                 'required' => false,
-                'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
+                'attr' => [
+                    'class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+                    'placeholder' => 'Saisissez un nom...',
+                ]
             ])
             ->add('first_name', TextType::class, [
                 'label' => 'Prénom :',
                 'required' => false,
-                'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
+                'attr' => [
+                    'class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+                    'placeholder' => 'Saisissez un prénom...',
+                ]
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Adresse email :',
                 'required' => false,
-                'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
+                'attr' => [
+                    'class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+                    'placeholder' => 'Saisissez une adresse email...',
+                ]
             ])
             ->add('name', TextType::class, [
                 'label' => 'Poste :',
                 'required' => false,
-                'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
+                'attr' => [
+                    'class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+                    'placeholder' => 'Saisissez un poste...'
+                ]
             ])
             ->add('totalleavedays', ChoiceType::class, [
                 'label' => 'Nb de congés posés sur l\'année :',
@@ -42,7 +54,7 @@ class FilterManagerTeamFormType extends AbstractType
                     'Croissant' => 'ASC',
                     'Décroissant' => 'DESC',
                 ],
-                'placeholder' => 'Choisir l\'ordre',
+                'placeholder' => 'Choisir l\'ordre...',
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
             ])
             ->add('submit', SubmitType::class, [
