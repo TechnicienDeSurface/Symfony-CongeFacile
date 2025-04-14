@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Position; 
 use App\Entity\Department; 
 use App\Repository\PositionRepository; 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -18,10 +19,17 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class ManagerType extends AbstractType
 {
+    public function __construct(PositionRepository $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $inputClass = 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500';
         $labelClass = 'block text-sm font-medium text-gray-700';
+        $defaultPosition1 = $this->entityManager->findByName('Manager');
+        $defaultPosition = $defaultPosition1[0];
 
         $builder
             // Prénom
@@ -58,12 +66,10 @@ class ManagerType extends AbstractType
             ->add('position', EntityType::class, [
                 'class' => Position::class,
                 'choice_label' => 'name',
-                'label' => 'Direction/Service',
-                'label_attr' => ['class' => $labelClass],
-                'attr' => ['class' => $inputClass,],
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le poste est obligatoire']),
-                ],
+                'label' => 'Poste',
+                'label_attr' => ['class' => $labelClass,'style'=>'display:none'],
+                'attr' => ['style'=>'display:none'],
+                'data' => $defaultPosition, 
             ])
             // Adresse email
             ->add('email', EmailType::class, [
