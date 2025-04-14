@@ -3,6 +3,7 @@
 namespace App\Controller\Collaborator;
 
 use App\Repository\RequestRepository;
+use App\Repository\PersonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,43 +15,58 @@ use App\Form\FilterRequestHistoryFormType;
 use App\Form\RequestType;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
+use App\Entity\Person ; 
+use App\Entity\User ; 
+use Symfony\Bundle\SecurityBundle\Security;
+
 
 class RequestController extends AbstractController
-{
+{ 
+
     //PAGE NOUVELLE DEMANDE "COLLABORATEUR"
     #[Route('/new-request', name: 'app_new_request')]
-    public function viewNewRequest(RequestFondation $request_bd, RequestRepository $repository, ManagerRegistry $registry): Response
+    public function viewNewRequest(Security $security, RequestFondation $request_bd, RequestRepository $repository, ManagerRegistry $registry, PersonRepository $personRepository): Response
     {
-        $request = new Request() ; 
-        $form = $this->createForm(RequestType::class,$request); 
-        $form->handleRequest($request_bd); 
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                try {
-                    // Si valide : j'enregistre les données dans la BDD.
-                    $registry->getManager()->persist($request);
-                    $registry->getManager()->flush();
-                    $this->addFlash('success', 'Success to add product') ; 
-                    return $this->render('accueil/accueil.html.twig', [
-                        'page' => 'accueil', //définir la page
-                    ]);  
-                } catch (NotFoundHttpException $e ){
-                    $this->addFlash('error', 'Error to add product') ; 
-                }
-                // Faire une redirection vers le formulaire de modification.
-            } else {
-                // Sinon j'affiche un message d'erreur
-                $this->addFlash('error', 'Error to add product') ; 
+        $request = new Request();
+        
+        // Récupérez l'utilisateur connecté
+        $user = New User() ; 
+        $user = $security->getUser() ;
+        $persons = $personRepository->findBy([],[]);
+        $person = New Person() ; 
+        foreach ($persons as $row) {
+            if($user == $row->getUser()){
+                $person = $row ; 
             }
-        }else{
-            
+        }
+        $request->setCollaborator($person);
+        $request->setDepartment($person->getDepartment());
+
+        // Créez le formulaire avec l'instance de Request
+        $form = $this->createForm(RequestType::class, $request);
+
+        $form->handleRequest($request_bd);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                // Si valide : j'enregistre les données dans la BDD.
+                $data = $form->getData();
+                $registry->getManager()->persist($data);
+                $registry->getManager()->flush();
+                $this->addFlash('success', 'La demande a été créée');
+            } catch (NotFoundHttpException $e) {
+                $this->addFlash('error', 'Error to add request');
+            }
+        } else {
+            $this->addFlash('error', 'Error to add request');
         }
 
         return $this->render('collaborator/new_request.html.twig', [
             'page' => 'new-request',
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
+
 
     //PAGE HISTORIQUE DES DEMANDES "COLLABORATEUR"
     #[Route('/request-history-collaborator/{page}', name: 'app_request_history_collaborator', methods: ['GET', 'POST'])]

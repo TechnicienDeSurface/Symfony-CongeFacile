@@ -1,7 +1,6 @@
 {% block sidebar %}
 
 	<style>
-		/* Menu sidebar ///////////////////////////////////////////////*/
 
 		/*/ // Test Ne pas toucher Merci//*/
 		/* * /* {
@@ -92,9 +91,6 @@
 		}
 
 
-		/*/ // //////////////////////////////////////////////////////////////////*/
-
-
 		/* Actif = Bleu foncé avec texte blanc */
 
 		.sidebar .submenu {
@@ -136,6 +132,7 @@
 				</a>
 			{% endif %}
 
+<<<<<<< HEAD
 			{# Historique des demandes selon rôle #}
 			{% if is_granted('ROLE_MANAGER') %}
 				<a href="{{ path('app_history_request_manager') }}" class="{% if app.request.get('_route') == 'app_history_request_manager' %}active{% endif %}">Historique des demandes</a>
@@ -156,6 +153,29 @@
 
 			{# Administration pour les managers #}
 			{% if is_granted('ROLE_MANAGER') %}
+=======
+			<a href="{{path('app_history_request')}}">Historique des demandes</a>
+				{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
+					<a href="{{path('app_team')}}" class="{% if app.request.get('_route') == 'app_team' %}active{% endif %}">Mon équipe</a>
+					<a href="{{ path('app_statistic') }}" class="{% if app.request.get('_route') == 'app_statistic' %}active{% endif %}">Statistiques</a>
+				{% endif %}
+			<div class="trait"></div>
+
+			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
+				<a href="{{path('app_information_manager')}}" class="{% if app.request.get('_route') == 'app_information_manager' %}active{% endif %}">Mes informations</a>
+			{% elseif app.user and 'ROLE_COLLABORATEUR' in app.user.roles %}
+				<a href="{{path('app_information_collaborateur')}}" class="{% if app.request.get('_route') == 'app_information_collaborateur' %}active{% endif %}">Mes informations</a>
+			{% endif %}
+
+			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
+				<a href="{{path('app_preference_manager')}}" class="{% if app.request.get('_route') == 'app_preference_manager' %}active{% endif %}">Mes préférences</a>
+			{% elseif app.user and 'ROLE_COLLABORATEUR' in app.user.roles %}
+				<a href="{{path('app_preference_collaborateur')}}" class="{% if app.request.get('_route') == 'app_preference_manager' %}active{% endif %}">Mes préférences</a>
+			{% endif %}
+
+			
+			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
+>>>>>>> main
 				<div class="dropdown-toggle">
 					<a href="#">Administration
 						<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
