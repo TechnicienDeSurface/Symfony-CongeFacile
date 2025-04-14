@@ -53,7 +53,7 @@ class RequestController extends AbstractController
     }
 
     //PAGE HISTORIQUE DES DEMANDES "COLLABORATEUR"
-    #[Route('/request-history-collaborator', name: 'app_request_history_collaborator', methods: ['GET', 'POST'])]
+    #[Route('/request-history-collaborator/{page}', name: 'app_request_history_collaborator', methods: ['GET', 'POST'])]
     public function viewRequestHistory(RequestFondation $request, RequestRepository $requestRepository, int $page = 1): Response
     {
         $this->denyAccessUnlessGranted('ROLE_COLLABORATEUR');
@@ -84,7 +84,7 @@ class RequestController extends AbstractController
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);
         $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(5);
+        $pagerfanta->setMaxPerPage(2);
 
         try{
             $pagerfanta->setCurrentPage($page);

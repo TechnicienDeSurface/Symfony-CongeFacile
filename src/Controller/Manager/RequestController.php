@@ -32,12 +32,12 @@ class RequestController extends AbstractController
     }
 
     //PAGE HISTORIQUE DES DEMANDES EN MODE "MANAGER"
-    #[Route('/history-request-manager', name: 'app_history_request_manager', methods: ['GET', 'POST'])]
+    #[Route('/history-request-manager/{page}', name: 'app_history_request_manager', methods: ['GET', 'POST'])]
     public function viewRequestHistory(Request $request, RequestRepository $requestRepository, int $page = 1): Response
     {
         $this->denyAccessUnlessGranted('ROLE_MANAGER');
 
-        $form = $this->createForm(FilterRequestHistoryFormType::class,[
+        $form = $this->createForm(FilterRequestHistoryFormType::class,null,[
             'is_manager' => true,
         ]);
 
@@ -66,7 +66,7 @@ class RequestController extends AbstractController
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);
         $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(5);
+        $pagerfanta->setMaxPerPage(3);
 
         try{
             $pagerfanta->setCurrentPage($page);
