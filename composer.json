@@ -18,7 +18,7 @@
         "pagerfanta/pagerfanta": "^4.7.1",
         "peppeocchi/php-cron-scheduler": "^4.0",
         "symfony/asset": "^7.2",
-        "symfony/asset-mapper": "^7.2.3",
+        "symfony/asset-mapper": "^7.2.5",
         "symfony/console": "7.2.*",
         "symfony/dependency-injection": "7.2.*",
         "symfony/dotenv": "7.2.*",
@@ -96,7 +96,7 @@
         }
     },
     "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^4.0",
+        "doctrine/doctrine-fixtures-bundle": "^4.1",
         "symfony/maker-bundle": "^1.62.1",
         "symfony/stopwatch": "7.2.*",
         "symfony/web-profiler-bundle": "7.2.*"
