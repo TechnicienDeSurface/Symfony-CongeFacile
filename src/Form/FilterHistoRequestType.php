@@ -34,7 +34,7 @@ class FilterHistoRequestType extends AbstractType
                 'required'=>false, 
             ])
             ->add('totalnbdemande', ChoiceType::class, [
-                'label' => 'Nb demandes associées :',
+                'label' => 'Nb jours :',
                 'required' => false,
                 'choices' => [
                     'Croissant' => 'ASC',
