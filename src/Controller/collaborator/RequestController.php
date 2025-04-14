@@ -10,9 +10,9 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request as RequestFondation;
-use App\Entity\Request ; 
-use App\Entity\Person ; 
-use App\Entity\User ; 
+use App\Entity\Request; 
+use App\Entity\Person;
+use App\Entity\User; 
 use App\Form\RequestType ; 
 use Symfony\Bundle\SecurityBundle\Security; 
 

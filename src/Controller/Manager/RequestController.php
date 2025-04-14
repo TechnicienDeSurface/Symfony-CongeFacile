@@ -5,16 +5,27 @@ namespace App\Controller\Manager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Form\FilterRequestPendingFormType;
+use Symfony\Component\HttpFoundation\Request;
+use App\Form\FilterRequestPendingFormType;
 
 class RequestController extends AbstractController
 {
-    //PAGE DES DEMANDES EN ATTENTE
+    // PAGE DES DEMANDES EN ATTENTE
     #[Route('/request-pending', name: 'app_request_pending')]
-    public function viewRequestPending(): Response
+    public function viewRequestPending(Request $request): Response
     {
+        $form = $this->createForm(FilterRequestPendingFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Logique de traitement des données du formulaire
+            $data = $form->getData();
+            // Tu peux ensuite filtrer les demandes ici avec $data
+        }
+
         return $this->render('manager/request_pending.html.twig', [
             'page' => 'request-pending',
+            'form' => $form->createView(),
         ]);
     }
 
