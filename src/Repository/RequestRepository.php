@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Request;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -41,12 +42,12 @@ class RequestRepository extends ServiceEntityRepository
                 ->getResult() ; 
        }
 
-       public function findByFilters(array $filters): array
+       public function HistoryRequestfindByFilters(array $filters, string $order = ''): Query
        {
            $qb = $this->createQueryBuilder('request');
    
            // Jointure avec l'entité Person
-           $qb->leftJoin('request.person', 'person');
+           $qb->leftJoin('request.collaborator', 'person');
 
            // Jointure avec l'entité Person
            $qb->leftJoin('request.request_type', 'request_type');
@@ -82,6 +83,6 @@ class RequestRepository extends ServiceEntityRepository
                 }
 
    
-           return $qb->getQuery()->getResult();
+           return $qb->getQuery();
        }
 }

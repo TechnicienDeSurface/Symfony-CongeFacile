@@ -139,7 +139,12 @@
 				</a>
 			{% endif %}
 
-			<a href="{{path('app_history_request')}}" class="{% if app.request.get('_route') == 'app_history_request' %}active{% endif %}">Historique des demandes</a>
+			{% if app.user and 'ROLE_COLLABORATEUR' in app.user.roles %}
+				<a href="{{path('app_request_history_collaborator')}}" class="{% if app.request.get('_route') == 'app_request_history_collaborator' %}active{% endif %}">Historique des demandes</a>
+			{% elseif app.user and 'ROLE_MANAGER' in app.user.roles and 'ROLE_COLLABORATEUR' in app.user.roles %}
+			<a href="{{path('app_history_request_manager')}}" class="{% if app.request.get('_route') == 'app_history_request_manager' %}active{% endif %}">Historique des demandes</a>
+			{% endif %}
+
 			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
 				<a href="{{path('app_team')}}" class="{% if app.request.get('_route') == 'app_team' %}active{% endif %}">Mon équipe</a>
 				<a href="{{ path('app_statistic') }}" class="{% if app.request.get('_route') == 'app_statistic' %}active{% endif %}">Statistique</a>

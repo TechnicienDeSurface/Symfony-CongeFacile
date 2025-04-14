@@ -1,9 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Historique des demandes{% endblock %}
-
 {% block body %}
-<title>{% block title %}Mon équipe{% endblock %}</title>
+	<title>{% block title %}Historique des demandes{% endblock %}</title>
 		{% include 'layout/menu/_header.html.twig' %}
 		<main style="display: flex;">
 			{% include 'layout/menu/_sidebar.html.twig' %}
@@ -58,14 +56,22 @@
                         <tbody>
                             {% for requests in request %}
                                 <tr>
-                                    <td class="py-6 px-6">{{ requests.type }}</td>
-                                    <td class="py-6 px-6">{{ requests.collaborateur }}</td>
-                                    <td class="py-6 px-6">{{ requests.dateDebut|date('d/m/Y H:i') }}</td>
-                                    <td class="py-6 px-6">{{ requests.dateFin|date('d/m/Y H:i') }}</td>
-                                    <td class="py-6 px-6">{{ requests.nbJours }} jours</td>
-                                    <td class="py-6 px-6">{{ requests.statut }}</td>
-                                    <td class="py-6 px-6">class="py-6 px-6">
-                                        <form method="POST" action="{{ path('app_detail_request_pending', {'id': items.id}) }}">
+                                    <td class="py-6 px-6">{{ requests.requesttype.name }}</td>
+                                    <td class="py-6 px-6">{{ requests.collaborator.firstnamelastname }}</td>
+                                    <td class="py-6 px-6">{{ requests.startat|date('d/m/Y H:i') }}</td>
+                                    <td class="py-6 px-6">{{ requests.endat|date('d/m/Y H:i') }}</td>
+                                    <td class="py-6 px-6">{{ requests.nbdays }} jours</td>
+                                    <td class="py-6 px-6">
+										{% if requests.answer == 1 %}
+											Accepté
+										{% elseif requests.answer == 0 %}
+											Refusé
+										{% else %}
+											En attente
+										{% endif %}
+									</td>
+                                    <td class="py-6 px-6">
+                                        <form method="POST" action="{{ path('app_detail_request_pending', {'id': requests.id}) }}">
                                             <button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
                                         </form>
                                     </td>

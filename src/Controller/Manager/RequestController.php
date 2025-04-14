@@ -31,13 +31,16 @@ class RequestController extends AbstractController
         ]);
     }
 
-    //PAGE HISTORIQUE DES DEMANDES
-    #[Route('/history-request', name: 'app_history_request', methods: ['GET', 'POST'])]
-    public function viewRequestHistory(Request $request, int $page = 1, RequestRepository $requestRepository): Response
+    //PAGE HISTORIQUE DES DEMANDES EN MODE "MANAGER"
+    #[Route('/history-request-manager', name: 'app_history_request_manager', methods: ['GET', 'POST'])]
+    public function viewRequestHistory(Request $request, RequestRepository $requestRepository, int $page = 1): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_MANAGER' || 'ROLE_COLLABORATEUR');
+        $this->denyAccessUnlessGranted('ROLE_MANAGER');
 
-        $form = $this->createForm(FilterRequestHistoryFormType::class);
+        $form = $this->createForm(FilterRequestHistoryFormType::class,[
+            'is_manager' => true,
+        ]);
+
         $form->handleRequest($request);
 
         $filters = [
@@ -58,7 +61,7 @@ class RequestController extends AbstractController
         $order = $filters['nbdays'] ?? '';
 
         // Recherche dans le repository avec les filtres
-        $query = $requestRepository->searchTeamMembers($filters, $order);
+        $query = $requestRepository->HistoryRequestfindByFilters($filters, $order);
         
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);
@@ -73,6 +76,7 @@ class RequestController extends AbstractController
         }
 
         return $this->render('manager/history_request.html.twig', [
+            'page' => 'history-request-manager',
             'pager' => $pagerfanta,
             'form' => $form->createView(),
             'filters' => $filters,
