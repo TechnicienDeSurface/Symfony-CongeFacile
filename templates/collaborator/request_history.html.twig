@@ -62,12 +62,12 @@
                                     <td class="py-6 px-6">{{ requests.endat|date('d/m/Y H:i') }}</td>
                                     <td class="py-6 px-6">{{ requests.nbdays }} jours</td>
                                     <td class="py-6 px-6">
-										{% if requests.answer == 1 %}
-											Accepté
-										{% elseif requests.answer == 0 %}
-											Refusé
-										{% else %}
+										{% if requests.answer is null %}
 											En attente
+										{% elseif requests.answer == true %}
+											Validé
+										{% elseif requests.answer == false %}
+											Refusé
 										{% endif %}
 									</td>
                                     <td class="py-6 px-6">

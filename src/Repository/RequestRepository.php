@@ -51,36 +51,66 @@ class RequestRepository extends ServiceEntityRepository
 
            // Jointure avec l'entité Person
            $qb->leftJoin('request.request_type', 'request_type');
+
+           //$qb->addSelect('DATEDIFF(request.end_at, request.start_at) AS nbdays');
    
            // FILTRE PAR TYPE DE DEMANDE
            if (!empty($filters['request_type'])) {
-               $qb->andWhere('request.request_type LIKE :request_type')
-                  ->setParameter('request_type', '%' . $filters['request_type'] . '%');
+                // Ici, comme tu as un objet, on filtre par ID
+                $qb->andWhere('request_type.id = :request_type')
+                ->setParameter('request_type', $filters['request_type']->getId());
             }
 
             // FILTRE PAR COLLABORATEUR
             if (!empty($filters['collaborator'])) {
-                $qb->andWhere('request.collaborator LIKE :collaborator')
-                    ->setParameter('collaborator', '%' . $filters['collaborator'] . '%');    
+                $qb->andWhere("CONCAT(person.first_name, ' ', person.last_name) = :collaborator")
+                   ->setParameter('collaborator', $filters['collaborator']->getFirstNameLastName());
             }
    
-           // FILTRE PAR DATE DE DEPART
-           if (!empty($filters['start_at'])) {
-               $qb->andWhere('request.start_at LIKE :start_at')
-                  ->setParameter('start_at', '%' . $filters['start_at'] . '%');
+            // FILTRE PAR DATE DE DEPART
+            if (!empty($filters['start_at'])) {
+                //INSTANCIATION D'UN OBJET DATETIME
+                if ($filters['start_at'] instanceof \DateTime) {
+                    $qb->andWhere('request.start_at >= :start_at')
+                        ->setParameter('start_at', $filters['start_at']);
+                } else {
+                    $startAt = \DateTime::createFromFormat('Y-m-d', $filters['start_at']);
+                    if ($startAt) {
+                        $qb->andWhere('request.start_at >= :start_at')
+                            ->setParameter('start_at', $startAt);
+                    }
+                }
             }
 
             // FILTRE PAR DATE DE FIN
             if (!empty($filters['end_at'])) {
-            $qb->andWhere('request.end_at LIKE :end_at')
-                ->setParameter('end_at', '%' . $filters['end_at'] . '%');
+                if ($filters['end_at'] instanceof \DateTime) {
+                    $qb->andWhere('request.end_at <= :end_at')
+                        ->setParameter('end_at', $filters['end_at']);
+                } else {
+                    $endAt = \DateTime::createFromFormat('Y-m-d', $filters['end_at']);
+                    if ($endAt) {
+                        $qb->andWhere('request.end_at <= :end_at')
+                            ->setParameter('end_at', $endAt);
+                    }
+                }
+            }
+
+            //FILTRE PAR NOMBRE DE JOURS
+            if (!empty($filters['nbdays'])) {
+                $order = $filters['nbdays'] === 'ASC' ? 'ASC' : 'DESC';
+                $qb->orderBy('nbdays', $order); // Trier par le calcul des jours
             }
 
             // FILTRE PAR STATUT
-            if (!empty($filters['answert'])) {
-                $qb->andWhere('request.answert LIKE :answert')
-                    ->setParameter('answert', '%' . $filters['answert'] . '%');
+            if (array_key_exists('answer', $filters)) {
+                if ($filters['answer'] === null) {
+                    $qb->andWhere('request.answer IS NULL');
+                } else {
+                    $qb->andWhere('request.answer = :answer')
+                       ->setParameter('answer', $filters['answer']);
                 }
+            }
 
    
            return $qb->getQuery();

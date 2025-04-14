@@ -76,12 +76,13 @@ class FilterRequestHistoryFormType extends AbstractType
                 'label' => 'Statut',
                 'required' => false,
                 'choices' => [
-                    'Validé' => '1',
-                    'Refusé' => '0',
+                    'Validé' => true,
+                    'Refusé' => false,
                     'En attente' => null,
                 ],
                 'placeholder' => 'Sélectionner un statut...',
-                'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
+                'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'],
+                'data' => null,
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Filtrer les demandes',
