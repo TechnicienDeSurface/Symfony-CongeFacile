@@ -50,7 +50,7 @@ class FilterHistoRequestType extends AbstractType
                     'Insérer' => null,
                     'Validé' => true,
                     'Refusé' => false,
-                    'En attente' => 'none' //vaqleur intermédiaire car null est la valeur par défaut
+                    'En attente' => 'none' //valeur intermédiaire car null est la valeur par défaut
                 ],
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'],
                 'placeholder' => 'Choisir l\'ordre',

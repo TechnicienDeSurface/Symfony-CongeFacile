@@ -65,7 +65,7 @@ class RequestRepository extends ServiceEntityRepository
             }
 
             if(!empty($filters['answer'])){
-                if($filters['answer'] == "none"){
+                if($filters['answer'] == "none"){  //condition pour aller chercher les answer null avec la valeur none
                     $qb->andWhere('request.answer IS NULL'); 
                 }else{
                     $qb->andWhere('request.answer LIKE :answer')
