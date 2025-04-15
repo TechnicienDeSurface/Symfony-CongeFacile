@@ -46,11 +46,11 @@ class FilterHistoRequestType extends AbstractType
             ->add('answer', ChoiceType::class, [
                 'label' => 'Statut :',
                 'required' => false,
-                'mapped' => false,
                 'choices' => [
+                    'Insérer' => null,
                     'Validé' => true,
                     'Refusé' => false,
-                    'En attente' => null,
+                    'En attente' => 'none' //vaqleur intermédiaire car null est la valeur par défaut
                 ],
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'],
                 'placeholder' => 'Choisir l\'ordre',

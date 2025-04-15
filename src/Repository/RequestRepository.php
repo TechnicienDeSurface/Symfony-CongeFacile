@@ -42,7 +42,7 @@ class RequestRepository extends ServiceEntityRepository
                 ->getResult() ; 
        }
 
-        public function searchTypeOfRequest(array $filters,  string $order = ''): Query
+        public function searchRequest(array $filters,  string $order = ''): Query
         {
             $qb = $this->createQueryBuilder('request');
             // Correction : jointure correcte avec l'entité person
@@ -65,8 +65,13 @@ class RequestRepository extends ServiceEntityRepository
             }
 
             if(!empty($filters['answer'])){
-                $qb->andWhere('request.answer LIKE :answer')
-                ->setParameter('answer',$filters['answer']); 
+                if($filters['answer'] == "none"){
+                    $qb->andWhere('request.answer IS NULL'); 
+                }else{
+                    $qb->andWhere('request.answer LIKE :answer')
+                    ->setParameter('answer',$filters['answer']); 
+                }
+                
             }
 
             if (!empty($order)) {
