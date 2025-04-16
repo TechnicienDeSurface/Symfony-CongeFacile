@@ -2,12 +2,8 @@
 
 namespace App\Controller\Manager;
 
-
 use App\Form\FilterManagerFormType;
-use App\Form\FilterRequestHistoryFormType;
-use App\Repository\RequestRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\RequestRepository ; 
@@ -15,7 +11,6 @@ use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\FilterHistoRequestType;
-
 
 class RequestController extends AbstractController
 {
@@ -69,12 +64,11 @@ class RequestController extends AbstractController
         $adapter = new QueryAdapter($query);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage(10);
-
         try{
             $pagerfanta->setCurrentPage($page);
         }
         catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
-            throw $this->createNotFoundException('La page demandée n\'existe pas.') 
+            throw $this->createNotFoundException('La page demandée n\'existe pas.');
         }
 
         return $this->render('manager/history_request.html.twig', [
@@ -83,8 +77,6 @@ class RequestController extends AbstractController
             'requests' => $pagerfanta->getCurrentPageResults(),
             'pager' => $pagerfanta,
             'filters' => $filters,
-
         ]);
     }
-    
 }
