@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% if is_granted('ROLE_MANAGER') %}
+        <title>{% block title %}Manager - Mes préférences{% endblock %}</title>
+
+        {% include 'layout/menu/_header.html.twig' %}
+
+        <main class="flex">
+
+            {% include 'layout/menu/_sidebar.html.twig' %}
+
+            <div class="w-full p-8 overflow-y-auto">
+
+                <h1 class="font-medium text-2xl my-3 text-[#004C6C]">Mes préférences</h1>
+                
+                {{ form_start(form) }}
+
+                <div class="mt-7 flex items-center">
+                    <label class="relative inline-block w-12 h-6">
+                        {{ form_widget(form.alert_new_request, { 
+                            'attr': { 
+                                'class': 'sr-only peer' 
+                            } 
+                        }) }}
+                        <span class="absolute cursor-pointer inset-0 bg-gray-300 rounded-full transition peer-checked:bg-[#004C6C]"></span>
+                        <span class="absolute left-1 bottom-1 w-4 h-4 bg-white rounded-full transition peer-checked:translate-x-6"></span>
+                    </label>
+                    <p class="ml-3 text-sm">Être alerté par email lorsqu'une demande de congé arrive</p>
+                </div>
+
+                <div class="mt-7">
+                    {{ form_widget(form.submit, { 
+                        'attr': { 
+                            'class': 'text-white bg-[#004C6C] rounded-lg w-64 h-10 font-medium cursor-pointer hover:bg-[#00334a] transition' 
+                        } 
+                    }) }}
+                </div>
+
+                {{ form_end(form) }}
+
+            </div>
+        </main>
+    {% else %}
+        <p>Vous n'avez pas les permissions nécessaires pour accéder à cette page.</p>
+    {% endif %}
+{% endblock %}

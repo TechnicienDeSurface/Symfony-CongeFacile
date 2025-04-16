@@ -1,50 +1,12 @@
 {% block header %}
 
-
-	<style>
-		body {
-			margin: 0;
-			padding: 0;
-			/*background-color: #fff;*/
-		}
-
-		.header {
-			width: 98%;
-			height: 50px;
-			margin: 20px auto 0;
-			display: flex;
-			align-items: center;
-			background-color: #004c6c; /* Bleu foncé */
-			border-radius: 10px; /* Bords arrondis */
-			position: relative;
-			padding: 32px 0;
-		}
-
-		.header-ombre {
-
-			width: 97%;
-			height: 40px;
-			margin: -8px 1.5%;
-			border-radius: 10px;
-			background-color: #b4c4cf;
-			position: absolute;
-
-		}
-
-		.logo img {
-			height: 40px; /* Taille du logo */
-			margin: 0 20px;
-		}
-	</style>
-
-
-	<header class="header-ombre"></header>
-	<div class="header">
-		<div class="logo">
+	<header class="w-[97%] h-[40px] -mt-2 mx-[1.5%] rounded-[10px] bg-[#b4c4cf] absolute"></header>
+	<div class="w-[98%] h-[50px] mt-5 mx-auto flex items-center bg-[#004c6c] rounded-[10px] relative py-8">
+		<div class="h-[40px] mx-5">
 			<a href="{{ path('app_home') }}">
-				<img src="{{ asset('assets/image/logo-mentalworks-blanc.png') }}" alt="Logo">
-			</div>
-		</a>
+				<img src="{{ asset('assets/image/logo-mentalworks-blanc.png') }}" alt="Image Logo">
+			</a>
+		</div>
 	</div>
 
 {% endblock %}

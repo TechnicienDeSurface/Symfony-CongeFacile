@@ -199,4 +199,27 @@ class Request
         return $this->totalnbdemande; // ou la valeur calculée
     }
 
+
+    //FONCTION QUI CALCULE LE NOMBRE DE JOURS
+    public function getNbDays(): int
+    {
+        if (!$this->start_at || !$this->end_at) {
+            return 0;
+        }
+
+        $startDate = clone $this->start_at;
+        $endDate = clone $this->end_at;
+        $workingDays = 0;
+
+        while ($startDate <= $endDate) {
+            // format('N') renvoie 1 (lundi) à 7 (dimanche)
+            if ((int)$startDate->format('N') < 6) {
+                $workingDays++;
+            }
+            $startDate->modify('+1 day');
+        }
+
+        return $workingDays;
+    }
+
 }

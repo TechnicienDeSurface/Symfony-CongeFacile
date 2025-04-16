@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Request;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -90,4 +91,110 @@ class RequestRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+       public function HistoryRequestfindByFilters(array $filters, string $order = ''): Query
+       {
+           $qb = $this->createQueryBuilder('request');
+   
+           // Jointure avec l'entité Person
+           $qb->leftJoin('request.collaborator', 'person');
+
+           // Jointure avec l'entité Person
+           $qb->leftJoin('request.request_type', 'request_type');
+
+           //$qb->addSelect('DATEDIFF(request.end_at, request.start_at) AS nbdays');
+   
+           // FILTRE PAR TYPE DE DEMANDE
+           if (!empty($filters['request_type'])) {
+                // Ici, comme tu as un objet, on filtre par ID
+                $qb->andWhere('request_type.id = :request_type')
+                ->setParameter('request_type', $filters['request_type']->getId());
+            }
+
+            // FILTRE PAR COLLABORATEUR
+            if (!empty($filters['collaborator'])) {
+                $qb->andWhere("CONCAT(person.first_name, ' ', person.last_name) = :collaborator")
+                   ->setParameter('collaborator', $filters['collaborator']->getFirstNameLastName());
+            }
+
+            // FILTRE PAR DATE DE CRÉATION
+            if (!empty($filters['created_at'])) {
+                // INSTANCIATION D'UN OBJET DATETIME
+                if ($filters['created_at'] instanceof \DateTime) {
+                    // Set l'heure à 00:00:00 pour ne pas tenir compte de l'heure
+                    $filters['created_at']->setTime(0, 0, 0);
+                    // Définir la fin de la journée à 23:59:59
+                    $endOfDay = clone $filters['created_at'];
+                    $endOfDay->setTime(23, 59, 59);
+                    
+                    //FILTRE DÉBUT DE JOURNE
+                    $qb->andWhere('request.created_at BETWEEN :start_date AND :end_date')
+                        ->setParameter('start_date', $filters['created_at'])
+                        ->setParameter('end_date', $endOfDay);
+                } else {
+                    $createdAt = \DateTime::createFromFormat('Y-m-d', $filters['created_at']);
+                    if ($createdAt) {
+                        // Set l'heure à 00:00:00 pour éviter de comparer les heures
+                        $createdAt->setTime(0, 0, 0);
+                        // Définir la fin de la journée à 23:59:59
+                        $endOfDay = clone $createdAt;
+                        $endOfDay->setTime(23, 59, 59);
+                        
+                        //FILTRE DÉBUT DE JOURNE
+                        $qb->andWhere('request.created_at BETWEEN :start_date AND :end_date')
+                            ->setParameter('start_date', $createdAt)
+                            ->setParameter('end_date', $endOfDay);
+                    }
+                }
+            }
+
+   
+            // FILTRE PAR DATE DE DEPART
+            if (!empty($filters['start_at'])) {
+                //INSTANCIATION D'UN OBJET DATETIME
+                if ($filters['start_at'] instanceof \DateTime) {
+                    $qb->andWhere('request.start_at >= :start_at')
+                        ->setParameter('start_at', $filters['start_at']);
+                } else {
+                    $startAt = \DateTime::createFromFormat('Y-m-d', $filters['start_at']);
+                    if ($startAt) {
+                        $qb->andWhere('request.start_at >= :start_at')
+                            ->setParameter('start_at', $startAt);
+                    }
+                }
+            }
+
+            // FILTRE PAR DATE DE FIN
+            if (!empty($filters['end_at'])) {
+                if ($filters['end_at'] instanceof \DateTime) {
+                    $qb->andWhere('request.end_at <= :end_at')
+                        ->setParameter('end_at', $filters['end_at']);
+                } else {
+                    $endAt = \DateTime::createFromFormat('Y-m-d', $filters['end_at']);
+                    if ($endAt) {
+                        $qb->andWhere('request.end_at <= :end_at')
+                            ->setParameter('end_at', $endAt);
+                    }
+                }
+            }
+
+            //FILTRE PAR NOMBRE DE JOURS
+            if (!empty($filters['nbdays'])) {
+                $order = $filters['nbdays'] === 'ASC' ? 'ASC' : 'DESC';
+                $qb->orderBy('nbdays', $order); // Trier par le calcul des jours
+            }
+
+            // FILTRE PAR STATUT
+            if (array_key_exists('answer', $filters)) {
+                if ($filters['answer'] === null) {
+                    $qb->andWhere('request.answer IS NULL');
+                } else {
+                    $qb->andWhere('request.answer = :answer')
+                       ->setParameter('answer', $filters['answer']);
+                }
+            }
+
+   
+           return $qb->getQuery();
+       }
 }
