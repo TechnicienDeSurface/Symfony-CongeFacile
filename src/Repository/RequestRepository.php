@@ -6,6 +6,7 @@ use App\Entity\Request;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Request>
@@ -41,6 +42,55 @@ class RequestRepository extends ServiceEntityRepository
                 ->getQuery()
                 ->getResult() ; 
        }
+
+        public function searchRequest(array $filters,  string $order = ''): Query
+        {
+            $qb = $this->createQueryBuilder('request');
+            // Correction : jointure correcte avec l'entité person
+            $qb->leftJoin('request.collaborator', 'collaborator');
+            $qb->leftJoin('request.request_type','request_type');
+            if (!empty($filters['collaborator'])) {
+                $qb->andWhere('collaborator.last_name LIKE :last_name')
+                ->setParameter('last_name', '%' . $filters['collaborator'] . '%'); 
+                $qb->orWhere('collaborator.first_name LIKE :first_name')
+                ->setParameter('first_name', '%' . $filters['collaborator'] . '%'); 
+            }
+            if (!empty($filters['start_at']) && !empty($filters['end_at'])) {
+                $qb->andWhere('request.start_at BETWEEN :startDate AND :endDate AND request.end_at BETWEEN :startDate AND :endDate')
+                    ->setParameter('startDate', $filters['start_at'])
+                    ->setParameter('endDate', $filters['end_at']);
+            }
+            if(!empty($filters['request_type'])){
+                $qb->andWhere('request_type.name LIKE :name')
+                ->setParameter('name', '%'.$filters['request_type'].'%'); 
+            }
+
+            if(!empty($filters['answer'])){
+                if($filters['answer'] == "none"){  //condition pour aller chercher les answer null avec la valeur none
+                    $qb->andWhere('request.answer IS NULL'); 
+                }else{
+                    $qb->andWhere('request.answer LIKE :answer')
+                    ->setParameter('answer',$filters['answer']); 
+                }
+                
+            }
+
+            if (!empty($order)) {
+                $qb->orderBy('request.id', $order);
+            }
+        
+            return $qb->getQuery();
+        }
+
+    //    public function findOneBySomeField($value): ?Request
+    //    {
+    //        return $this->createQueryBuilder('r')
+    //            ->andWhere('r.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 
        public function HistoryRequestfindByFilters(array $filters, string $order = ''): Query
        {

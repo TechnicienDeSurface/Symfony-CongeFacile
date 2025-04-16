@@ -1,73 +1,67 @@
-{# /administration-ajouter-manager #}
-
 {% extends 'base.html.twig' %}
-
 {% block body %}
-
-	<title>
-		{% block title %}Ajout d'un manager{% endblock %}
-	</title>
-
+	<title>Gestion des managers</title>
 	<body>
+
 		{% include 'layout/menu/_header.html.twig' %}
-
 		<main style="display: flex;">
+			{% include 'layout/menu/_sidebar.html.twig' %}
+            <div class="w-full p-8">
+                <h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Ajouter un manager</h1>
+                {% include 'layout/_addFlash.html.twig'%} {# include pour appeler le message flash dans le formulaire#}
+                {{ form_start(form) }}
 
-		    {% include 'layout/menu/_sidebar.html.twig' %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-			<div class="w-full p-8">
-				<h1 class="text-3xl font-medium mb-4 text-[#1B3168]">Salesse Test{# {{ user.lastName }} {{ user.firstName }} #}</h1>
+                    <div>
+                        {{ form_label(form.email, null, {'label_attr': {'class': ' block text-sm font-medium text-gray-700'}}) }}
+                        {{ form_widget(form.email, {'attr': {'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm'}}) }}
+                        <h3 class="text-red-500">{{ form_errors(form.email) }}</h3>
+                    </div>
+                    <br>
+                    <div>
+                        {{ form_label(form.first_name, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                        {{ form_widget(form.first_name, {'attr': {'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm'}}) }}
+                        <h3 class="text-red-500">{{ form_errors(form.first_name) }}</h3>
+                    </div>
 
-				<form method="post" class="space-y-4 w-1/2">
-					<div class="mb-6 relative w-1/2">
-						<label for="email" class="block text-gray-700 text-sm font-bold mb-2">Adresse email - champ obligatoire</label>
-						<div class="absolute left-3 mt-5 transform -translate-y-1/2 text-gray-400">
-							<img src="{{ asset('assets/image/icon-enveloppe.svg') }}" alt="Icon Courrier" class="h-5 w-5">
-						</div>
-						<input type="email" value="{# {{ user.email }} #}" id="email" name="email" class="pl-10 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-500" autocomplete="email" required autofocus>
-					</div>
+                    <div>
+                        {{ form_label(form.last_name, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                        {{ form_widget(form.last_name, {'attr': {'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm'}}) }}
+                       <h3 class="text-red-500"> {{ form_errors(form.last_name) }}</h3>
+                    </div>
 
-					<div class="grid grid-cols-2 gap-4">
-						<div>
-							<label class="block text-gray-700 text-sm font-bold mb-2">Nom de famille - champ obligatoire</label>
-							<input type="text" name="lastName" value="{# {{ user.lastName }} #}" class="w-full p-2 border rounded" required>
-						</div>
-						<div>
-							<label class="block text-gray-700 text-sm font-bold mb-2">Prénom - champ obligatoire</label>
-							<input type="text" name="firstName" value="{# {{ user.firstName }} #}" class="w-full p-2 border rounded" required>
-						</div>
-					</div>
+                    <div>
+                        {{ form_label(form.department, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                        {{ form_widget(form.department, {'attr': {'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm'}}) }}
+                        <h3 class="text-red-500">{{ form_errors(form.department) }}</h3>
+                    </div>
+                    <br>
+                    <div>
+                        {{ form_label(form.newPassword, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                        <div class="relative">
+                            {{ form_widget(form.newPassword, {'attr': {'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm pr-10'}}) }}
+                            <!-- Optionnel : icône d'affichage mot de passe -->
+                        </div>
+                         <h3 class="text-red-500">{{ form_errors(form.newPassword) }}</h3>
+                    </div>
 
-					<div class="w-1/2">
-						<label class="block text-gray-700 text-sm font-bold mb-2">Direction/Service - champ obligatoire</label>
-						<select name="service" class="w-full p-2 border rounded" required>
-							<option value="BU Symfony" {# {% if user.service == 'BU Symfony' %} selected {% endif %} #}>BU Symfony</option>
-						</select>
-					</div>
+                    <div>
+                        {{ form_label(form.confirmPassword, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                        <div class="relative">
+                            {{ form_widget(form.confirmPassword, {'attr': {'class': 'mt-1 block w-full p-2 rounded-md border border-gray-400 shadow-sm pr-10'}}) }}
+                            <!-- Optionnel : icône d'affichage mot de passe -->
+                        </div>
+                        <h3 class="text-red-500">{{ form_errors(form.confirmPassword) }}</h3>
+                    </div>
+                </div>
 
-					<div class="grid grid-cols-2 gap-4">
-						<div class="mb-6 relative">
-							<label for="password" class="block text-gray-700 text-sm font-bold mb-2">Mot de passe</label>
-							<input type="password" id="password" name="_password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Mot de passe" autocomplete="current-password" required>
-							<button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-6">
-								<img id="eyeIcon" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
-							</button>
-						</div>
+                <div class="mt-6">
+                    {{ form_widget(form.submit)}}
+                </div>
 
-						<div class="mb-6 relative">
-							<label for="confirmPassword" class="block text-gray-700 text-sm font-bold mb-2">Comfirmation de Mot de passe</label>
-							<input type="password" id="comfirmPassword" name="comfirmPassword" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" autocomplete="current-password" required>
-							<button type="button" id="toggleComfirmPassword" class="absolute inset-y-0 right-0 flex items-center pr-3 mt-6">
-								<img id="eyeIcon" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
-							</button>
-						</div>
-					</div>
-
-					<button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6">Ajouter un manager</button>
-				
-                </form>
-			</div>
+                {{ form_end(form) }}
+            </div>
 		</main>
-
 	</body>
 {% endblock %}

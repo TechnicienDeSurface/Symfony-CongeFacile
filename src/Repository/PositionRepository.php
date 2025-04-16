@@ -17,6 +17,18 @@ class PositionRepository extends ServiceEntityRepository
         parent::__construct($registry, Position::class);
     }
 
+    public function findByName($value): array
+       {
+           return $this->createQueryBuilder('d')
+               ->andWhere('d.name = :val')
+               ->setParameter('val', $value)
+               ->orderBy('d.id', 'ASC')
+               ->setMaxResults(10)
+               ->getQuery()
+               ->getResult()
+           ;
+       }
+
     public function findPagination(int $page, int $limit)
     {
         $offset = ($page - 1) * $limit;

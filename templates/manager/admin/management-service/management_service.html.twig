@@ -12,13 +12,13 @@
 
         {% include 'layout/menu/_sidebar.html.twig' %}
 
-        <div class=" p-8 overflow-y-auto">
+        <div class=" flex-grow p-7 ">
 
             <h1 class="text-left font-bold text-2xl mb-2 inline-block" style='color : #004C6C'>Directions/Services</h1>
             <button type="submit" class="mx-2 text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[220px] h-[35px] font-medium my-7 cursor-pointer inline-block">Ajouter directions/services</button>
 
-            <div class="w-[700px] justify-center items-center h-max">
-                <table class=" mt-2 bg-[#F9FAFB]">
+            <div class=" justify-center items-center h-max">
+                <table class=" mt-2 bg-[#F9FAFB] w-full">
                     <thead class="rounded-lg">
                         
                         <tr class="text-gray-700 border-x border-t border-[#EAECF0] ">
@@ -47,7 +47,7 @@
                                 <td class="w-[80%] py-6 px-6 ">{{ service }}</td>
                                 <td class="py-6 px-6">
                                     <form method="POST" action="">
-                                        <button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
+                                        <button type="submit" class="text-gray-600 bg-[#ecf3f9] px-5 font-medium py-2 rounded">Détails</button>
                                     </form>
                                 </td>
                             </tr>

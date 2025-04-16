@@ -5,9 +5,9 @@ namespace App\Entity;
 use App\Repository\RequestRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\RequestType ; 
+use App\Entity\RequestType; 
 use App\Entity\Person; 
-use App\Entity\Department ; 
+use App\Entity\Department; 
 
 #[ORM\Entity(repositoryClass: RequestRepository::class)]
 class Request
@@ -56,6 +56,8 @@ class Request
 
     #[ORM\Column(nullable: true)]
     private ?\DateTime $answer_at = null;
+
+    public ?int $totalnbdemande = null;
 
     public function getId(): ?int
     {
@@ -191,6 +193,13 @@ class Request
         return $this;
     }
 
+    public function getTotalNbDemande(): int
+    {
+        // Logique pour calculer totalnbdemande
+        return $this->totalnbdemande; // ou la valeur calculée
+    }
+
+
     //FONCTION QUI CALCULE LE NOMBRE DE JOURS
     public function getNbDays(): int
     {
@@ -212,4 +221,5 @@ class Request
 
         return $workingDays;
     }
+
 }

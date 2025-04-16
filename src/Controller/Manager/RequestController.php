@@ -2,14 +2,20 @@
 
 namespace App\Controller\Manager;
 
+
+use App\Form\FilterManagerFormType;
 use App\Form\FilterRequestHistoryFormType;
 use App\Repository\RequestRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\RequestRepository ; 
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
+use Symfony\Component\HttpFoundation\Request;
+use App\Form\FilterHistoRequestType;
+
 
 class RequestController extends AbstractController
 {
@@ -31,56 +37,53 @@ class RequestController extends AbstractController
         ]);
     }
 
-    //PAGE HISTORIQUE DES DEMANDES EN MODE "MANAGER"
-    #[Route('/history-request-manager/{page}', name: 'app_history_request_manager', methods: ['GET', 'POST'])]
-    public function viewRequestHistory(Request $request, RequestRepository $requestRepository, int $page = 1): Response
+    //PAGE HISTORIQUE DES DEMANDES
+    #[Route('/history-request', name: 'app_history_request', methods:['GET', 'POST'])]
+    public function viewRequestHistory(Request $request, RequestRepository $repository, int $page = 1 ): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_MANAGER');
-
-        $form = $this->createForm(FilterRequestHistoryFormType::class,null,[
-            'is_manager' => true,
-        ]);
-
+        $requests = $repository->findBy([],[]) ;
+        $form = $this->createForm(FilterHistoRequestType::class);
         $form->handleRequest($request);
 
-        $filters = [
-            'request_type'     => $request->query->get('requesttype'),
-            'collaborator'     => $request->query->get('collaborator'),
-            'start_at'         => $request->query->get('startat'),
-            'end_at'           => $request->query->get('endat'),
-            'nbdays'           => $request->query->get('nbdays'),
-            'answer'           => $request->query->get('answer'),
+        $filters = json_decode($request->getContent(), true) ?? [
+            'request_type'=>$request->query->get('request_type'),
+            'start_at'=> $request->query->get('start_at'),
+            'end_at'=> $request->query->get('end_at'),
+            'totalnbdemande' => $request->query->get('totalnbdemande'),
+            'collaborator' => $request->query->get('collaborator'),
+            'answer' => $request->query->get('answer'),
         ];
-        
-
         // Si le formulaire est soumis et valide, on utilise ses données
         if ($form->isSubmitted() && $form->isValid()) {
-            $filters = array_merge($filters, $form->getData());
+            $formData = $form->getData();
+            $filters = array_merge($filters, $formData);    
+            //Recherche avec les filtres
+            $order = $filters['totalnbdemande'] ?? '';
+            $query = $repository->searchRequest($filters, $order);
+        }else{
+            $query = $repository->createQueryBuilder('r')->getQuery();
+
         }
-
-        $order = $filters['nbdays'] ?? '';
-
-        // Recherche dans le repository avec les filtres
-        $query = $requestRepository->HistoryRequestfindByFilters($filters, $order);
-        
+            
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);
         $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(5);
+        $pagerfanta->setMaxPerPage(10);
 
         try{
             $pagerfanta->setCurrentPage($page);
         }
         catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
-            throw $this->createNotFoundException('La page demandée n\'existe pas.');
+            throw $this->createNotFoundException('La page demandée n\'existe pas.') 
         }
 
         return $this->render('manager/history_request.html.twig', [
-            'page' => 'history-request-manager',
-            'pager' => $pagerfanta,
+            'page' => 'history-request',
             'form' => $form->createView(),
+            'requests' => $pagerfanta->getCurrentPageResults(),
+            'pager' => $pagerfanta,
             'filters' => $filters,
-            'request' => $pagerfanta->getCurrentPageResults(),
+
         ]);
     }
     

@@ -1,98 +1,136 @@
-{% extends 'base.html.twig' %}
+{# {% extends 'base.html.twig' %}
 
 {% block body %}
-	<title>{% block title %}Historique des demandes{% endblock %}</title>
-		{% include 'layout/menu/_header.html.twig' %}
-		<main style="display: flex;">
-			{% include 'layout/menu/_sidebar.html.twig' %}
+<div class="container mt-4">
+    <h2 class="mb-4">Historique des demandes</h2>
 
-			<div class="w-full p-8">
-				<div class="flex items-center gap-5">
-					<h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Historique des demandes</h1>
-				</div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Type de demande</th>
+                <th>Collaborateur</th>
+                <th>Date de début</th>
+                <th>Date de fin</th>
+                <th>Nb jours</th>
+                <th>Statut</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for demand in demands %}
+                <tr>
+                    <td>{{ demand.reques_type }}</td>
+                    <td>{{ demand.collaborator}}</td>
+                    <td>{{ demand.startAt|date('d/m/Y H:i') }}</td>
+                    <td>{{ demand.endAt|date('d/m/Y H:i') }}</td>
+                    <td>{{ demand.nbJours }} jours</td>
+                    <td>
+                        <span class="badge {% if demand.statut == 'Validé' %}bg-success{% elseif demand.statut == 'Refusé' %}bg-danger{% else %}bg-warning{% endif %}">
+                            {{ demand.statut }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ path('demande_details', { id: demand.id }) }}" class="btn btn-secondary btn-sm">Détails</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-center">Aucune demande trouvée.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %} #}
 
-                <div class="flex w-full justify-center items-center h-max">
-					<table class="w-full mt-6">
-                        <thead>
-								{{ form_start(form) }}
-								<tr class="bg-[#F9FAFB] text-gray-700 border-x border-t border-[#EAECF0] rounded-lg">
-									<td class="py-4 px-6 pr-0 w-1/6">
-										{{ form_label(form.request_type, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
-										{{ form_widget(form.request_type, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
-									</td>
+{% extends 'base.html.twig' %}
 
-									<td class="py-4 px-6 pr-0 w-1/6">
-										{{ form_label(form.collaborator, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
-										{{ form_widget(form.collaborator, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
-									</td>
+{% block title %}Historique des demandes{% endblock %}
 
-									<td class="py-4 px-6 pr-0 w-1/6">
-										{{ form_label(form.start_at, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
-										{{ form_widget(form.start_at, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
-									</td>
+{% block body %}
 
-									<td class="py-4 px-6 pr-0 w-1/6">
-										{{ form_label(form.end_at, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
-										{{ form_widget(form.end_at, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
-									</td>
+{% include 'layout/menu/_header.html.twig' %}
+	
+	<main style="display: flex;">
+		{% include 'layout/menu/_sidebar.html.twig' %}
 
-									<td class="py-4 px-6 pr-0 w-1/4">
-										{{ form_label(form.nbdays, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
-										{{ form_widget(form.nbdays, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
-									</td>
-                                    <td class="py-4 px-6 pr-0 w-1/4">
-										{{ form_label(form.answer, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
-										{{ form_widget(form.answer, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
-									</td>
+		<div class="w-full p-8">
+        <h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Historique des demandes</h1>
+            <table class="text-gray-600 min-w-full border-collapse border border-gray-200 shadow-sm rounded-lg">
+                <thead class="bg-gray-100 text-gray-700">
+                    {{ form_start(form) }}
+                        <tr class="bg-[#F9FAFB] text-gray-700 border-x border-t border-[#EAECF0] rounded-lg">
+                            <td class="py-4 px-6 pr-0 w-1/6">
+                                {{ form_label(form.request_type, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.request_type, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                            </td>
+                            <td class="py-4 px-6 pr-0 w-1/6">
+                                {{ form_label(form.collaborator, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.collaborator, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                            </td>
+                            <td class="py-4 px-6 pr-0 w-1/6">
+                                {{ form_label(form.start_at, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.start_at, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                            </td>
+                                <td class="py-4 px-6 pr-0 w-1/6">
+                                {{ form_label(form.end_at, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.end_at, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                            </td>
+                            <td class="py-4 px-4 pr-0 w-1/6">
+                                {{ form_label(form.totalnbdemande, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.totalnbdemande, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                            </td>
+                             <td class="py-2 px-3 pr-0 w-1/4">
+                                {{ form_label(form.answer, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
+                                {{ form_widget(form.answer, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                            </td>
+                            <td class="w-1/6 px-6 pr-6" colspan="3" style="vertical-align: bottom; padding-bottom: 15px;">
+                                <div>
+                                    {{ form_widget(form.submit, {'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
+                                </div>
+                            </td>
+                        </tr>
+                    {{ form_end(form) }}
+                </thead>
+                <tbody>
+                   {% for request in requests %} 
+                        <tr class="border-t border-b"> 
+                            <td class="px-4 py-6">{{ request.requestType.name }}</td>
+                            <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.collaborator.firstName }} {{ request.collaborator.lastName}}</td>
+                            <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.startAt|date('d/m/Y H:i') }}</td>
+                            <td class="px-4 py-6 border-t border-b border-gray-300">{{ request.endAt|date('d/m/Y H:i') }}</td>
+                            <td class="px-4 py-6 border-t border-b border-gray-300">
+                                {% set date1 = request.startAt|date('U') %}
+                                {% set date2 = request.endAt|date('U') %}
+                                
+                                {% set diff = (date2 - date1) / 86400 %}
+                                {{ diff }} jours
+                            </td>
 
-									<td class="w-1/6 px-6 pr-6" colspan="3" style="vertical-align: bottom; padding-bottom: 15px;">
-										<div>
-											{{ form_widget(form.submit, {'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
-										</div>
-									</td>
-								</tr>
-								{{ form_end(form) }}
-							</thead>
-                        <tbody>
-                            {% for requests in request %}
-                                <tr>
-                                    <td class="py-6 px-6">{{ requests.requesttype.name }}</td>
-                                    <td class="py-6 px-6">{{ requests.collaborator.firstnamelastname }}</td>
-                                    <td class="py-6 px-6">{{ requests.startat|date('d/m/Y H:i') }}</td>
-                                    <td class="py-6 px-6">{{ requests.endat|date('d/m/Y H:i') }}</td>
-                                    <td class="py-6 px-6">{{ requests.nbdays }} jours</td>
-                                    <td class="py-6 px-6">
-										{% if requests.answer is null %}
-											En attente
-										{% elseif requests.answer == true %}
-											Validé
-										{% elseif requests.answer == false %}
-											Refusé
-										{% endif %}
-									</td>
-                                    <td class="py-6 px-6">
-                                        <form method="POST" action="{{ path('app_detail_request_pending', {'id': requests.id}) }}">
-                                            <button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            {% else %}
-                                <tr>
-                                    <td colspan="7" class="text-center">Aucune demande trouvée.</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="flex w-full justify-center items-center h-max mt-10">
-					{% if pager.hasPreviousPage %}
-						<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path('app_history_request_manager', { page: pager.previousPage }) }}">Précédent</a>
-					{% endif %}
-						<p>Page {{ pager.currentPage }} sur {{ pager.nbPages }}</p>
-					{% if pager.hasNextPage %}
-						<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path('app_history_request_manager', { page: pager.nextPage }) }}">Suivant</a>
-					{% endif %}
-				</div>
-			</div>
-		</main>
+                            <td class="px-4 py-6 border-t border-b border-gray-300">
+                                <div class="{% if request.answer is null %}{% elseif request.answer == 1 %}{% else %}{% endif %}">
+                                    {% if request.answer is null %}
+                                        En attente
+                                    {% elseif request.answer == true %}
+                                        Validé
+                                    {% elseif request.answer == false %}
+                                        Refusé
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="px-4 py-2 border-t border-b border-gray-300">
+                                <a href="" class="text-gray-600 bg-[#ecf3f9] px-5 font-medium py-2 rounded">
+                                    Détails
+                                </a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="px-4 py-2 text-center text-gray-500">Aucune demande trouvée</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
 {% endblock %}
