@@ -26,7 +26,7 @@ class CollaborateurType extends AbstractType
         $builder
             // Prénom
             ->add('first_name', TextType::class, [
-                'label' => 'Prénom',
+                'label' => 'Prénom - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
                 'constraints' => [
@@ -36,7 +36,7 @@ class CollaborateurType extends AbstractType
 
             // Nom de famille
             ->add('last_name', TextType::class, [
-                'label' => 'Nom de famille',
+                'label' => 'Nom de famille - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
                 'constraints' => [
@@ -48,7 +48,7 @@ class CollaborateurType extends AbstractType
             ->add('department', EntityType::class, [
                 'class' => Department::class,
                 'choice_label' => 'name',
-                'label' => 'Direction/Service',
+                'label' => 'Direction/Service - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
                 'constraints' => [
@@ -58,13 +58,13 @@ class CollaborateurType extends AbstractType
             ->add('position', EntityType::class, [
                 'class' => Position::class,
                 'choice_label' => 'name',
-                'label' => 'Poste',
+                'label' => 'Poste - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
             ])
             // Adresse email
             ->add('email', EmailType::class, [
-                'label' => 'Adresse email',
+                'label' => 'Adresse email - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
                 'constraints' => [
@@ -74,7 +74,7 @@ class CollaborateurType extends AbstractType
 
             // Nouveau mot de passe
             ->add('newPassword', PasswordType::class, [
-                'label' => 'Nouveau mot de passe',
+                'label' => 'Nouveau mot de passe - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
                 'constraints' => [
@@ -100,7 +100,7 @@ class CollaborateurType extends AbstractType
 
             // Confirmation du mot de passe
             ->add('confirmPassword', PasswordType::class, [
-                'label' => 'Confirmation de mot de passe',
+                'label' => 'Confirmation de mot de passe - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
                 'constraints' => [
