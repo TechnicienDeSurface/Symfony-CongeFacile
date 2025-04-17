@@ -31,8 +31,14 @@ class TeamController extends AbstractController
 
     //PAGE DE L'EQUIPE GERER PAR LE MANAGER
     #[Route('/team-manager/{page}', name: 'app_team', methods: ['GET', 'POST'])]
-    public function viewTeam(Request $request , PersonRepository $personRepository, int $page = 1): Response 
+    public function viewTeam(Security $security,Request $request , PersonRepository $personRepository, int $page = 1): Response 
     {
+        $manager = New User() ; 
+        $manager = $security->getUser() ;
+        if (!$manager instanceof \App\Entity\User) {
+            throw new \LogicException('L\'utilisateur connecté n\'est pas une instance de App\Entity\User.');
+        }
+
         $form = $this->createForm(FilterManagerTeamFormType::class);
         $form->handleRequest($request);
 
@@ -52,7 +58,7 @@ class TeamController extends AbstractController
         $order = $filters['totalleavedays'] ?? '';
 
         // Recherche dans le repository avec les filtres
-        $query = $personRepository->searchTeamMembers($filters, $order);
+        $query = $personRepository->searchTeamMembers($filters, $manager, $order);
         
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);
