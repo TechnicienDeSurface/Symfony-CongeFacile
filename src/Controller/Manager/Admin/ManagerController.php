@@ -95,37 +95,39 @@ class ManagerController extends AbstractController
         if($form->isSubmitted())
         {
             if($form->isValid()){
-                try{
-                    $formData = $form->getData();
-                    $new_manager= new Person();
-                    $new_manager->setFirstName($formData['first_name']);
-                    $new_manager->setLastName($formData['last_name']);
-                    $new_manager->setDepartment($formData['department']);
-                    $new_manager->setAlertBeforeVacation(false);
-                    $new_manager->setAlertNewRequest(false);
-                    $new_manager->setAlertOnAnswer(true);
-                    $new_manager->setPosition($formData['position']);
-                    $new_manager->setManager(null);
-                    $registry->getManager()->persist($new_manager);
-                    $registry->getManager()->flush();
-                    $this->addFlash('success', 'Succès pour ajouter le manager');
-                }catch(\Exception $e){
-                    $this->addFlash('error', 'Erreur pour l\'ajout de manager'); 
-                }try{
-                    $person = $registry->getManager()->getRepository(Person::class)->find($new_manager->getId());
-                    $new_user = New User();
-                    $new_user->setEmail($formData['email']);
-                    $password_hash = $this->passwordHasher->hashPassword($new_user, $formData['newPassword']) ;
-                    $new_user->setPassword($password_hash);
-                    $new_user->setPerson($person);
-                    $new_user->setRoles([1 => "ROLE_MANAGER"]);
-                    $new_user->setIsVerified(true);
-                    $new_user->setEnabled(true);
-                    $registry->getManager()->persist($new_user);
-                    $registry->getManager()->flush();
-                    $this->addFlash('success', 'Succès pour ajouter l\'utilisateur');
-                }catch(\Exception $e ){
-                    $this->addFlash('error', 'Erreur pour l\'ajout utilisateur'); 
+                $formData = $form->getData();
+                if($formData['newPassword'] == $formData['confirmPassword']){
+                    try{
+                        $new_manager= new Person();
+                        $new_manager->setFirstName($formData['first_name']);
+                        $new_manager->setLastName($formData['last_name']);
+                        $new_manager->setDepartment($formData['department']);
+                        $new_manager->setAlertBeforeVacation(false);
+                        $new_manager->setAlertNewRequest(false);
+                        $new_manager->setAlertOnAnswer(true);
+                        $new_manager->setPosition($formData['position']);
+                        $new_manager->setManager(null);
+                        $registry->getManager()->persist($new_manager);
+                        $registry->getManager()->flush();
+                        $this->addFlash('success', 'Succès pour ajouter le manager');
+                    }catch(\Exception $e){
+                        $this->addFlash('error', 'Erreur pour l\'ajout de manager'); 
+                    }try{
+                        $person = $registry->getManager()->getRepository(Person::class)->find($new_manager->getId());
+                        $new_user = New User();
+                        $new_user->setEmail($formData['email']);
+                        $password_hash = $this->passwordHasher->hashPassword($new_user, $formData['newPassword']) ;
+                        $new_user->setPassword($password_hash);
+                        $new_user->setPerson($person);
+                        $new_user->setRoles([1 => "ROLE_MANAGER"]);
+                        $new_user->setIsVerified(true);
+                        $new_user->setEnabled(true);
+                        $registry->getManager()->persist($new_user);
+                        $registry->getManager()->flush();
+                        $this->addFlash('success', 'Succès pour ajouter l\'utilisateur');
+                    }catch(\Exception $e ){
+                        $this->addFlash('error', 'Erreur pour l\'ajout utilisateur'); 
+                    }
                 }
             }
         }
@@ -159,7 +161,6 @@ class ManagerController extends AbstractController
         if($form->isSubmitted()){
             if($form->isValid()){
                 $formData = $form->getData();
-                dd($formData);
                 if($formData['newPassword'] == $formData['confirmPassword']){
                     try{
                         if($manager->getFirstName() != $formData['first_name']){
@@ -210,95 +211,6 @@ class ManagerController extends AbstractController
             'user'=>$user,
         ]);
     }
-
-    // #[Route('/administration-detail-manager', name: 'app_administration_detail_manager')]
-    // public function detailManager(): Response
-    // {
-    //     return $this->render('manager/admin/manager/detail_manager.html.twig', [
-    //         'page' => 'administration-detail-manager',
-    //         'user'=>'',
-            
-    //     ]);
-    // }
-
-    //SUPPRIMER MANAGER VIA L'ADMINISTRATION DU PORTAIL MANAGER
-    // #[Route('/administration-supprimer-manager/{id}', name: 'app_administration_supprimer_manager', methods: ['POST', 'GET'])]
-    // public function delete(Request $request, int $id, UserRepository $repository_user, PersonRepository $repository, ManagerRegistry $registry, UserRepository $user_repository): Response 
-    // {
-    //     $managerRecup = $repository->find($id);
-    //     $form = $this->createForm(FilterManagerFormType::class, null, [
-    //         'method' => 'POST',
-    //     ]);
-    //     $form->handleRequest($request);
-
-    //     $Managers = $repository_user->findAllManagers();
-        
-    //     $personIds = [];
-    //     $userIds = [];
-
-    //     foreach ($Managers as $manager) {
-    //         $personIds[] = $manager['person_id'];
-    //         $userIds[] = $manager['user_id'];
-    //     }
-
-    //     $persons = [];
-    //     foreach ($personIds as $personId) {
-    //         $person = $repository->find($personId);
-    //         if ($person) {
-    //             $persons[] = $person;
-    //         }
-    //     }
-
-    //     $filters = [
-    //         'last_name' => '',
-    //         'first_name' => '',
-    //         'department' => '',
-    //     ];
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $data = $form->getData();
-    //         $filters = [
-    //             'last_name' => $data['LastName'] ?? '',
-    //             'first_name' => $data['FirstName'] ?? '',
-    //             'department' => $data['Department'] ?? '',
-    //         ];            
-
-    //         $persons = $repository->findByFilters($filters);
-    //     }
-    //     $users = $user_repository->findBy([],[]);
-    //     foreach($users as $row){
-    //         if($row->getPerson()->getId() === $id){
-    //             $user = $row;
-    //         }
-    //     }
-    //     if (!$managerRecup) {
-    //         throw $this->createNotFoundException('Pas de manager trouvé pour cet id : ' . $id);
-    //     }
-
-    //     $entityManager = $registry->getManager();
-    //     // $productCount = $productRepository->countByCategory($manager->getId());
-    //     try{
-    //         $entityManager->remove($user);
-    //         $entityManager->flush();
-    //         $this->addFlash('success', 'Utilisateur supprimé avec succès.');
-    //     }catch(\Exception $e){
-    //         $this->addFlash('error', 'Erreur de suppression de l\'utilisateur');
-    //     }
-    //     try{
-    //         $entityManager->remove($managerRecup);
-    //         $entityManager->flush();
-    //         $this->addFlash('success', 'Manager supprimé avec succès.');
-    //     }catch(\Exception $e){
-    //         $this->addFlash('error', 'Erreur de suppression du manager');
-    //     }
-        
-    //     return $this->render('manager/admin/manager/manager.html.twig', [
-    //         'page' => 'administration-manager',
-    //         'manager'=>$manager,
-    //         'form'=>$form,
-    //         'persons'=>$persons, 
-    //         'filters' => $filters,
-    //     ]);
-    // }
 
     #[Route('/administration-supprimer-manager/{id}', name: 'app_administration_supprimer_manager', methods: ['POST', 'GET'])]
     public function deleteManager(PersonRepository $repository, Request $request, int $id, ManagerRegistry $registry,EntityManagerInterface $entityManager): Response
