@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Person; 
 use App\Entity\Position;
 use App\Form\ManagerType;
+use App\Form\DeleteType;
 use App\Entity\Department;  
 use App\Repository\UserRepository; 
 use App\Form\FilterManagerFormType;
@@ -221,81 +222,125 @@ class ManagerController extends AbstractController
     // }
 
     //SUPPRIMER MANAGER VIA L'ADMINISTRATION DU PORTAIL MANAGER
+    // #[Route('/administration-supprimer-manager/{id}', name: 'app_administration_supprimer_manager', methods: ['POST', 'GET'])]
+    // public function delete(Request $request, int $id, UserRepository $repository_user, PersonRepository $repository, ManagerRegistry $registry, UserRepository $user_repository): Response 
+    // {
+    //     $managerRecup = $repository->find($id);
+    //     $form = $this->createForm(FilterManagerFormType::class, null, [
+    //         'method' => 'POST',
+    //     ]);
+    //     $form->handleRequest($request);
+
+    //     $Managers = $repository_user->findAllManagers();
+        
+    //     $personIds = [];
+    //     $userIds = [];
+
+    //     foreach ($Managers as $manager) {
+    //         $personIds[] = $manager['person_id'];
+    //         $userIds[] = $manager['user_id'];
+    //     }
+
+    //     $persons = [];
+    //     foreach ($personIds as $personId) {
+    //         $person = $repository->find($personId);
+    //         if ($person) {
+    //             $persons[] = $person;
+    //         }
+    //     }
+
+    //     $filters = [
+    //         'last_name' => '',
+    //         'first_name' => '',
+    //         'department' => '',
+    //     ];
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $data = $form->getData();
+    //         $filters = [
+    //             'last_name' => $data['LastName'] ?? '',
+    //             'first_name' => $data['FirstName'] ?? '',
+    //             'department' => $data['Department'] ?? '',
+    //         ];            
+
+    //         $persons = $repository->findByFilters($filters);
+    //     }
+    //     $users = $user_repository->findBy([],[]);
+    //     foreach($users as $row){
+    //         if($row->getPerson()->getId() === $id){
+    //             $user = $row;
+    //         }
+    //     }
+    //     if (!$managerRecup) {
+    //         throw $this->createNotFoundException('Pas de manager trouvé pour cet id : ' . $id);
+    //     }
+
+    //     $entityManager = $registry->getManager();
+    //     // $productCount = $productRepository->countByCategory($manager->getId());
+    //     try{
+    //         $entityManager->remove($user);
+    //         $entityManager->flush();
+    //         $this->addFlash('success', 'Utilisateur supprimé avec succès.');
+    //     }catch(\Exception $e){
+    //         $this->addFlash('error', 'Erreur de suppression de l\'utilisateur');
+    //     }
+    //     try{
+    //         $entityManager->remove($managerRecup);
+    //         $entityManager->flush();
+    //         $this->addFlash('success', 'Manager supprimé avec succès.');
+    //     }catch(\Exception $e){
+    //         $this->addFlash('error', 'Erreur de suppression du manager');
+    //     }
+        
+    //     return $this->render('manager/admin/manager/manager.html.twig', [
+    //         'page' => 'administration-manager',
+    //         'manager'=>$manager,
+    //         'form'=>$form,
+    //         'persons'=>$persons, 
+    //         'filters' => $filters,
+    //     ]);
+    // }
+
     #[Route('/administration-supprimer-manager/{id}', name: 'app_administration_supprimer_manager', methods: ['POST', 'GET'])]
-    public function delete(Request $request, int $id, UserRepository $repository_user, PersonRepository $repository, ManagerRegistry $registry, UserRepository $user_repository): Response 
+    public function deleteManager(PersonRepository $repository, Request $request, int $id, ManagerRegistry $registry,EntityManagerInterface $entityManager): Response
     {
-        $managerRecup = $repository->find($id);
-        $form = $this->createForm(FilterManagerFormType::class, null, [
-            'method' => 'POST',
+        $manager = $repository->find($id);
+        $user = $manager->getUser();
+        $confirmation = $this->createForm(DeleteType::class, null, [
+            'csrf_token_id' => 'submit', //Ajout du token csrf id car formulaire non lié à une entité 
+        ]);
+        $confirmation->handleRequest($request);
+
+        $form = $this->createForm(ManagerType::class, null, [
+            'csrf_token_id' => 'submit', //Ajout du token csrf id car formulaire non lié à une entité 
         ]);
         $form->handleRequest($request);
-
-        $Managers = $repository_user->findAllManagers();
-        
-        $personIds = [];
-        $userIds = [];
-
-        foreach ($Managers as $manager) {
-            $personIds[] = $manager['person_id'];
-            $userIds[] = $manager['user_id'];
+        if (!$manager) {
+            throw $this->createNotFoundException('Manager introuvable.');
         }
 
-        $persons = [];
-        foreach ($personIds as $personId) {
-            $person = $repository->find($personId);
-            if ($person) {
-                $persons[] = $person;
+        if (!$user) {
+            throw $this->createNotFoundException('Utilisateur lié au manager introuvable.');
+        }
+        if($confirmation->isSubmitted())
+        {
+            if($confirmation->isValid()){
+                try {
+                    $entityManager->remove($manager);
+                    $entityManager->remove($user);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Manager supprimé avec succès.');
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'Une erreur est survenue lors de la suppression.');
+                }
+                return $this->redirectToRoute('app_administration_manager');
             }
         }
-
-        $filters = [
-            'last_name' => '',
-            'first_name' => '',
-            'department' => '',
-        ];
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $filters = [
-                'last_name' => $data['LastName'] ?? '',
-                'first_name' => $data['FirstName'] ?? '',
-                'department' => $data['Department'] ?? '',
-            ];            
-
-            $persons = $repository->findByFilters($filters);
-        }
-        $users = $user_repository->findBy([],[]);
-        foreach($users as $row){
-            if($row->getPerson()->getId() === $id){
-                $user = $row;
-            }
-        }
-        if (!$managerRecup) {
-            throw $this->createNotFoundException('Pas de manager trouvé pour cet id : ' . $id);
-        }
-
-        $entityManager = $registry->getManager();
-        // $productCount = $productRepository->countByCategory($manager->getId());
-        try{
-            $entityManager->remove($user);
-            $entityManager->flush();
-            $this->addFlash('success', 'Utilisateur supprimé avec succès.');
-        }catch(\Exception $e){
-            $this->addFlash('error', 'Erreur de suppression de l\'utilisateur');
-        }
-        try{
-            $entityManager->remove($managerRecup);
-            $entityManager->flush();
-            $this->addFlash('success', 'Manager supprimé avec succès.');
-        }catch(\Exception $e){
-            $this->addFlash('error', 'Erreur de suppression du manager');
-        }
-        
-        return $this->render('manager/admin/manager/manager.html.twig', [
-            'page' => 'administration-manager',
+        return $this->render('manager/admin/manager/detail_manager.html.twig', [
+            'page' => 'administration-supprimer-manager',
+            'confirmation'=>$confirmation->createView(), 
+            'form'=>$form->createView(),
             'manager'=>$manager,
-            'form'=>$form,
-            'persons'=>$persons, 
-            'filters' => $filters,
+            'user'=>$user,
         ]);
     }
 }
