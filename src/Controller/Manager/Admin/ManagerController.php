@@ -155,10 +155,10 @@ class ManagerController extends AbstractController
                 $user = $row;
             }
         }
-        if($form->isSubmitted())
-        {
+        if($form->isSubmitted()){
             if($form->isValid()){
                 $formData = $form->getData();
+                dd($formData);
                 if($formData['newPassword'] == $formData['confirmPassword']){
                     try{
                         if($manager->getFirstName() != $formData['first_name']){

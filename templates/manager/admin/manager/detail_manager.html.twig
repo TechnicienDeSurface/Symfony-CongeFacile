@@ -76,15 +76,15 @@
                         {{ form_widget(form._token) }}
                         {{ form_widget(form.submit)}}
 					</div>
-                    {% if page == "administration-detail-manager" %}
-						<div class="w-1/2 bg-red-600 text-white tex-center font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition">
-							<form action="{{ path('app_administration_supprimer_manager', {'id': manager.id}) }}">
-								<button type="submit" class="w-full text-white font-semibold py-2 px-4 rounded-lg">Supprimer</button>
-							</form>
-						</div>
-					{% endif %}
                 </div>
                 {{ form_end(form) }}
+                {% if page == "administration-detail-manager" %}
+                    <div class="w-1/2 bg-red-600 text-white tex-center font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition">
+                        <form action="{{ path('app_administration_supprimer_manager', {'id': manager.id}) }}">
+                            <button type="submit" class="w-full text-white font-semibold py-2 px-4 rounded-lg">Supprimer</button>
+                        </form>
+                    </div>
+                {% endif %}
             </div>
 		</main>
 	</body>
