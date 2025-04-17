@@ -11,6 +11,7 @@ use App\Repository\UserRepository;
 use App\Form\FilterManagerFormType;
 use App\Repository\PersonRepository;
 use App\Repository\PositionRepository; 
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DepartmentRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\SecurityBundle\Security; 
@@ -137,12 +138,12 @@ class ManagerController extends AbstractController
 
     //PAGE DETAIL MANAGER VIA ADMINISTRATION MANAGER
     #[Route('/administration-detail-manager/{id}', name: 'app_administration_detail_manager', methods: ['GET','POST'])]
-    public function editManager(PersonRepository $repository, int $id, ManagerRegistry $registry,Request $request,UserRepository $user_repository): Response
+    public function editManager(PersonRepository $repository, int $id, EntityManagerInterface $entityManager,Request $request,UserRepository $user_repository): Response
     {
         $manager = $repository->find($id);
-        $user = $user_repository->find($manager);
+        $user = $manager->getUser();
         if(!$manager){
-            throw $this->createNotFoundException('No category found for id ' . $id);
+            throw $this->createNotFoundException('No manager found for id ' . $id);
         }
         $form = $this->createForm(ManagerType::class);
         $form->handleRequest($request);
@@ -157,27 +158,31 @@ class ManagerController extends AbstractController
             if($form->isValid()){
                 try{
                     $formData = $form->getData();
-                    $new_manager=$manager;
-                    $new_manager->setFirstName($formData['first_name']);
-                    $new_manager->setLastName($formData['last_name']);
-                    $new_manager->setDepartment($formData['department']);
-                    $registry->getManager()->persist($new_manager);
-                    $registry->getManager()->flush();
+                    $manager->setFirstName($formData['first_name']);
+                    $manager->setLastName($formData['last_name']);
+                    $manager->setDepartment($formData['department']);
+                    dd($manager);
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($manager);
+                    $entityManager->flush();
                     $this->addFlash('success', 'Succès pour la mise à jour le manager');
                 }catch(\Exception $e){
                     $this->addFlash('error', 'Erreur pour la mise à jour de manager'); 
                 }try{
-                    $new_user = $user;
-                    $new_user->setEmail($formData['email']);
-                    $password_hash = $this->passwordHasher->hashPassword($new_user, $formData['newPassword']) ;
-                    $new_user->setPassword($password_hash);
-                    $new_user->setRoles([1 => "ROLE_MANAGER"]);
-                    $registry->getManager()->persist($new_user);
-                    $registry->getManager()->flush();
+                    $user->setEmail($formData['email']);
+                    $password_hash = $this->passwordHasher->hashPassword($user, $formData['newPassword']) ;
+                    $user->setPassword($password_hash);
+                    $user->setRoles([1 => "ROLE_MANAGER"]);
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($user);
+                    $entityManager->flush();
                     $this->addFlash('success', 'Succès pour la mise à jour l\'utilisateur');
                 }catch(\Exception $e ){
                     $this->addFlash('error', 'Erreur pour la mise à jour utilisateur'); 
                 }
+            }else{
+                dd($form->getErrors());
+
             }
         }
         return $this->render('manager/admin/manager/detail_manager.html.twig', [
