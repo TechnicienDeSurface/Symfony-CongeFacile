@@ -110,38 +110,39 @@ class TeamController extends AbstractController
         if($form->isSubmitted())
         {
             if($form->isValid()){
-                try{
-                    $formData = $form->getData();
-                    $new_collaborator= new Person();
-                    $new_collaborator->setFirstName($formData['first_name']);
-                    $new_collaborator->setLastName($formData['last_name']);
-                    $new_collaborator->setDepartment($formData['department']);
-                    $new_collaborator->setAlertBeforeVacation(false);
-                    $new_collaborator->setAlertNewRequest(false);
-                    $new_collaborator->setAlertOnAnswer(true);
-                    $new_collaborator->setPosition($formData['position']);
-                    $new_collaborator->setManager($manager);
-                    $registry->getManager()->persist($new_collaborator);
-                    $registry->getManager()->flush();
-                    $this->addFlash('success', 'Succès pour ajouter le collaborateur');
-                }catch(\Exception $e){
-                    $this->addFlash('error', 'Erreur pour l\'ajout de collaborateur'); 
-                }try{
-                    $person = $registry->getManager()->getRepository(Person::class)->find($new_collaborator->getId());
-                    $new_user = New User();
-                    $new_user->setEmail($formData['email']);
-                    $password_hash = $this->passwordHasher->hashPassword($new_user, $formData['newPassword']) ;
-                    $new_user->setPassword($password_hash);
-                    $new_user->setPerson($person);
-                    $new_user->setRoles([1 => "ROLE_COLLABORATEUR"]);
-                    $new_user->setIsVerified(true);
-                    $new_user->setEnabled(true);
-                    $registry->getManager()->persist($new_user);
-                    $registry->getManager()->flush();
-                    $this->addFlash('success', 'Succès pour ajouter l\'utilisateur');
-                }catch(\Exception $e ){
-                    $this->addFlash('error', 'Erreur pour l\'ajout utilisateur'); 
-
+                $formData = $form->getData();
+                if($formData['newPassword'] == $formData['confirmPassword']){
+                    try{
+                        $new_manager= new Person();
+                        $new_manager->setFirstName($formData['first_name']);
+                        $new_manager->setLastName($formData['last_name']);
+                        $new_manager->setDepartment($formData['department']);
+                        $new_manager->setAlertBeforeVacation(false);
+                        $new_manager->setAlertNewRequest(false);
+                        $new_manager->setAlertOnAnswer(true);
+                        $new_manager->setPosition($formData['position']);
+                        $new_manager->setManager(null);
+                        $registry->getManager()->persist($new_manager);
+                        $registry->getManager()->flush();
+                        $this->addFlash('success', 'Succès pour ajouter le collaborateur');
+                    }catch(\Exception $e){
+                        $this->addFlash('error', 'Erreur pour l\'ajout de collaborateur'); 
+                    }try{
+                        $person = $registry->getManager()->getRepository(Person::class)->find($new_manager->getId());
+                        $new_user = New User();
+                        $new_user->setEmail($formData['email']);
+                        $password_hash = $this->passwordHasher->hashPassword($new_user, $formData['newPassword']) ;
+                        $new_user->setPassword($password_hash);
+                        $new_user->setPerson($person);
+                        $new_user->setRoles([1 => "ROLE_MANAGER"]);
+                        $new_user->setIsVerified(true);
+                        $new_user->setEnabled(true);
+                        $registry->getManager()->persist($new_user);
+                        $registry->getManager()->flush();
+                        $this->addFlash('success', 'Succès pour ajouter l\'utilisateur');
+                    }catch(\Exception $e ){
+                        $this->addFlash('error', 'Erreur pour l\'ajout utilisateur'); 
+                    }
                 }
             }
         }
