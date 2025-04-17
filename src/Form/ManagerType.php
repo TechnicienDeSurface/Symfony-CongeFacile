@@ -148,6 +148,11 @@ class ManagerType extends AbstractType
     {
         $resolver->setDefaults([
             // Configure your form options here
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
+            'csrf_token_id' => 'manager_form', // Intention unique pour le formulaire
         ]);
     }
 }
+
+

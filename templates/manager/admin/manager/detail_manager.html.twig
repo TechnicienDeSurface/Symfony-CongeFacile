@@ -24,7 +24,6 @@
                         {{ form_label(form.email, null, {'label_attr': {'class': ' block text-sm font-medium text-gray-700'}}) }}
                         {{ form_widget(form.email, {'attr': {
 							'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm',
-							'value':user.email
 						}}) }}
                         <h3 class="text-red-500">{{ form_errors(form.email) }}</h3>
                     </div>
@@ -33,7 +32,6 @@
                         {{ form_label(form.first_name, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
                         {{ form_widget(form.first_name, {'attr': {
 							'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm',
-							'value':manager.firstName,
 							}}) }}
                         <h3 class="text-red-500">{{ form_errors(form.first_name) }}</h3>
                     </div>
@@ -42,7 +40,6 @@
                         {{ form_label(form.last_name, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
                         {{ form_widget(form.last_name, {'attr': {
 							'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm',
-							'value':manager.lastName
 							}}) }}
                        <h3 class="text-red-500"> {{ form_errors(form.last_name) }}</h3>
                     </div>
@@ -50,8 +47,7 @@
                     <div>
                         {{ form_label(form.department, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
                         {{ form_widget(form.department, {'attr': {
-							'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm',
-							'value' :manager.department.name	
+							'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm',	
 						}}) }}
                         <h3 class="text-red-500">{{ form_errors(form.department) }}</h3>
                     </div>
@@ -77,7 +73,8 @@
 
                 <div class="grid grid-cols-2 mt-6">
 					<div class="w-1/2 text-white font-semibold py-2 px-4 rounded-lg">
-                    	{{ form_widget(form.submit)}}
+                        {{ form_widget(form._token) }}
+                        {{ form_widget(form.submit)}}
 					</div>
                     {% if page == "administration-detail-manager" %}
 						<div class="w-1/2 bg-red-600 text-white tex-center font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition">

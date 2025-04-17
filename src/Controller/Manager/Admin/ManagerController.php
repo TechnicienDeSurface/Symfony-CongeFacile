@@ -89,8 +89,8 @@ class ManagerController extends AbstractController
         if (!$manager instanceof \App\Entity\User) {
             throw new \LogicException('L\'utilisateur connecté n\'est pas une instance de App\Entity\User.');
         }
-        $form = $this->createForm(ManagerType::class) ; 
-        $form->handleRequest($request) ; 
+        $form = $this->createForm(ManagerType::class); 
+        $form->handleRequest($request); 
         if($form->isSubmitted())
         {
             if($form->isValid()){
@@ -138,14 +138,16 @@ class ManagerController extends AbstractController
 
     //PAGE DETAIL MANAGER VIA ADMINISTRATION MANAGER
     #[Route('/administration-detail-manager/{id}', name: 'app_administration_detail_manager', methods: ['GET','POST'])]
-    public function editManager(PersonRepository $repository, int $id, EntityManagerInterface $entityManager,Request $request,UserRepository $user_repository): Response
+    public function editManager(DepartmentRepository $department_repository, PersonRepository $repository, int $id, EntityManagerInterface $entityManager,Request $request,UserRepository $user_repository): Response
     {
         $manager = $repository->find($id);
         $user = $manager->getUser();
         if(!$manager){
             throw $this->createNotFoundException('No manager found for id ' . $id);
         }
-        $form = $this->createForm(ManagerType::class);
+        $form = $this->createForm(ManagerType::class, null, [
+            'csrf_token_id' => 'submit', //Ajout du token csrf id car formulaire non lié à une entité 
+        ]);
         $form->handleRequest($request);
         $users = $user_repository->findBy([],[]);
         foreach($users as $row){
@@ -156,34 +158,49 @@ class ManagerController extends AbstractController
         if($form->isSubmitted())
         {
             if($form->isValid()){
-                try{
-                    $formData = $form->getData();
-                    $manager->setFirstName($formData['first_name']);
-                    $manager->setLastName($formData['last_name']);
-                    $manager->setDepartment($formData['department']);
-                    dd($manager);
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->persist($manager);
-                    $entityManager->flush();
-                    $this->addFlash('success', 'Succès pour la mise à jour le manager');
-                }catch(\Exception $e){
-                    $this->addFlash('error', 'Erreur pour la mise à jour de manager'); 
-                }try{
-                    $user->setEmail($formData['email']);
-                    $password_hash = $this->passwordHasher->hashPassword($user, $formData['newPassword']) ;
-                    $user->setPassword($password_hash);
-                    $user->setRoles([1 => "ROLE_MANAGER"]);
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->persist($user);
-                    $entityManager->flush();
-                    $this->addFlash('success', 'Succès pour la mise à jour l\'utilisateur');
-                }catch(\Exception $e ){
-                    $this->addFlash('error', 'Erreur pour la mise à jour utilisateur'); 
-                }
-            }else{
-                dd($form->getErrors());
+                $formData = $form->getData();
+                if($formData['newPassword'] == $formData['confirmPassword']){
+                    try{
+                        if($manager->getFirstName() != $formData['first_name']){
+                            $manager->setFirstName($formData['first_name']);
+                        }
+                        if($manager->getLastName() != $formData['last_name']){
+                            $manager->setLastName($formData['last_name']);
+                        }
+                        if($manager->getDepartment != $formData['department']){
+                            $department = $department_repository->find($formData['department']);
+                            $manager->setDepartment($department);
+                        }
+                        $entityManager->persist($manager);
+                        $entityManager->flush();
+                        $this->addFlash('success', 'Succès pour la mise à jour le manager');
+                    }catch(\Exception $e){
 
+                    }try{
+                        $password_hash = $this->passwordHasher->hashPassword($user, $formData['newPassword']) ;
+                        if($user->getEmail() != $formData['email']){
+                            $user->setEmail($formData['email']);
+                        }
+                        if($password_hash != $user->getPassword()){
+                            $user->setPassword($password_hash);
+                        }  
+                        $entityManager->persist($user);
+                        $entityManager->flush();
+                        $this->addFlash('success', 'Succès pour la mise à jour l\'utilisateur');
+                    }catch(\Exception $e ){
+                        $this->addFlash('error', 'Erreur pour la mise à jour utilisateur'); 
+                    }
+                }else{
+                    $this->addFlash('error','Confirmation mot de passe incorrect');
+                }
             }
+        }else{
+            $form = $this->createForm(ManagerType::class, [
+                'email' => $user->getEmail(),
+                'first_name' => $manager->getFirstName(),
+                'last_name' => $manager->getLastName(),
+                'department' => $manager->getDepartment(),
+            ]);
         }
         return $this->render('manager/admin/manager/detail_manager.html.twig', [
             'page' => 'administration-detail-manager',
