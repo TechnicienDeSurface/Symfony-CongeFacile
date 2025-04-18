@@ -18,7 +18,7 @@ class PersonRepository extends ServiceEntityRepository
         parent::__construct($registry, Person::class);
     }
 
-    public function searchTeamMembers(array $filters, string $order = ''): Query
+    public function searchTeamMembers(array $filters,User $manager, string $order = ''): Query
     {
         $qb = $this->createQueryBuilder('person');
 
@@ -51,28 +51,15 @@ class PersonRepository extends ServiceEntityRepository
                 ->setParameter('name', '%' . $filters['name'] . '%');
         }
 
+        // FILTRE PAR LE DEPARTEMENT
+        if (!empty($manager)) {
+            $qb->andWhere('person.manager = :id')
+                ->setParameter('id',$manager->getId());
+        }
+
         if ($order) {
             $qb->orderBy('person.last_name', $order);
         }
-
-
-        // // Tri dynamique par total_leave_days
-        // $qb->addSelect(
-        //     '(
-        //         SELECT COUNT(r.id) 
-        //         FROM App\Entity\Request r 
-        //         WHERE r.collaborator = person
-        //     ) AS total_leave_days'
-        // );
-
-        // // Tri dynamique par autre attributs comme position ou email peut-être
-        // if (!empty($filters['sort_order'])) {
-        //     $sortOrder = $filters['sort_order']; // 'ASC' ou 'DESC'
-        //     $qb->orderBy('total_leave_days', $sortOrder);
-        // } else {
-        //     // Par défaut, on trie par autre critère
-        //     $qb->orderBy('person.last_name', 'ASC');
-        // }
 
         return $qb->getQuery();
     }
