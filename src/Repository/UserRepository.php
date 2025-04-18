@@ -44,4 +44,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getQuery()
             ->getScalarResult(); // Retourne un tableau simple avec les IDs
     }
+
+    public function findCollaboratorsByManager(int $managerId): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('p.id AS person_id', 'u.id AS user_id') // Sélectionner user.id et person.id
+            ->join('u.person', 'p')
+            ->where('p.manager = :managerId')
+            ->setParameter('managerId', $managerId)
+            ->getQuery()
+            ->getScalarResult(); // Retourne un tableau simple avec les IDs
+    }
 }

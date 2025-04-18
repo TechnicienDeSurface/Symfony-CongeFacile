@@ -40,7 +40,6 @@ class RequestRepository extends ServiceEntityRepository
                 ->getQuery()
                 ->getResult() ; 
        }
-
     //    public function findOneBySomeField($value): ?Request
     //    {
     //        return $this->createQueryBuilder('r')
