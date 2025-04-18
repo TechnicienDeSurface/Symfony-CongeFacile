@@ -7,3 +7,21 @@
     background-color: var(--custom-blue) !important ;
 
 }
+
+.hidden {
+    display: none;
+}
+#delete-modal {
+    display: flex;
+    position: fixed;
+    inset: 0; /* Remplit l'écran */
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    justify-content: center;
+    align-items: center;
+}
+.bg-white {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%; /* Ajuster la largeur */
+}

@@ -16,20 +16,12 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
-
-class ManagerType extends AbstractType
+class CollaborateurType extends AbstractType
 {
-    public function __construct(PositionRepository $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $inputClass = 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500';
         $labelClass = 'block text-sm font-medium text-gray-700';
-        $defaultPosition1 = $this->entityManager->findByName('Manager');
-        $defaultPosition = $defaultPosition1[0];
 
         $builder
             // Prénom
@@ -44,7 +36,7 @@ class ManagerType extends AbstractType
 
             // Nom de famille
             ->add('last_name', TextType::class, [
-                'label' => 'Nom de  - champ obligatoire',
+                'label' => 'Nom de famille - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
                 'constraints' => [
@@ -67,9 +59,8 @@ class ManagerType extends AbstractType
                 'class' => Position::class,
                 'choice_label' => 'name',
                 'label' => 'Poste - champ obligatoire',
-                'label_attr' => ['class' => $labelClass,'style'=>'display:none'],
-                'attr' => ['style'=>'display:none'],
-                'data' => $defaultPosition, 
+                'label_attr' => ['class' => $labelClass],
+                'attr' => ['class' => $inputClass],
             ])
             // Adresse email
             ->add('email', EmailType::class, [
@@ -135,7 +126,7 @@ class ManagerType extends AbstractType
 
             // Bouton de soumission
             ->add('submit', SubmitType::class, [
-                'label' => 'Mettre à jour',
+                'label' => 'Ajouter',
                 'attr' => [
                     'class' => 'w-full text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition',
                     'style' => 'background-color: #004C6C;',
@@ -148,11 +139,6 @@ class ManagerType extends AbstractType
     {
         $resolver->setDefaults([
             // Configure your form options here
-            'csrf_protection' => true,
-            'csrf_field_name' => '_token',
-            'csrf_token_id' => 'manager_form', // Intention unique pour le formulaire
         ]);
     }
 }
-
-

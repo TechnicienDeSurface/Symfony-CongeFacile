@@ -18,7 +18,7 @@ class PersonRepository extends ServiceEntityRepository
         parent::__construct($registry, Person::class);
     }
 
-    public function searchTeamMembers(array $filters, string $order = ''): Query
+    public function searchTeamMembers(array $filters,User $manager, string $order = ''): Query
     {
         $qb = $this->createQueryBuilder('person');
 
@@ -49,6 +49,12 @@ class PersonRepository extends ServiceEntityRepository
         if (!empty($filters['name'])) {
             $qb->andWhere('position.name LIKE :name')
                 ->setParameter('name', '%' . $filters['name'] . '%');
+        }
+
+        // FILTRE PAR LE DEPARTEMENT
+        if (!empty($manager)) {
+            $qb->andWhere('person.manager = :id')
+                ->setParameter('id',$manager->getId());
         }
 
         if ($order) {

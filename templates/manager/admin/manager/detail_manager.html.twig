@@ -16,78 +16,83 @@
 			<div class="w-full p-8">
                 <h1 class="text-2xl font-bold text-gray-800 mb-6">{{ manager.lastName ~ ' ' ~ manager.firstName }}</h1>
                 {% include 'layout/_addFlash.html.twig'%} {# include pour appeler le message flash dans le formulaire#}
-                {{ form_start(form) }}
+                {% if page == "administration-supprimer-manager" %}
+                    {% include 'layout/_delete.html.twig'%}
+                {% endif %}
+                
+                {% if page == "administration-detail-manager" %}
+                    {{ form_start(form) }}
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                    <div>
-                        {{ form_label(form.email, null, {'label_attr': {'class': ' block text-sm font-medium text-gray-700'}}) }}
-                        {{ form_widget(form.email, {'attr': {
-							'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm',
-							'value':user.email
-						}}) }}
-                        <h3 class="text-red-500">{{ form_errors(form.email) }}</h3>
-                    </div>
-                    <br>
-                    <div>
-                        {{ form_label(form.first_name, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
-                        {{ form_widget(form.first_name, {'attr': {
-							'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm',
-							'value':manager.firstName,
-							}}) }}
-                        <h3 class="text-red-500">{{ form_errors(form.first_name) }}</h3>
-                    </div>
-
-                    <div>
-                        {{ form_label(form.last_name, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
-                        {{ form_widget(form.last_name, {'attr': {
-							'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm',
-							'value':manager.lastName
-							}}) }}
-                       <h3 class="text-red-500"> {{ form_errors(form.last_name) }}</h3>
-                    </div>
-
-                    <div>
-                        {{ form_label(form.department, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
-                        {{ form_widget(form.department, {'attr': {
-							'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm',
-							'value' :manager.department.name	
-						}}) }}
-                        <h3 class="text-red-500">{{ form_errors(form.department) }}</h3>
-                    </div>
-                    <br>
-                    <div>
-                        {{ form_label(form.newPassword, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
-                        <div class="relative">
-                            {{ form_widget(form.newPassword, {'attr': {'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm pr-10'}}) }}
-                            <!-- Optionnel : icône d'affichage mot de passe -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            {{ form_label(form.email, null, {'label_attr': {'class': ' block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.email, {'attr': {
+                                'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm',
+                            }}) }}
+                            <h3 class="text-red-500">{{ form_errors(form.email) }}</h3>
                         </div>
-                         <h3 class="text-red-500">{{ form_errors(form.newPassword) }}</h3>
-                    </div>
-
-                    <div>
-                        {{ form_label(form.confirmPassword, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
-                        <div class="relative">
-                            {{ form_widget(form.confirmPassword, {'attr': {'class': 'mt-1 block w-full p-2 rounded-md border border-gray-400 shadow-sm pr-10'}}) }}
-                            <!-- Optionnel : icône d'affichage mot de passe -->
+                        <br>
+                        <div>
+                            {{ form_label(form.first_name, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.first_name, {'attr': {
+                                'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm',
+                                }}) }}
+                            <h3 class="text-red-500">{{ form_errors(form.first_name) }}</h3>
                         </div>
-                        <h3 class="text-red-500">{{ form_errors(form.confirmPassword) }}</h3>
-                    </div>
-                </div>
 
-                <div class="grid grid-cols-2 mt-6">
-					<div class="w-1/2 text-white font-semibold py-2 px-4 rounded-lg">
-                    	{{ form_widget(form.submit)}}
-					</div>
-                </div>
-                {{ form_end(form) }}
-					{% if page == "administration-detail-manager" %}
-						<div class="w-1/2 bg-red-700 text-white tex-center font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition">
-							<form action="{{ path('app_administration_supprimer_manager', {'id': manager.id}) }}">
-								<button type="submit" class="w-full text-white font-semibold py-2 px-4 rounded-lg">Supprimer</button>
-							</form>
-						</div>
-					{% endif %}
+                        <div>
+                            {{ form_label(form.last_name, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.last_name, {'attr': {
+                                'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm',
+                                }}) }}
+                        <h3 class="text-red-500"> {{ form_errors(form.last_name) }}</h3>
+                        </div>
+
+                        <div>
+                            {{ form_label(form.department, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.department, {'attr': {
+                                'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm',	
+                            }}) }}
+                            <h3 class="text-red-500">{{ form_errors(form.department) }}</h3>
+                        </div>
+                        <br>
+                        <div>
+                            {{ form_label(form.newPassword, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            <div class="relative">
+                                {{ form_widget(form.newPassword, {'attr': {'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm pr-10'}}) }}
+                                <!-- Optionnel : icône d'affichage mot de passe -->
+                            </div>
+                            <h3 class="text-red-500">{{ form_errors(form.newPassword) }}</h3>
+                        </div>
+
+                        <div>
+                            {{ form_label(form.confirmPassword, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            <div class="relative">
+                                {{ form_widget(form.confirmPassword, {'attr': {'class': 'mt-1 block w-full p-2 rounded-md border border-gray-400 shadow-sm pr-10'}}) }}
+                                <!-- Optionnel : icône d'affichage mot de passe -->
+                            </div>
+                            <h3 class="text-red-500">{{ form_errors(form.confirmPassword) }}</h3>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 mt-6 flex items-center space-x-4">
+                        <!-- Premier formulaire : Submit -->
+                        <div class="w-1/2">
+                            {{ form_start(form) }}
+                                {{ form_widget(form._token) }}
+                                {{form_widget(form.submit)}}
+                            {{ form_end(form) }}
+                        </div>
+                        <div class="w-1/2">
+                            <form method="post" action="{{ path('app_administration_supprimer_manager', {'id': manager.id}) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ manager.id) }}">
+                                <button type="submit" class="bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition">
+                                    Supprimer
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
 		</main>
 	</body>

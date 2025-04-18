@@ -3,26 +3,42 @@
 namespace App\Controller\Manager;
 
 use App\Entity\User;
+use App\Entity\Person;
 use App\Form\FilterManagerTeamFormType;
+use App\Form\CollaborateurType;
 use App\Repository\PersonRepository;
+use App\Repository\PositionRepository;
+use App\Repository\UserRepository;
+use App\Repository\DepartmentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
-use App\Repository\PersonRepository as UserRepository;
 use App\Repository\RequestRepository as RequestRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class TeamController extends AbstractController
 {
+    public function __construct(private UserPasswordHasherInterface $passwordHasher)
+    {
+        
+    }
+
     //PAGE DE L'EQUIPE GERER PAR LE MANAGER
     #[Route('/team-manager/{page}', name: 'app_team', methods: ['GET', 'POST'])]
-    public function viewTeam(Request $request , PersonRepository $personRepository, int $page = 1): Response 
+    public function viewTeam(Security $security,Request $request , PersonRepository $personRepository, int $page = 1): Response 
     {
+        $manager = New User() ; 
+        $manager = $security->getUser() ;
+        if (!$manager instanceof \App\Entity\User) {
+            throw new \LogicException('L\'utilisateur connecté n\'est pas une instance de App\Entity\User.');
+        }
+
         $form = $this->createForm(FilterManagerTeamFormType::class);
         $form->handleRequest($request);
 
@@ -42,7 +58,7 @@ class TeamController extends AbstractController
         $order = $filters['totalleavedays'] ?? '';
 
         // Recherche dans le repository avec les filtres
-        $query = $personRepository->searchTeamMembers($filters, $order);
+        $query = $personRepository->searchTeamMembers($filters, $manager, $order);
         
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);
@@ -79,6 +95,65 @@ class TeamController extends AbstractController
             'user' => $user,
         ]);
     }
+
+    //PAGE AJOUTER MANAGER VIA ADMINISTRATION MANAGER
+    #[Route('/administration-ajouter-collaborateur', name: 'app_administration_ajouter_collaborateur')]
+    public function addCollaborateur(UserPasswordHasherInterface $hash, ManagerRegistry $registry, Security $security,Request $request, PositionRepository $position_repository, PersonRepository $person_repository, DepartmentRepository $department_repository, UserRepository $user_repository): Response
+    {
+        $manager = New User() ; 
+        $manager = $security->getUser() ;
+        if (!$manager instanceof \App\Entity\User) {
+            throw new \LogicException('L\'utilisateur connecté n\'est pas une instance de App\Entity\User.');
+        }
+        $form = $this->createForm(CollaborateurType::class) ; 
+        $form->handleRequest($request) ; 
+        if($form->isSubmitted())
+        {
+            if($form->isValid()){
+                $formData = $form->getData();
+                if($formData['newPassword'] == $formData['confirmPassword']){
+                    try{
+                        $new_manager= new Person();
+                        $new_manager->setFirstName($formData['first_name']);
+                        $new_manager->setLastName($formData['last_name']);
+                        $new_manager->setDepartment($formData['department']);
+                        $new_manager->setAlertBeforeVacation(false);
+                        $new_manager->setAlertNewRequest(false);
+                        $new_manager->setAlertOnAnswer(true);
+                        $new_manager->setPosition($formData['position']);
+                        $new_manager->setManager(null);
+                        $registry->getManager()->persist($new_manager);
+                        $registry->getManager()->flush();
+                        $this->addFlash('success', 'Succès pour ajouter le collaborateur');
+                    }catch(\Exception $e){
+                        $this->addFlash('error', 'Erreur pour l\'ajout de collaborateur'); 
+                    }try{
+                        $person = $registry->getManager()->getRepository(Person::class)->find($new_manager->getId());
+                        $new_user = New User();
+                        $new_user->setEmail($formData['email']);
+                        $password_hash = $this->passwordHasher->hashPassword($new_user, $formData['newPassword']) ;
+                        $new_user->setPassword($password_hash);
+                        $new_user->setPerson($person);
+                        $new_user->setRoles([1 => "ROLE_MANAGER"]);
+                        $new_user->setIsVerified(true);
+                        $new_user->setEnabled(true);
+                        $registry->getManager()->persist($new_user);
+                        $registry->getManager()->flush();
+                        $this->addFlash('success', 'Succès pour ajouter l\'utilisateur');
+                    }catch(\Exception $e ){
+                        $this->addFlash('error', 'Erreur pour l\'ajout utilisateur'); 
+                    }
+                }
+            }
+        }
+        
+        return $this->render('manager/add_collaborator.html.twig', [
+            'page' => 'administration-ajouter-collaborateur',
+            'manager'=>$manager,
+            'form'=>$form,
+        ]);
+    }
+
 
     // PAGE SUPPRESSION D'UN MEMBRE
     //#[Route('/delete-member/{id}', name: 'app_delete_member', methods: ['POST', 'DELETE'])]
