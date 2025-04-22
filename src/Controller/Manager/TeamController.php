@@ -134,7 +134,7 @@ class TeamController extends AbstractController
                         $password_hash = $this->passwordHasher->hashPassword($new_user, $formData['newPassword']) ;
                         $new_user->setPassword($password_hash);
                         $new_user->setPerson($person);
-                        $new_user->setRoles([1 => "ROLE_MANAGER"]);
+                        $new_user->setRoles(["ROLE_COLLABORATEUR"]);
                         $new_user->setIsVerified(true);
                         $new_user->setEnabled(true);
                         $registry->getManager()->persist($new_user);
