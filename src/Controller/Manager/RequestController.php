@@ -9,14 +9,13 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request as RequestFondation;
 use App\Form\FilterRequestPendingFormType;
 use Symfony\Bundle\SecurityBundle\Security; 
-use App\Entity\Request;
+use App\Entity\Request ;
 use App\Entity\User;
 use App\Entity\Person;
 use App\Repository\UserRepository;
 use App\Repository\RequestRepository ; 
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
-use Pagerfanta\Pagerfanta;
-use Symfony\Component\HttpFoundation\Request;
+use Pagerfanta\Pagerfanta ;
 use App\Form\FilterHistoRequestType;
 
 class RequestController extends AbstractController
@@ -62,7 +61,7 @@ class RequestController extends AbstractController
 
     //PAGE HISTORIQUE DES DEMANDES
     #[Route('/history-request', name: 'app_history_request_manager', methods:['GET', 'POST'])]
-    public function viewRequestHistory(Request $request, RequestRepository $repository, int $page = 1 ): Response
+    public function viewRequestHistory(RequestFondation $request, RequestRepository $repository, int $page = 1 ): Response
     {
         $requests = $repository->findBy([],[]) ;
         $form = $this->createForm(FilterHistoRequestType::class);

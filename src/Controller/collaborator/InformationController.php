@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Collaborator;
+namespace App\Controller\collaborator;
 
 use App\Entity\Person;
 use App\Entity\User;

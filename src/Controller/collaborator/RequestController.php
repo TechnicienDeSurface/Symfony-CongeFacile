@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Collaborator;
+namespace App\Controller\collaborator;
 
 use App\Repository\RequestRepository;
 use App\Repository\PersonRepository;
@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Request as RequestFondation;
 use App\Form\RequestType ; 
 use App\Entity\Request;
 use App\Form\FilterRequestHistoryFormType;
-use App\Form\RequestType;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use App\Entity\Person ; 

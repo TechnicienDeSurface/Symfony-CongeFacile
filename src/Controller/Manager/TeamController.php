@@ -121,7 +121,7 @@ class TeamController extends AbstractController
                         $new_manager->setAlertNewRequest(false);
                         $new_manager->setAlertOnAnswer(true);
                         $new_manager->setPosition($formData['position']);
-                        $new_manager->setManager(null);
+                        $new_manager->setManager($manager);
                         $registry->getManager()->persist($new_manager);
                         $registry->getManager()->flush();
                         $this->addFlash('success', 'Succès pour ajouter le collaborateur');
