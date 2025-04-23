@@ -68,99 +68,46 @@
 
 					<tbody>
 
-						{# {% for items in team %} #}
-						<tr class="border-x border-b mt-4 text-gray-600">
-							<td class="py-6 px-6">Congé sans solde
-								{#{{items.lastname}} #}
-							</td>
-							<td class="py-6 px-6">10/04/25 13h00{#{{items.firstname}}#}</td>
-							<td class="py-6 px-6">Lucas Dupas
-								{#{{ items.user.email|default('Non défini')}}#}
-							</td>
-							<td class="py-6 px-6">12/04/25 13h00
-								{#{{items.positionid.name}}#}
-							</td>
-							<td class="py-6 px-6">14/04/25 13h00
-								{#{{items.totalleavedays}}
-								                                {% if items.totalleavedays <= 1 %} jour {% else %} jours {% endif %}#}
-							</td>
-							<td class="py-6 px-6">0,5 jours
-								{#{{items.positionid.name}}#}
-							</td>
-							<td class="py-6 px-6">
-								<form method="POST" action=" {#{{ path('app_detail_team', {'id': items.id}) }}#}">
-									<button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
-								</form>
-							</td>
-						</tr>
+						{% for item in requests %}
+							{% set collaborator = item.collaborator %}
+							{% for request in item.requests %}
+								<tr class="border-x border-b mt-4 text-gray-600">
+									<td class="py-6 px-6">{{ request.requestType.name }}
+									</td>
 
-						{# Exemple Test Provisoire > A enlever ↓↓↓ #}
-						<tr class="border-x border-b mt-4 text-gray-600">
-							<td class="py-6 px-6">Congé payé
-								{#{{items.lastname}} #}
-							</td>
-							<td class="py-6 px-6">10/04/25 13h00{#{{items.firstname}}#}</td>
-							<td class="py-6 px-6">Jeff Martins
-								{#{{ items.user.email|default('Non défini')}}#}
-							</td>
-							<td class="py-6 px-6">12/04/25 13h00
-								{#{{items.positionid.name}}#}
-							</td>
-							<td class="py-6 px-6">14/04/25 13h00
-								{#{{items.totalleavedays}}
-								                                {% if items.totalleavedays <= 1 %} jour {% else %} jours {% endif %}#}
-							</td>
-							<td class="py-6 px-6">3 jours
-								{#{{items.positionid.name}}#}
-							</td>
-							<td class="py-6 px-6">
-								<form method="POST" action=" {#{{ path('app_detail_team', {'id': items.id}) }}#}">
-									<button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
-								</form>
-							</td>
-						</tr>
+									<td class="py-6 px-6">{{ request.createdAt|date('d/m/Y H:i') }}</td>
+									<td class="py-6 px-6">{{ collaborator.firstname }} {{ collaborator.lastname }}
+									</td>
+									<td class="py-6 px-6">{{ request.startAt|date('d/m/Y') }}
+									</td>
+									<td class="py-6 px-6">{{ request.endAt|date('d/m/Y') }}
+															                                
+									</td>
+									<td class="py-6 px-6">{{ collaborator.totalLeaveDays }} {% if collaborator.totalLeaveDays <= 1 %} jour {% else %} jours {% endif %}
+									</td>
+									<td class="py-6 px-6">
+										<form method="POST" action="{{ path('app_detail_request_pending', {'id': request.id}) }}">
+											<button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
+										</form>
+									</td>
+								</tr>
+							{% endfor %}
+						{% endfor %}
 
-						<tr class="border-x border-b mt-4 text-gray-600">
-							<td class="py-6 px-6">Congé maladie
-								{#{{items.lastname}} #}
-							</td>
-							<td class="py-6 px-6">10/04/25 13h00{#{{items.firstname}}#}</td>
-							<td class="py-6 px-6">Adrien Dupas
-								{#{{ items.user.email|default('Non défini')}}#}
-							</td>
-							<td class="py-6 px-6">12/04/25 13h00
-								{#{{items.positionid.name}}#}
-							</td>
-							<td class="py-6 px-6">14/04/25 13h00
-								{#{{items.totalleavedays}}
-								                                {% if items.totalleavedays <= 1 %} jour {% else %} jours {% endif %}#}
-							</td>
-							<td class="py-6 px-6">2 jours
-								{#{{items.positionid.name}}#}
-							</td>
-							<td class="py-6 px-6">
-								<form method="POST" action=" {#{{ path('app_detail_team', {'id': items.id}) }}#}">
-									<button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
-								</form>
-							</td>
-						</tr>
-						{# Fin Exemple Test Provisoire > A enlever ▲▲▲ ↑ #}
-
-						{# {% endfor %} #}
 					</tbody>
 				</table>
-			</div>
-			<div
-				class="flex w-full justify-center items-center h-max mt-10">
-				{# {% if pager.hasPreviousPage %} #}
-				<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{#{{ path('app_team', { page: pager.previousPage }) }}#}">Précédent</a>
-				{# {% endif %} #}
-				<p>Page 1* sur 1*{#{{ pager.currentPage }} sur {{ pager.nbPages }}#}</p>
-				{# {% if pager.hasNextPage %} #}
-				<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{#{{ path('app_team', { page: pager.nextPage }) }}#}">Suivant</a>
-				{# {% endif %} #}
-			</div>
-
+			</tbody>
 		</div>
-	</main>
-{% endblock %}
+		<div
+			class="flex w-full justify-center items-center h-max mt-10">
+			{# {% if pager.hasPreviousPage %} #}
+			<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{#{{ path('app_team', { page: pager.previousPage }) }}#}">Précédent</a>
+			{# {% endif %} #}
+			<p>Page 1* sur 1*{#{{ pager.currentPage }} sur {{ pager.nbPages }}#}</p>
+			{# {% if pager.hasNextPage %} #}
+			<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{#{{ path('app_team', { page: pager.nextPage }) }}#}">Suivant</a>
+			{# {% endif %} #}
+		</div>
+
+	</div>
+</main>{% endblock %}

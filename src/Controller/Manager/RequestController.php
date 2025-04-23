@@ -17,12 +17,14 @@ use App\Repository\RequestRepository ;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta ;
 use App\Form\FilterHistoRequestType;
+use App\Repository\PersonRepository;
+use App\Form\RequestStatusFormType;
 
 class RequestController extends AbstractController
 {
     // PAGE DES DEMANDES EN ATTENTE
     #[Route('/request-pending', name: 'app_request_pending')]
-    public function viewRequestPending(Security $security, RequestFondation $request, UserRepository $userRepository): Response
+    public function viewRequestPending(Security $security, RequestFondation $request, UserRepository $userRepository, RequestRepository $requestRepository, PersonRepository $personRepository): Response
     {
         // Récupérez l'utilisateur connecté
         $user = $security->getUser();
@@ -33,11 +35,24 @@ class RequestController extends AbstractController
             throw new \LogicException('L\'utilisateur connecté n\'est pas valide.');
         }
 
-         // Récupérez les collaborateurs du manager
-        $collaborators = $userRepository->findCollaboratorsByManager($userId);
-        
         $form = $this->createForm(FilterRequestPendingFormType::class);
         $form->handleRequest($request);
+
+        // Récupérez les collaborateurs du manager
+        $collaborators = $userRepository->findCollaboratorsByManager($userId);
+
+        $allRequests = [];
+
+        foreach ($collaborators as $collaboratorData) {
+            $collaboratorId = $collaboratorData['person_id'];
+            $collaborator = $personRepository->find($collaboratorId);
+            $requests = $requestRepository->getTeamRequest($collaboratorId);
+        
+            $allRequests[] = [
+                'collaborator' => $collaborator,
+                'requests' => $requests,
+            ];
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Logique de traitement des données du formulaire
@@ -47,15 +62,35 @@ class RequestController extends AbstractController
         return $this->render('manager/request_pending.html.twig', [
             'page' => 'request-pending',
             'form' => $form->createView(),
+            'requests' => $allRequests,
         ]);
     }
 
     //PAGE DETAILS DES DEMANDES EN ATTENTE
     #[Route('/detail-request-pending/{id}', name: 'app_detail_request_pending')]
-    public function viewDetailRequestPending(): Response
+    public function viewDetailRequestPending(Security $security, int $id, RequestRepository $requestRepository, RequestFondation $request,): Response
     {
+        // Récupérez l'utilisateur connecté
+        $user = $security->getUser();
+        // Vérifiez si l'utilisateur est une instance de User avant d'appeler getId()
+        if ($user instanceof User) {
+            $userId = $user->getId();
+        } else {
+            throw new \LogicException('L\'utilisateur connecté n\'est pas valide.');
+        }
+
+        $requestLoaded = $requestRepository->find($id);
+        if (!$requestLoaded) {
+            throw $this->createNotFoundException('La demande n\'existe pas.');
+        }
+
+        $form = $this->createForm(RequestStatusFormType::class);
+        $form->handleRequest($request);
+
         return $this->render('manager/detail_request_pending.html.twig', [
             'page' => 'detail-request-pending',
+            'request' => $requestLoaded,
+            'form' => $form->createView(),
         ]);
     }
 
