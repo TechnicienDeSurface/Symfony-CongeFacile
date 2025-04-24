@@ -35,7 +35,7 @@ class TeamController extends AbstractController
     {
         $manager = New User() ; 
         $manager = $security->getUser() ;
-        if (!$manager instanceof \App\Entity\User) {
+        if (!$manager instanceof User) {
             throw new \LogicException('L\'utilisateur connecté n\'est pas une instance de App\Entity\User.');
         }
 
@@ -63,7 +63,7 @@ class TeamController extends AbstractController
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);
         $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(5);
+        $pagerfanta->setMaxPerPage(10);
 
         try{
             $pagerfanta->setCurrentPage($page);
@@ -102,7 +102,7 @@ class TeamController extends AbstractController
     {
         $manager = New User() ; 
         $manager = $security->getUser() ;
-        if (!$manager instanceof \App\Entity\User) {
+        if (!$manager instanceof User) {
             throw new \LogicException('L\'utilisateur connecté n\'est pas une instance de App\Entity\User.');
         }
         $form = $this->createForm(CollaborateurType::class) ; 
