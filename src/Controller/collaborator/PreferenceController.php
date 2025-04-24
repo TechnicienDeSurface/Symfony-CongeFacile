@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\collaborator;
+namespace App\Controller\Collaborator;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

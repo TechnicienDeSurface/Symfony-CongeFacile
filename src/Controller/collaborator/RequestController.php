@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\collaborator;
+namespace App\Controller\Collaborator;
 
 use App\Repository\RequestRepository;
 use App\Repository\PersonRepository;
