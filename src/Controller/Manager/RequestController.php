@@ -8,14 +8,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request as RequestFondation;
 use App\Form\FilterRequestPendingFormType;
-use Symfony\Bundle\SecurityBundle\Security; 
-use App\Entity\Request ;
+use Symfony\Bundle\SecurityBundle\Security;
+use App\Entity\Request;
 use App\Entity\User;
 use App\Entity\Person;
 use App\Repository\UserRepository;
-use App\Repository\RequestRepository ; 
+use App\Repository\RequestRepository;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
-use Pagerfanta\Pagerfanta ;
+use Pagerfanta\Pagerfanta;
 use App\Form\FilterHistoRequestType;
 use App\Repository\PersonRepository;
 use App\Form\RequestStatusFormType;
@@ -35,10 +35,9 @@ class RequestController extends AbstractController
             throw new \LogicException('L\'utilisateur connecté n\'est pas valide.');
         }
 
-        $form = $this->createForm(FilterRequestPendingFormType::class);
-        $form->handleRequest($request);
+        $filters = [];
 
-        // Récupérez les collaborateurs du manager
+        // Récupérer les collaborateurs du manager avant de créer le formulaire
         $collaborators = $userRepository->findCollaboratorsByManager($userId);
 
         $allRequests = [];
@@ -47,21 +46,77 @@ class RequestController extends AbstractController
             $collaboratorId = $collaboratorData['person_id'];
             $collaborator = $personRepository->find($collaboratorId);
             $requests = $requestRepository->getTeamRequest($collaboratorId);
-        
+
+            $allCollaborators[] = $collaborator; // Ajout de la liste des collaborateurs
+
             $allRequests[] = [
                 'collaborator' => $collaborator,
                 'requests' => $requests,
             ];
         }
 
+         // Créer le formulaire en passant les collaborateurs comme option
+         $form = $this->createForm(FilterRequestPendingFormType::class, null, [
+            'collaborators' => $allCollaborators,
+        ]);
+
+        $form->handleRequest($request); // Traiter la requête du formulaire
+
+
         if ($form->isSubmitted() && $form->isValid()) {
-            // Logique de traitement des données du formulaire
-            // Tu peux ensuite filtrer les demandes ici avec $form->getData()
+            $formData = $form->getData();
+            $allRequests = [];
+
+            $filters = [
+                'request_type'      => $formData['request_type'] ?? null,
+                'collaborator'      => $formData['collaborator'] ?? null,
+                'start_at'          => $formData['start_at'] ?? null,
+                'end_at'            => $formData['end_at'] ?? null,
+                'totalleavedays'    => $formData['totalleavedays'] ?? null,
+                'created_at'        => $formData['created_at'] ?? null,
+            ];
+
+            if (!empty($formData['collaborator'])) {
+                $filters['collaborator'] = $formData['collaborator'];
+            }
+
+            if (!empty($formData['start_at']) && !empty($formData['end_at'])) {
+                $filters['start_at'] = $formData['start_at'];
+                $filters['end_at'] = $formData['end_at'];
+            }
+
+            if (!empty($formData['request_type'])) {
+                $filters['request_type'] = $formData['request_type']; // c’est déjà une string
+            }
+
+            if (!empty($formData['answer'])) {
+                $filters['answer'] = $formData['answer'];
+            }
+
+            $filteredRequests = $requestRepository->searchRequest($filters, 'DESC')->getResult();
+
+            // Regrouper les résultats par collaborateur (comme dans la première partie)
+            foreach ($collaborators as $collaboratorData) {
+                $collaboratorId = $collaboratorData['person_id'];
+                $collaborator = $personRepository->find($collaboratorId);
+
+                // Filtrer les requêtes pour ce collaborateur
+                $requestsForCollaborator = array_filter($filteredRequests, function ($request) use ($collaboratorId) {
+                    return $request->getCollaborator()->getId() === $collaboratorId;
+                });
+
+                // Ajouter les résultats au tableau dans la même structure
+                $allRequests[] = [
+                    'collaborator' => $collaborator,
+                    'requests' => $requestsForCollaborator,
+                ];
+            }
         }
 
         return $this->render('manager/request_pending.html.twig', [
             'page' => 'request-pending',
             'form' => $form->createView(),
+            'filters' => $filters,
             'requests' => $allRequests,
         ]);
     }
@@ -95,17 +150,17 @@ class RequestController extends AbstractController
     }
 
     //PAGE HISTORIQUE DES DEMANDES
-    #[Route('/history-request', name: 'app_history_request_manager', methods:['GET', 'POST'])]
-    public function viewRequestHistory(RequestFondation $request, RequestRepository $repository, int $page = 1 ): Response
+    #[Route('/history-request', name: 'app_history_request_manager', methods: ['GET', 'POST'])]
+    public function viewRequestHistory(RequestFondation $request, RequestRepository $repository, int $page = 1): Response
     {
-        $requests = $repository->findBy([],[]) ;
+        $requests = $repository->findBy([], []);
         $form = $this->createForm(FilterHistoRequestType::class);
         $form->handleRequest($request);
 
         $filters = json_decode($request->getContent(), true) ?? [
-            'request_type'=>$request->query->get('request_type'),
-            'start_at'=> $request->query->get('start_at'),
-            'end_at'=> $request->query->get('end_at'),
+            'request_type' => $request->query->get('request_type'),
+            'start_at' => $request->query->get('start_at'),
+            'end_at' => $request->query->get('end_at'),
             'totalnbdemande' => $request->query->get('totalnbdemande'),
             'collaborator' => $request->query->get('collaborator'),
             'answer' => $request->query->get('answer'),
@@ -113,23 +168,21 @@ class RequestController extends AbstractController
         // Si le formulaire est soumis et valide, on utilise ses données
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
-            $filters = array_merge($filters, $formData);    
+            $filters = array_merge($filters, $formData);
             //Recherche avec les filtres
             $order = $filters['totalnbdemande'] ?? '';
             $query = $repository->searchRequest($filters, $order);
-        }else{
+        } else {
             $query = $repository->createQueryBuilder('r')->getQuery();
-
         }
-            
+
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage(10);
-        try{
+        try {
             $pagerfanta->setCurrentPage($page);
-        }
-        catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
+        } catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
             throw $this->createNotFoundException('La page demandée n\'existe pas.');
         }
 
