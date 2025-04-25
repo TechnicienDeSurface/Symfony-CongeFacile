@@ -2,6 +2,12 @@
 
 namespace App\Form;
 
+use DateTime;
+use Dom\Entity;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\RequestType;
+use App\Entity\Request;
+use App\Entity\Person;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -9,33 +15,42 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class FilterRequestPendingFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('request_type', TextType::class, [
+            ->add('request_type', EntityType::class, [
+                'class' => RequestType::class,
+                'choice_label' => 'name',
                 'label' => 'Type de demande :',
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
             ])
-            ->add('created_at', TextType::class, [
+            ->add('created_at', DateTimeType::class, [
                 'label' => 'Demandé le :',
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
             ])
-            ->add('collaborator', EmailType::class, [
+            ->add('collaborator', EntityType::class, [
+                'class' => \App\Entity\Person::class,
+                'choices' => $options['collaborators'], // liste filtrée
+                'choice_label' => function (\App\Entity\Person $person) {
+                    return $person->getFirstName() . ' ' . $person->getLastName();
+                },
                 'label' => 'Collaborateur :',
                 'required' => false,
+                'placeholder' => 'Tous les collaborateurs',
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
             ])
-            ->add('start_at', TextType::class, [
+            ->add('start_at', DateTimeType::class, [
                 'label' => 'Date de début :',
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
             ])
-            ->add('end_at', TextType::class, [
+            ->add('end_at', DateTimeType::class, [
                 'label' => 'Date de fin :',
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
@@ -52,6 +67,8 @@ class FilterRequestPendingFormType extends AbstractType
     }
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([]);
+        $resolver->setDefaults([
+            'collaborators' => [],
+        ]);
     }
 }
