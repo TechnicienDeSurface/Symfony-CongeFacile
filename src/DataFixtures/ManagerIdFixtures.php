@@ -3,27 +3,54 @@
 namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Person;
 use App\Entity\User;
 
-class ManagerIdFixtures extends Fixture
+class ManagerIdFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
         $personRepo = $manager->getRepository(Person::class);
         $userRepo = $manager->getRepository(User::class);
 
-        // Récupération d'une personne et d'un utilisateur existants
-        $person = $personRepo->find(11, 12); // ID de la personne à mettre à jour
-        $managerUser = $userRepo->find(15); // ID du manager (User)
+        $person = $personRepo->find(1);
+        $managerUser = $userRepo->find(5);
 
-        if ($person && $managerUser) {
-            $person->setManager($managerUser);
-            $manager->flush();
-        } else {
-            throw new \Exception("Personne (ID 11) ou manager (User ID 15) introuvable !");
-        }
+        $person->setManager($managerUser);
+        $manager->flush();
+
+        $person = $personRepo->find(3);
+        $managerUser = $userRepo->find(5);
+
+        $person->setManager($managerUser);
+        $manager->flush();
+
+        $person = $personRepo->find(4);
+        $managerUser = $userRepo->find(5);
+
+        $person->setManager($managerUser);
+        $manager->flush();
+
+        $person = $personRepo->find(5);
+        $managerUser = $userRepo->find(5);
+
+        $person->setManager($managerUser);
+        $manager->flush();
+
+        $person = $personRepo->find(6);
+        $managerUser = $userRepo->find(5);
+
+        $person->setManager($managerUser);
+        $manager->flush();
+    }
+    
+    public function getDependencies() : array
+    {
+        return [
+            UserFixtures::class,
+        ];
     }
 }
 

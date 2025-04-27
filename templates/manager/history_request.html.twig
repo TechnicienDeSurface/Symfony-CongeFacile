@@ -1,56 +1,9 @@
-{# {% extends 'base.html.twig' %}
-
-{% block body %}
-<div class="container mt-4">
-    <h2 class="mb-4">Historique des demandes</h2>
-
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Type de demande</th>
-                <th>Collaborateur</th>
-                <th>Date de début</th>
-                <th>Date de fin</th>
-                <th>Nb jours</th>
-                <th>Statut</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for demand in demands %}
-                <tr>
-                    <td>{{ demand.reques_type }}</td>
-                    <td>{{ demand.collaborator}}</td>
-                    <td>{{ demand.startAt|date('d/m/Y H:i') }}</td>
-                    <td>{{ demand.endAt|date('d/m/Y H:i') }}</td>
-                    <td>{{ demand.nbJours }} jours</td>
-                    <td>
-                        <span class="badge {% if demand.statut == 'Validé' %}bg-success{% elseif demand.statut == 'Refusé' %}bg-danger{% else %}bg-warning{% endif %}">
-                            {{ demand.statut }}
-                        </span>
-                    </td>
-                    <td>
-                        <a href="{{ path('demande_details', { id: demand.id }) }}" class="btn btn-secondary btn-sm">Détails</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="7" class="text-center">Aucune demande trouvée.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-{% endblock %} #}
-
 {% extends 'base.html.twig' %}
-
-{% block title %}Historique des demandes{% endblock %}
 
 {% block body %}
 
 {% include 'layout/menu/_header.html.twig' %}
-	
+	<title>{% block title %}Historique des demandes{% endblock %}</title>
 	<main style="display: flex;">
 		{% include 'layout/menu/_sidebar.html.twig' %}
 

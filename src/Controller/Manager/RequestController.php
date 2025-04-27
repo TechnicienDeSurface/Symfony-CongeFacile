@@ -3,6 +3,7 @@
 namespace App\Controller\Manager;
 
 use App\Form\FilterManagerFormType;
+use Pagerfanta\Adapter\ArrayAdapter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -23,8 +24,8 @@ use App\Form\RequestStatusFormType;
 class RequestController extends AbstractController
 {
     // PAGE DES DEMANDES EN ATTENTE
-    #[Route('/request-pending', name: 'app_request_pending')]
-    public function viewRequestPending(Security $security, RequestFondation $request, UserRepository $userRepository, RequestRepository $requestRepository, PersonRepository $personRepository): Response
+    #[Route('/request-pending/{page}', name: 'app_request_pending')]
+    public function viewRequestPending(Security $security, RequestFondation $request, UserRepository $userRepository, RequestRepository $requestRepository, PersonRepository $personRepository, int $page = 1): Response
     {
         // Récupérez l'utilisateur connecté
         $user = $security->getUser();
@@ -59,7 +60,19 @@ class RequestController extends AbstractController
             // Tu peux ensuite filtrer les demandes ici avec $form->getData()
         }
 
+        $adapter = new ArrayAdapter($collaborators);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage(10);
+
+        try{
+            $pagerfanta->setCurrentPage($page);
+        }
+        catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
+            throw $this->createNotFoundException('La page demandée n\'existe pas.');
+        }
+
         return $this->render('manager/request_pending.html.twig', [
+            'pager' => $pagerfanta,
             'page' => 'request-pending',
             'form' => $form->createView(),
             'requests' => $allRequests,

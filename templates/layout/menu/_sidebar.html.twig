@@ -151,10 +151,10 @@
 						<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
 					</a>
 					<div class="submenu">
-						<a href="{{ path('app_administration_type_of_request') }}" class="whitespace-nowrap {% if app.request.get('_route') == 'app_administration_type_of_request' %}active{% endif %}">Types de demandes</a>
-						<a href="{{ path('app_administration_management_service') }}" class="whitespace-nowrap {% if app.request.get('_route') == 'app_administration_management_service' %}active{% endif %}">Directions/Services</a>
-						<a href="{{ path('app_administration_manager') }}" class="whitespace-nowrap {% if app.request.get('_route') == 'app_administration_manager' %}active{% endif %}">Managers</a>
-						<a href="{{ path('app_administration_job') }}" class="whitespace-nowrap {% if app.request.get('_route') == 'app_administration_job' %}active{% endif %}">Postes</a>
+						<a id="typededemande" href="{{ path('app_administration_type_of_request') }}" class="whitespace-nowrap {% if app.request.get('_route') == 'app_administration_type_of_request' %}active{% endif %}">Types de demandes</a>
+						<a id="directions" href="{{ path('app_administration_management_service') }}" class="whitespace-nowrap {% if app.request.get('_route') == 'app_administration_management_service' %}active{% endif %}">Directions/Services</a>
+						<a id="managers" href="{{ path('app_administration_manager') }}" class="whitespace-nowrap {% if app.request.get('_route') == 'app_administration_manager' %}active{% endif %}">Managers</a>
+						<a id="postes" href="{{ path('app_administration_job') }}" class="whitespace-nowrap {% if app.request.get('_route') == 'app_administration_job' %}active{% endif %}">Postes</a>
 					</div>
 				</div>
 			{% endif %}
@@ -177,13 +177,29 @@
 	</aside>
 
 
-	<script>
-		document.querySelectorAll('.dropdown-toggle').forEach(item => {
-			item.addEventListener('click', function () {
-			this.classList.toggle('dropdown-open');
-			});
-		});
-	</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.dropdown-toggle').forEach(item => {
+            item.addEventListener('click', function () {
+                this.classList.toggle('dropdown-open');
+            });
+        });
+
+        // CODE POUR LAISSER OUVERT LES MODALES SPÉCIFIÉES
+        const idsToCheck = ['typededemande', 'directions', 'managers', 'postes'];
+        idsToCheck.forEach(id => {
+            const element = document.getElementById(id);
+            
+            if (element) {
+                const parentDropdown = element.closest('.dropdown-toggle');
+                if (parentDropdown) {
+                    parentDropdown.classList.add('dropdown-toggle', 'dropdown-open');
+                }
+            }
+        });
+    });
+</script>
+
 
 
 {% endblock %}

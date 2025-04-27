@@ -17,7 +17,6 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $person1 = new Person();
         $person1->setFirstName("John");
         $person1->setLastName("Doe");
-        $person1->setManager(NULL);
         $person1->setDepartment($this->getReference('Symfony', Department::class));
         $person1->setPosition($this->getReference('Developpeur', Position::class));
         $person1->setAlertNewRequest(true);
@@ -30,7 +29,6 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $person2 = new Person();
         $person2->setFirstName("Jane");
         $person2->setLastName("Smith");
-        $person2->setManager(NULL);
         $person2->setDepartment($this->getReference('Marketing', Department::class));
         $person2->setPosition($this->getReference('Manager', Position::class));
         $person2->setAlertNewRequest(false);
@@ -43,7 +41,6 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $person3 = new Person();
         $person3->setFirstName("Alice");
         $person3->setLastName("Johnson");
-        $person3->setManager(NULL);
         $person3->setDepartment($this->getReference('RH', Department::class));
         $person3->setPosition($this->getReference('Recruteur', Position::class));
         $person3->setAlertNewRequest(true);
@@ -56,7 +53,6 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $person4 = new Person();
         $person4->setFirstName("Bob");
         $person4->setLastName("Brown");
-        $person4->setManager(NULL);
         $person4->setDepartment($this->getReference('CMS', Department::class));
         $person4->setPosition($this->getReference('Developpeur', Position::class));
         $person4->setAlertNewRequest(false);
@@ -69,7 +65,6 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $person5 = new Person();
         $person5->setFirstName("Charlie");
         $person5->setLastName("Davis");
-        $person5->setManager(NULL);
         $person5->setDepartment($this->getReference('BU Design', Department::class));
         $person5->setPosition($this->getReference('Graphiste', Position::class));
         $person5->setAlertNewRequest(true);
@@ -84,7 +79,6 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $person5 = new Person();
         $person5->setFirstName("Adrien");
         $person5->setLastName("Martin");
-        $person5->setManager(NULL);
         $person5->setDepartment($this->getReference('BU Design', Department::class));
         $person5->setPosition($this->getReference('Graphiste', Position::class));
         $person5->setAlertNewRequest(true);
@@ -99,7 +93,7 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             DepartmentFixtures::class,
-            PositionFixtures::class
+            PositionFixtures::class,
         ];
     }
 }
