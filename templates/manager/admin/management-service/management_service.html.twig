@@ -15,7 +15,7 @@
         <div class=" flex-grow p-7 ">
 
             <h1 class="text-left font-bold text-2xl mb-2 inline-block" style='color : #004C6C'>Directions/Services</h1>
-            <button type="submit" class="mx-2 text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[220px] h-[35px] font-medium my-7 cursor-pointer inline-block">Ajouter directions/services</button>
+            <a href="{{ path('app_administration_ajouter_management_service') }}" ><button type="submit" class="mx-2 text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[220px] h-[35px] font-medium my-7 cursor-pointer inline-block">Ajouter directions/services</button></a>
 
             <div class=" justify-center items-center h-max">
                 <table class=" mt-2 bg-[#F9FAFB] w-full">
@@ -40,19 +40,24 @@
                     </thead>
 
                     <tbody class="bg-white">
-                        {% set services = ['BU Symfony', 'BU Wordpress', 'BU Applications mobiles', 'BU Marketing', 'Autre'] %}
                         
-                        {% for service in services %}
+                        {% for department in departments %}
                             <tr class="border-x border-b mt-4 overflow-x-auto">
-                                <td class="w-[80%] py-6 px-6 ">{{ service }}</td>
+                                <td class="w-[80%] py-6 px-6 ">{{ department.name }}</td>
                                 <td class="py-6 px-6">
-                                    <form method="POST" action="">
-                                        <button type="submit" class="text-gray-600 bg-[#ecf3f9] px-5 font-medium py-2 rounded">Détails</button>
-                                    </form>
+                                    {# <form method="POST" action="{{ path('app_administration_detail_management_service', {'id': items.id}) }}">
+                                        <a href="{{ path('app_administration_detail_management_service', {id: department.id}) }}"><button type="submit" class="text-gray-600 bg-[#ecf3f9] px-5 font-medium py-2 rounded">Détails</button></a>
+                                    </form> #}
+
+                                    
+                                    <a class="text-gray-600 bg-[#ecf3f9] px-5 font-medium py-2 rounded" href="{{ path('app_administration_detail_management_service', { id: department.id }) }}">
+                                        Détails
+                                    </a>
                                 </td>
                             </tr>
                         {% endfor %}
                     </tbody>
+
 
                 </table>
             </div>
