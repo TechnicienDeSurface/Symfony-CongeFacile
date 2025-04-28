@@ -98,15 +98,14 @@
 				</table>
 			</tbody>
 		</div>
-		<div
-			class="flex w-full justify-center items-center h-max mt-10">
-			{# {% if pager.hasPreviousPage %} #}
-			<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{#{{ path('app_team', { page: pager.previousPage }) }}#}">Précédent</a>
-			{# {% endif %} #}
-			<p>Page 1* sur 1*{#{{ pager.currentPage }} sur {{ pager.nbPages }}#}</p>
-			{# {% if pager.hasNextPage %} #}
-			<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{#{{ path('app_team', { page: pager.nextPage }) }}#}">Suivant</a>
-			{# {% endif %} #}
+		<div class="flex w-full justify-center items-center h-max mt-10">
+			{% if pager.hasPreviousPage %}
+				<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path('app_request_pending', { page: pager.previousPage }) }}">Précédent</a>
+			{% endif %}
+				<p>Page {{ pager.currentPage }} sur {{ pager.nbPages }}</p>
+			{% if pager.hasNextPage %}
+				<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path('app_request_pending', { page: pager.nextPage }) }}">Suivant</a>
+			{% endif %}
 		</div>
 
 	</div>
