@@ -68,11 +68,6 @@ class TypeOfRequestController extends AbstractController
             'isAdd' => true,
         ]);
         $form->handleRequest($request);
-
-        if (!$this->isCsrfTokenValid('add_type_of_request', $request->request->get('_token'))) {
-            $this->addFlash('warning', 'Le jeton CSRF est invalide. Veuillez réessayer.');
-            return $this->redirectToRoute('app_administration_type_of_request');
-        }
         
         if($form->isSubmitted() && $form->isValid()) {
             $requestType = $form->getData();
@@ -90,7 +85,7 @@ class TypeOfRequestController extends AbstractController
     }
 
     //PAGE DETAIL TYPE DE DEMANDE VIA ADMINISTRATION MANAGER
-    #[Route('/administration-detail-type-de-demande/{id}', name: 'app_administration_detail_type_of_request', methods: ['POST'])]
+    #[Route('/administration-detail-type-de-demande/{id}', name: 'app_administration_detail_type_of_request', methods: ['GET','POST'])]
     public function editRequestType(RequestType $typeDemande, Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(RequestTypeForm::class, $typeDemande);

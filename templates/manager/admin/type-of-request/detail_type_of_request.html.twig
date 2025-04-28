@@ -2,9 +2,8 @@
 
 {% extends 'base.html.twig' %}
 
-{% block title %}Manager - Consulter une demande{% endblock %}
-
 {% block body %}
+<title>{% block title %}Type de demande{% endblock %}</title>
     {% include 'layout/menu/_header.html.twig' %}
 
     <main class="flex">
@@ -26,16 +25,10 @@
                     }) }}
             </form>
 
-            <form method="POST" action="{{ path('app_administration_delete_type_of_request', {id: requestType.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce type de demande ?');">
-                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ requestType.id) }}">
-
-                    {{ form_widget(form.supprimer, {
-                        'attr': {
-                            'class': 'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded'
-                        }
-                    }) }}
-                </div>
-            </form>
+<form method="POST" action="{{ path('app_administration_delete_type_of_request', {id: requestType.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce type de demande ?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ requestType.id) }}">
+    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Supprimer</button>
+</form>
 
         </div>
     </main>
