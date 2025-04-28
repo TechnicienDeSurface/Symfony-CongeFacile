@@ -60,9 +60,9 @@
 										{% if items.totalnbdemande <= 1 %} demande {% else %} demandes {% endif %}
 									</td>
                                      <td class="py-6 px-6">
-                                    <form method="POST" action="{{ path('app_administration_detail_type_of_request', {'id': items.id}) }}">
-                                        <button type="submit" class="text-gray-600 bg-[#ecf3f9] px-5 font-medium py-2 rounded">Détails</button>
-                                    </form>
+										<form method="POST" action="{{ path('app_administration_detail_type_of_request', {'id': items.id}) }}">
+											<button type="submit" class="text-gray-600 bg-[#ecf3f9] px-5 font-medium py-2 rounded">Détails</button>
+										</form>
                                     </td>
                                 </tr>
                             {% endfor %}
