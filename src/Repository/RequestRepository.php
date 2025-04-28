@@ -53,6 +53,45 @@ class RequestRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getWorkingDays(\DateTime $startAt, \DateTime $endAt)
+    {
+        $workingDays = 0;
+        $currentDate = clone $startAt;
+
+        // Liste des jours fériés fixes en France (format 'd-m')
+        $holidays = [
+            '01-01', // Jour de l'An
+            '01-05', // Fête du Travail
+            '08-05', // Victoire 1945
+            '14-07', // Fête Nationale
+            '15-08', // Assomption
+            '01-11', // Toussaint
+            '11-11', // Armistice 1918
+            '25-12', // Noël
+        ];
+
+        // Assure que la date de début est avant la date de fin
+        if ($startAt > $endAt) {
+            throw new \InvalidArgumentException('La date de début ne peut pas être après la date de fin.');
+        }
+
+        // Boucle à travers chaque jour entre les deux dates
+        while ($currentDate <= $endAt) {
+            // Vérifier si le jour est un jour ouvré (lundi à vendredi) et s'il n'est pas un jour férié
+            if ($currentDate->format('N') < 6) { // 'N' retourne 1 pour lundi et 5 pour vendredi
+                $formattedDate = $currentDate->format('d-m');
+                if (!in_array($formattedDate, $holidays)) {
+                    $workingDays++;
+                }
+            }
+
+            // Passer au jour suivant
+            $currentDate->add(new \DateInterval('P1D'));
+        }
+
+        return $workingDays;
+    }
+
     public function searchRequest(array $filters, string $order = ''): Query
     {
         $qb = $this->createQueryBuilder('request');
@@ -127,28 +166,6 @@ class RequestRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
-
-    public function calculateDayWorking(\DateTime $date1, \DateTime $date2): int
-    {
-        $joursOuvres = 0;
-
-        // Assure-toi que la date1 est avant ou égale à la date2
-        if ($date1 > $date2) {
-            return 0;
-        }
-
-        // Parcours les jours entre les deux dates
-        while ($date1 <= $date2) {
-            $jourSemaine = $date1->format('w'); // 0 = dimanche, 6 = samedi
-            if ($jourSemaine != 0 && $jourSemaine != 6) { // Exclure le samedi (6) et le dimanche (0)
-                $joursOuvres++;
-            }
-            $date1->modify('+1 day'); // Incrémente la date d'un jour
-        }
-
-        return $joursOuvres;
-    }
-
 
     public function HistoryRequestfindByFilters(array $filters, string $order = ''): Query
     {

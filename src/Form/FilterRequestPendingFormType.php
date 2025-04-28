@@ -55,7 +55,7 @@ class FilterRequestPendingFormType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
             ])
-            ->add('totalleavedays', TextType::class, [
+            ->add('nbdays', TextType::class, [
                 'label' => 'Nombre de congés posés :',
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']

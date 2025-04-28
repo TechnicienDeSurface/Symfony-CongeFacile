@@ -48,13 +48,25 @@ class RequestController extends AbstractController
             $collaborator = $personRepository->find($collaboratorId);
             $requests = $requestRepository->getTeamRequest($collaboratorId);
 
+            foreach ($requests as $requestsFiltered) {
+                // Calcul du nombre de jours ouvrés pour cette demande
+                $nbDaysWorking = $requestRepository->getWorkingDays($requestsFiltered->getStartAt(), $requestsFiltered->getEndAt());
+
+                // Ajouter les jours ouvrés à un tableau pour ce collaborateur
+                $daysWorking[] = [
+                    'request' => $requestsFiltered,
+                    'nbDaysWorking' => $nbDaysWorking
+                ];
+
+            }
+
             $allCollaborators[] = $collaborator; // Ajout de la liste des collaborateurs
 
             $allRequests[] = [
                 'collaborator' => $collaborator,
                 'requests' => $requests,
+                'daysWorking' => $daysWorking,
             ];
-
         }
 
         // Créer le formulaire en passant les collaborateurs comme option
@@ -74,7 +86,7 @@ class RequestController extends AbstractController
                 'collaborator'      => $formData['collaborator'] ?? null,
                 'start_at'          => $formData['start_at'] ?? null,
                 'end_at'            => $formData['end_at'] ?? null,
-                'totalleavedays'    => $formData['totalleavedays'] ?? null,
+                'nbdays'            => $formData['nbdays'] ?? null,
                 'created_at'        => $formData['created_at'] ?? null,
             ];
 
@@ -94,8 +106,8 @@ class RequestController extends AbstractController
                 $filters['created_at'] = $formData['created_at'];
             }
 
-            if (!empty($formData['totalleavedays'])) {
-                $filters['totalleavedays'] = $formData['totalleavedays'];
+            if (!empty($formData['nbdays'])) {
+                $filters['nbdays'] = $formData['nbdays'];
             }
 
             if (!empty($formData['request_type'])) {
@@ -125,6 +137,7 @@ class RequestController extends AbstractController
                 ];
             }
         }
+
 
         $adapter = new ArrayAdapter($collaborators);
         $pagerfanta = new Pagerfanta($adapter);
