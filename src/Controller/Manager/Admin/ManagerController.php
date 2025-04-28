@@ -21,6 +21,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 
 class ManagerController extends AbstractController
 {
@@ -29,31 +31,13 @@ class ManagerController extends AbstractController
     }
 
     //PAGE MANAGER VIA ADMINISTRATION MANAGER
-    #[Route('/administration-manager', name: 'app_administration_manager', methods: ['GET', 'POST'])]
-    public function viewManager(Request $request, PersonRepository $repository, UserRepository $UserRepository): Response
+    #[Route('/administration-manager/{page}', name: 'app_administration_manager', methods: ['GET', 'POST'])]
+    public function viewManager(Request $request, UserRepository $UserRepository, int $page = 1): Response
     {
         $form = $this->createForm(FilterManagerFormType::class, null, [
             'method' => 'POST',
         ]);
         $form->handleRequest($request);
-
-        $Managers = $UserRepository->findAllManagers();
-        
-        $personIds = [];
-        $userIds = [];
-
-        foreach ($Managers as $manager) {
-            $personIds[] = $manager['person_id'];
-            $userIds[] = $manager['user_id'];
-        }
-
-        $persons = [];
-        foreach ($personIds as $personId) {
-            $person = $repository->find($personId);
-            if ($person) {
-                $persons[] = $person;
-            }
-        }
 
         $filters = [
             'last_name' => '',
@@ -67,17 +51,29 @@ class ManagerController extends AbstractController
                 'last_name' => $data['LastName'] ?? '',
                 'first_name' => $data['FirstName'] ?? '',
                 'department' => $data['Department'] ?? '',
-            ];            
-
-            $persons = $repository->findByFilters($filters);
+            ];
         }
 
+        $query = $UserRepository->findManagersWithFilters($filters);
+
+        //PAGINATION
+        $adapter = new QueryAdapter($query);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage(10);
+
+        try {
+            $pagerfanta->setCurrentPage($page);
+        } catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
+            throw $this->createNotFoundException('La page demandée n\'existe pas.');
+        }
+
+        // Retourner les données dans la vue
         return $this->render('manager/admin/manager/manager.html.twig', [
             'page' => 'administration-manager',
-            'managers' => $Managers,
-            'persons' => $persons,
+            'persons' => $pagerfanta->getCurrentPageResults(),
             'filters' => $filters,
             'form' => $form->createView(),
+            'pager' => $pagerfanta,
         ]);
     }
 
