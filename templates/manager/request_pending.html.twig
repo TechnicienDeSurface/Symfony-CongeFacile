@@ -28,35 +28,64 @@
 						<tr class="bg-[#F9FAFB] text-gray-700 border-x border-t border-[#EAECF0] rounded-lg">
 							<td class="py-4 px-6 pr-0 w-1/6">
 								{{ form_label(form.request_type, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
-								{{ form_widget(form.request_type, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+								{{ form_widget(form.request_type, {
+									'attr': {
+										'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+									},
+									'value': app.request.query.get('filter_histo_request')['request_type'] ?? null
+								}) }}
 							</td>
 
 							<td class="py-4 px-6 pr-0 w-1/6">
 								{{ form_label(form.created_at, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
-								{{ form_widget(form.created_at, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+								{{ form_widget(form.created_at, {
+									'attr': {
+										'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+									},
+									'value': app.request.query.get('filter_histo_request')['created_at'] ?? null
+								}) }}
 							</td>
 
 							<td class="py-4 px-6 pr-0 w-1/6">
 								{{ form_label(form.collaborator, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
-								{{ form_widget(form.collaborator, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+								{{ form_widget(form.collaborator, {
+									'attr': {
+										'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+									},
+									'value': app.request.query.get('filter_histo_request')['collaborator'] ?? null
+								}) }}
 							</td>
 
 							<td class="py-4 px-6 pr-0 w-1/6">
 								{{ form_label(form.start_at, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
-								{{ form_widget(form.start_at, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+								{{ form_widget(form.start_at, {
+									'attr': {
+										'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+									},
+									'value': app.request.query.get('filter_histo_request')['start_at'] ?? null
+								}) }}
 							</td>
 
 							<td class="py-4 px-6 pr-0 w-1/6">
 								{{ form_label(form.end_at, null, {'label_attr': {'class': 'block text-sm font-bold mb-2 flex items-center justify-start'}}) }}
-								{{ form_widget(form.end_at, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+								{{ form_widget(form.end_at, {
+									'attr': {
+										'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+									},
+									'value': app.request.query.get('filter_histo_request')['end_at'] ?? null
+								}) }}
 							</td>
-
 							<td class="w-1/6 px-6 pr-6" colspan="3" style="vertical-align: bottom; padding-bottom: 15px;">
 								<div>
-									{{ form_widget(form.submit, {'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
+									{{ form_widget(form.submit, {
+										'attr': {
+											'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'
+										}
+									}) }}
 								</div>
 							</td>
 						</tr>
+
 						{{ form_end(form) }}
 					</thead>
 
@@ -108,18 +137,33 @@
 				</table>
 			</tbody>
 		</div>
+		{% set queryParams = app.request.query.all %}
+
 		<div class="flex w-full justify-center items-center h-max mt-10">
-			{% if pager.hasPreviousPage %}
-				<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path('app_request_pending', { page: pager.previousPage }) }}">Précédent</a>
-			{% endif %}
-			<p>Page
-				{{ pager.currentPage }}
-				sur
-				{{ pager.nbPages }}</p>
-			{% if pager.hasNextPage %}
-				<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path('app_request_pending', { page: pager.nextPage }) }}">Suivant</a>
-			{% endif %}
+			<div>
+				{% set queryParams = app.request.query.all %}
+				
+				<div class="flex w-full justify-center items-center h-max mt-10">
+					{% if pager.hasPreviousPage %}
+						<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4"
+						href="{{ path(app.request.attributes.get('_route'), queryParams|merge({'page': pager.previousPage})) }}">
+							Précédent
+						</a>
+					{% endif %}
+
+					<p>Page {{ pager.currentPage }} sur {{ pager.nbPages }}</p>
+
+					{% if pager.hasNextPage %}
+						<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4"
+						href="{{ path(app.request.attributes.get('_route'), queryParams|merge({'page': pager.nextPage})) }}">
+							Suivant
+						</a>
+					{% endif %}
+				</div>
+			</div>
+
 		</div>
+
 
 	</div>
 </main>{% endblock %}
