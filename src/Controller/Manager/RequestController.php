@@ -120,20 +120,34 @@ class RequestController extends AbstractController
 
             $filteredRequests = $requestRepository->searchRequest($filters, 'DESC')->getResult();
 
-            // Regrouper les résultats par collaborateur (comme dans la première partie)
             foreach ($collaborators as $collaboratorData) {
                 $collaboratorId = $collaboratorData['person_id'];
                 $collaborator = $personRepository->find($collaboratorId);
-
+            
                 // Filtrer les requêtes pour ce collaborateur
                 $requestsForCollaborator = array_filter($filteredRequests, function ($request) use ($collaboratorId) {
                     return $request->getCollaborator()->getId() === $collaboratorId;
                 });
-
-                // Ajouter les résultats au tableau dans la même structure
+            
+                // Recalculer daysWorking pour chaque request filtrée
+                $daysWorking = [];
+                foreach ($requestsForCollaborator as $requestsFiltered) {
+                    $nbDaysWorking = $requestRepository->getWorkingDays(
+                        $requestsFiltered->getStartAt(),
+                        $requestsFiltered->getEndAt()
+                    );
+            
+                    $daysWorking[] = [
+                        'request' => $requestsFiltered,
+                        'nbDaysWorking' => $nbDaysWorking,
+                    ];
+                }
+            
+                // Ajouter les résultats au tableau dans la même structure qu'au début
                 $allRequests[] = [
                     'collaborator' => $collaborator,
                     'requests' => $requestsForCollaborator,
+                    'daysWorking' => $daysWorking,
                 ];
             }
         }
