@@ -53,13 +53,53 @@ class RequestRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function searchRequest(array $filters,  string $order = ''): Query
+    public function getWorkingDays(\DateTime $startAt, \DateTime $endAt)
+    {
+        $workingDays = 0;
+        $currentDate = clone $startAt;
+
+        // Liste des jours fériés fixes en France (format 'd-m')
+        $holidays = [
+            '01-01', // Jour de l'An
+            '01-05', // Fête du Travail
+            '08-05', // Victoire 1945
+            '14-07', // Fête Nationale
+            '15-08', // Assomption
+            '01-11', // Toussaint
+            '11-11', // Armistice 1918
+            '25-12', // Noël
+        ];
+
+        // Assure que la date de début est avant la date de fin
+        if ($startAt > $endAt) {
+            throw new \InvalidArgumentException('La date de début ne peut pas être après la date de fin.');
+        }
+
+        // Boucle à travers chaque jour entre les deux dates
+        while ($currentDate <= $endAt) {
+            // Vérifier si le jour est un jour ouvré (lundi à vendredi) et s'il n'est pas un jour férié
+            if ($currentDate->format('N') < 6) { // 'N' retourne 1 pour lundi et 5 pour vendredi
+                $formattedDate = $currentDate->format('d-m');
+                if (!in_array($formattedDate, $holidays)) {
+                    $workingDays++;
+                }
+            }
+
+            // Passer au jour suivant
+            $currentDate->add(new \DateInterval('P1D'));
+        }
+
+        return $workingDays;
+    }
+
+    public function searchRequest(array $filters, string $order = ''): Query
     {
         $qb = $this->createQueryBuilder('request');
-        // Correction : jointure correcte avec l'entité person
         $qb->leftJoin('request.collaborator', 'collaborator');
         $qb->leftJoin('request.request_type', 'request_type');
         if (!empty($filters['collaborator'])) {
+            $qb->andWhere('collaborator.id = :collaboratorId')
+                ->setParameter('collaboratorId', $filters['collaborator']->getId());
             $qb->andWhere('collaborator.last_name LIKE :last_name')
                 ->setParameter('last_name', '%' . $filters['collaborator']. '%');
             $qb->orWhere('collaborator.first_name LIKE :first_name')
@@ -67,9 +107,35 @@ class RequestRepository extends ServiceEntityRepository
         }
 
         if (!empty($filters['start_at']) && !empty($filters['end_at'])) {
-            $qb->andWhere('request.start_at BETWEEN :startDate AND :endDate AND request.end_at BETWEEN :startDate AND :endDate')
-                ->setParameter('startDate', $filters['start_at'])
-                ->setParameter('endDate', $filters['end_at']);
+            // Si les deux dates sont renseignées => filtre entre les deux dates
+            $qb->andWhere('request.start_at BETWEEN :start_at AND :end_at')
+                ->setParameter('start_at', $filters['start_at'])
+                ->setParameter('end_at', $filters['end_at']);
+        } elseif (!empty($filters['start_at'])) {
+            // Si seulement start_at est renseignée => start_at >= date donnée
+            $qb->andWhere('request.start_at >= :start_at')
+                ->setParameter('start_at', $filters['start_at']);
+        } elseif (!empty($filters['end_at'])) {
+            // Si seulement end_at est renseignée => filtre sur la date de fin exacte
+            $qb->andWhere('request.end_at = :end_at')
+                ->setParameter('end_at', $filters['end_at']);
+        }
+
+        if (!empty($filters['created_at'])) {
+            if ($filters['created_at'] instanceof \DateTime) {
+                $startOfDay = (clone $filters['created_at'])->setTime(0, 0, 0);
+
+                $qb->andWhere('request.created_at >= :start_date')
+                    ->setParameter('start_date', $startOfDay);
+            } else {
+                $createdAt = \DateTime::createFromFormat('Y-m-d', $filters['created_at']);
+                if ($createdAt) {
+                    $startOfDay = (clone $createdAt)->setTime(0, 0, 0);
+
+                    $qb->andWhere('request.created_at >= :start_date')
+                        ->setParameter('start_date', $startOfDay);
+                }
+            }
         }
 
         if (!empty($filters['request_type'])) {
@@ -78,6 +144,7 @@ class RequestRepository extends ServiceEntityRepository
         }
 
         if (!empty($filters['answer'])) {
+            if ($filters['answer'] === "none") {
             if ($filters['answer'] === "none") {  // condition pour aller chercher les answer null avec la valeur none
                 $qb->andWhere('request.answer IS NULL');
             } elseif ($filters['answer'] === true) {
@@ -93,6 +160,7 @@ class RequestRepository extends ServiceEntityRepository
         }
         return $qb->getQuery();
     }
+
 
     //    public function findOneBySomeField($value): ?Request
     //    {

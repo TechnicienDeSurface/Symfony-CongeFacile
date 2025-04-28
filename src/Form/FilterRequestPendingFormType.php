@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class FilterRequestPendingFormType extends AbstractType
 {
@@ -29,7 +29,7 @@ class FilterRequestPendingFormType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
             ])
-            ->add('created_at', DateTimeType::class, [
+            ->add('created_at', DateType::class, [
                 'label' => 'Demandé le :',
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
@@ -45,17 +45,17 @@ class FilterRequestPendingFormType extends AbstractType
                 'placeholder' => 'Tous les collaborateurs',
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
             ])
-            ->add('start_at', DateTimeType::class, [
+            ->add('start_at', DateType::class, [
                 'label' => 'Date de début :',
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
             ])
-            ->add('end_at', DateTimeType::class, [
+            ->add('end_at', DateType::class, [
                 'label' => 'Date de fin :',
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
             ])
-            ->add('totalleavedays', TextType::class, [
+            ->add('nbdays', TextType::class, [
                 'label' => 'Nombre de congés posés :',
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']

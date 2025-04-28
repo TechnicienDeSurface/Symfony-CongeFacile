@@ -34,25 +34,44 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    public function findAllManagers(): array
+    //POUR CHERCHER LES MANAGERS AVEC LES FILTRES
+    public function findManagersWithFilters(array $filters = []): \Doctrine\ORM\Query
     {
-        return $this->createQueryBuilder('u')
-            ->select('p.id AS person_id', 'u.id AS user_id',) // Sélectionner user.id et person.id
+        $qb = $this->createQueryBuilder('u')
             ->join('u.person', 'p')
+            ->join('p.department', 'd')
+            ->addSelect('p')
             ->where('u.roles LIKE :role')
-            ->setParameter('role', '%ROLE_MANAGER%')
-            ->getQuery()
-            ->getScalarResult(); // Retourne un tableau simple avec les IDs
+            ->setParameter('role', '%ROLE_MANAGER%');
+
+        if (!empty($filters['last_name'])) {
+            $qb->andWhere('p.last_name LIKE :last_name')
+                ->setParameter('last_name', '%' . $filters['last_name'] . '%');
+        }
+
+        if (!empty($filters['first_name'])) {
+            $qb->andWhere('p.first_name LIKE :first_name')
+                ->setParameter('first_name', '%' . $filters['first_name'] . '%');
+        }
+
+        if (!empty($filters['department'])) {
+            $qb->andWhere('d.name = :department')
+                ->setParameter('department', $filters['department']);
+        }
+
+        $qb->orderBy('p.first_name', 'ASC');
+
+        return $qb->getQuery();
     }
 
     public function findCollaboratorsByManager(int $managerId): array
     {
         return $this->createQueryBuilder('u')
-            ->select('p.id AS person_id', 'u.id AS user_id') // Sélectionner user.id et person.id
+            ->select('p.id AS person_id', 'u.id AS user_id')
             ->join('u.person', 'p')
             ->where('p.manager = :managerId')
             ->setParameter('managerId', $managerId)
             ->getQuery()
-            ->getScalarResult(); // Retourne un tableau simple avec les IDs
+            ->getScalarResult();
     }
 }

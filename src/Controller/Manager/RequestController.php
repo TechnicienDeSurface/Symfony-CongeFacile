@@ -48,16 +48,29 @@ class RequestController extends AbstractController
             $collaborator = $personRepository->find($collaboratorId);
             $requests = $requestRepository->getTeamRequest($collaboratorId);
 
+            foreach ($requests as $requestsFiltered) {
+                // Calcul du nombre de jours ouvrés pour cette demande
+                $nbDaysWorking = $requestRepository->getWorkingDays($requestsFiltered->getStartAt(), $requestsFiltered->getEndAt());
+
+                // Ajouter les jours ouvrés à un tableau pour ce collaborateur
+                $daysWorking[] = [
+                    'request' => $requestsFiltered,
+                    'nbDaysWorking' => $nbDaysWorking
+                ];
+
+            }
+
             $allCollaborators[] = $collaborator; // Ajout de la liste des collaborateurs
 
             $allRequests[] = [
                 'collaborator' => $collaborator,
                 'requests' => $requests,
+                'daysWorking' => $daysWorking,
             ];
         }
 
-         // Créer le formulaire en passant les collaborateurs comme option
-         $form = $this->createForm(FilterRequestPendingFormType::class, null, [
+        // Créer le formulaire en passant les collaborateurs comme option
+        $form = $this->createForm(FilterRequestPendingFormType::class, null, [
             'collaborators' => $allCollaborators,
         ]);
 
@@ -73,7 +86,7 @@ class RequestController extends AbstractController
                 'collaborator'      => $formData['collaborator'] ?? null,
                 'start_at'          => $formData['start_at'] ?? null,
                 'end_at'            => $formData['end_at'] ?? null,
-                'totalleavedays'    => $formData['totalleavedays'] ?? null,
+                'nbdays'            => $formData['nbdays'] ?? null,
                 'created_at'        => $formData['created_at'] ?? null,
             ];
 
@@ -81,13 +94,24 @@ class RequestController extends AbstractController
                 $filters['collaborator'] = $formData['collaborator'];
             }
 
-            if (!empty($formData['start_at']) && !empty($formData['end_at'])) {
+            if (!empty($formData['start_at'])) {
                 $filters['start_at'] = $formData['start_at'];
+            }
+
+            if (!empty($formData['end_at'])) {
                 $filters['end_at'] = $formData['end_at'];
             }
 
+            if (!empty($formData['created_at'])) {
+                $filters['created_at'] = $formData['created_at'];
+            }
+
+            if (!empty($formData['nbdays'])) {
+                $filters['nbdays'] = $formData['nbdays'];
+            }
+
             if (!empty($formData['request_type'])) {
-                $filters['request_type'] = $formData['request_type']; // c’est déjà une string
+                $filters['request_type'] = $formData['request_type'];
             }
 
             if (!empty($formData['answer'])) {
@@ -114,14 +138,14 @@ class RequestController extends AbstractController
             }
         }
 
+
         $adapter = new ArrayAdapter($collaborators);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage(10);
 
-        try{
+        try {
             $pagerfanta->setCurrentPage($page);
-        }
-        catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
+        } catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
             throw $this->createNotFoundException('La page demandée n\'existe pas.');
         }
 
