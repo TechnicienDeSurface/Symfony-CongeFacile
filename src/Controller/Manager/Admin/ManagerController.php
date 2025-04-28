@@ -125,6 +125,8 @@ class ManagerController extends AbstractController
                     }catch(\Exception $e ){
                         $this->addFlash('error', 'Erreur pour l\'ajout de l\'utilisateur'); 
                     }
+                }else{
+                    $this->addFlash('error','Erreur la confirmation mot de passe n\'est pas identique au nouveau mot de passe');
                 }
             }
         }
@@ -219,7 +221,7 @@ class ManagerController extends AbstractController
                             $this->addFlash('error', 'Erreur pour la mise à jour de l\'utilisateur'); 
                         }
                     }else{
-                        $this->addFlash('error','Confirmation mot de passe incorrect');
+                        $this->addFlash('error','Erreur la confirmation mot de passe n\'est pas identique au nouveau mot de passe');
                     }
                 }
             }
