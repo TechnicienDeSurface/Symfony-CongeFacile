@@ -16,20 +16,21 @@
 
             <h1 class="text-left font-bold text-2xl mb-4 " style='color : #004C6C'>Service {{ department.name }}</h1>
 
-            <form method="post">
-            <div class="my-3 ">
-                <label for=" " class="block text-sm/6 font-medium text-gray-900">Nom du service</label>
-                <div class="mt-2">
-                    <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                        <input type="text" id="name" name="name" value="{{ department.name }}" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="Nom du service">
-                        <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+            <form method="POST">
+                <div class="my-3 ">
+                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Nom du service</label>
+                    <div class="mt-2">
+                        <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                            <input type="text" id="name" name="name" value="{{ department.name }}" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="Nom du service">
+                            <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div> 
-
+                </div> 
             <div>
-                <button type="submit" name="delete" class="text-[#ebf1f4] bg-[#E10E0E] rounded-lg w-[130px] h-[35px] font-medium my-7 cursor-pointer inline-block">Supprimer</button>
+                <form method="DELETE" action="{{ path('app_administration_delete_type_of_request', {'id': department.id}) }}">
+                    <button type="submit" class="bg-gray-200 px-3 py-1 rounded">Supprimer</button>
+                </form>
                 <button type="submit" name="edit" class="mx-3 text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[154px] h-[35px] font-medium my-7 cursor-pointer inline-block">Mettre à jour</button>
             </div>
             </form>

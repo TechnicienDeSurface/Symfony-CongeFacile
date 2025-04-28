@@ -36,10 +36,9 @@ class TypeOfRequestController extends AbstractController
 
         $order = $filters['totalnbdemande'] ?? '';
 
-        // Recherche dans le repository avec les filtres
         $query = $requestTypeRepository->searchTypeOfRequest($filters, $order);
 
-        // Pagination avec QueryAdapter
+        //PAGINATION
         $adapter = new ORMQueryAdapter($query);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage(10);
@@ -63,10 +62,25 @@ class TypeOfRequestController extends AbstractController
 
     //PAGE AJOUTER TYPE DE DEMANDE VIA ADMINISTRATION MANAGER
     #[Route('/administration-ajouter-type-de-demande', name: 'app_administration_add_type_of_request', methods: ['POST'])]
-    public function addTypeOfRequest(): Response
+    public function addTypeOfRequest(Request $request, EntityManagerInterface $entityManagerInterface): Response
     {
+        $form = $this->createForm(RequestTypeForm::class, null, [
+            'isAdd' => true,
+        ]);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $requestType = $form->getData();
+            $entityManagerInterface->persist($requestType);
+            $entityManagerInterface->flush();
+
+            $this->addFlash('success', 'Le type de demande a été ajouté avec succès.');
+            return $this->redirectToRoute('app_administration_type_of_request');
+        }
+
         return $this->render('manager/admin/type-of-request/add_type_of_request.html.twig', [
             'page' => 'administration-type-de-demande',
+            'form' => $form->createView(),
         ]);
     }
 
@@ -76,9 +90,10 @@ class TypeOfRequestController extends AbstractController
     {
         $form = $this->createForm(RequestTypeForm::class, $typeDemande);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            $this->addFlash('success', 'Le type de demande a été modifié avec succès.');
             return $this->redirectToRoute('app_administration_type_of_request');
         }
 
@@ -88,6 +103,16 @@ class TypeOfRequestController extends AbstractController
         ]);
     }
 
-    //SUPPRIMER MANAGEMENTS ET SERVICES VIA L'ADMINISTRATION DU PORTAIL MANAGER
-    //#[Route('/administration-supprimer-type-de-demande/{id}', name: 'app_administration_supprimer_type_of_request', methods: ['POST', 'DELETE'])]
+    //SUPPRIMER TYPE DE DEMANDE VIA L'ADMINISTRATION DU PORTAIL MANAGER
+    #[Route('/administration-supprimer-type-de-demande/{id}', name: 'app_administration_delete_type_of_request', methods: ['POST', 'DELETE'])]
+    public function deleteTypeOfRequest(Request $request, RequestType $typeDemande, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $typeDemande->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($typeDemande);
+            $entityManager->flush();
+            $this->addFlash('success', 'Le type de demande a été supprimé avec succès.');
+            return $this->redirectToRoute('app_administration_type_of_request');
+        }
+        return $this->redirectToRoute('app_administration_type_of_request');
+    }
 }

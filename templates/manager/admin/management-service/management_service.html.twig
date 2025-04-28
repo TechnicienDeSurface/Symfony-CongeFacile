@@ -6,11 +6,23 @@
     <title>{% block title %}Administration - Directions/Services{% endblock %}</title>
     {% include 'layout/menu/_header.html.twig' %}
     <main style="display: flex;">
-
         {% include 'layout/menu/_sidebar.html.twig' %}
-
-        <div class=" flex-grow p-7 ">
-
+        <div class="w-full p-8">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="mb-4 p-4 rounded-lg text-sm
+                        {% if label == 'success' %}
+                            bg-green-100 text-green-800
+                        {% elseif label == 'error' %}
+                            bg-red-100 text-red-800
+                        {% else %}
+                            bg-blue-100 text-blue-800
+                        {% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        <div class="flex items-center gap-5">
             <h1 class="text-left font-bold text-2xl mb-2 inline-block" style='color : #004C6C'>Directions/Services</h1>
             <form method="POST" action="{{ path('app_administration_add_type_of_request') }}">
                 <button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Ajouter directions/services</button>
@@ -32,7 +44,6 @@
                             </td>
                         </tr>
                     </thead>
-
                     <tbody>
                         {% if departments is empty %}
                             <tr class="border-t">
@@ -62,5 +73,6 @@
                 {% endif %}
             </div>
         </div>
+     </div>
     </main>
 {% endblock %}

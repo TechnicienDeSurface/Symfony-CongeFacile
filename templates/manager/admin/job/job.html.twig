@@ -7,6 +7,20 @@
         <main style="display: flex;">
             {% include 'layout/menu/_sidebar.html.twig' %}
             <div class="w-full p-8">
+				{% for label, messages in app.flashes %}
+					{% for message in messages %}
+						<div class="mb-4 p-4 rounded-lg text-sm
+							{% if label == 'success' %}
+								bg-green-100 text-green-800
+							{% elseif label == 'error' %}
+								bg-red-100 text-red-800
+							{% else %}
+								bg-blue-100 text-blue-800
+							{% endif %}">
+							{{ message }}
+						</div>
+					{% endfor %}
+				{% endfor %}
                 <div class="flex items-center gap-5">
                     <h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Postes</h1>
 					<form method="POST" action="{{ path('app_administration_ajouter_job') }}">
@@ -61,5 +75,6 @@
 					{% endif %}
 				</div>
             </div>
-        </main> 
+        </main>
+
 {% endblock %}

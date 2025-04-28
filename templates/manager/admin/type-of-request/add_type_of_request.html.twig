@@ -1,36 +1,27 @@
-{# templates/admin/add_type_of_request.html.twig ou /administration-ajouter-type-de-demande #}
-
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <title>{% block title %}Ajouter un type de demande{% endblock %}</title>
+	<body>
+		{% include 'layout/menu/_header.html.twig' %}
 
-    <title>{% block title %}Administration - Types de demandes - Détails/Ajout{% endblock %}</title>
+		<main style="display: flex;">
+			{% include 'layout/menu/_sidebar.html.twig' %}
 
-    {% include 'layout/menu/_header.html.twig' %}
+            <div class="w-full p-8">
+				<h1 class="text-left font-bold text-2xl my-4 " style='color : #004C6C !important'>Ajouter un type de demande</h1>
 
-    <main style="display: flex;">
-
-        {% include 'layout/menu/_sidebar.html.twig' %}
-
-        <div class="p-8 overflow-y-auto">
-
-        <h1 class="text-left font-bold text-2xl mb-4 " style='color : #004C6C'>Types de demandes</h1>
-
-        <div class="my-3 ">
-            <label for=" " class="block text-sm/6 font-medium text-gray-900">Nom du type</label>
-            <div class="mt-2">
-                <div class="flex w-60 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                    <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="Nom du type">
-                    <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                {{ form_start(form) }}
+                    <div class="mb-4 w-1/4">
+                        <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Nom de la demande :</label>
+                        {{ form_widget(form.name, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
                     </div>
-                </div>
+                    <div class="flex items-left">
+                        {{ form_widget(form.ajouter, {'attr': {'class': 'bg-[#004C6C] hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-2'}}) }}
+                    </div>
+                {{ form_end(form) }}
+
             </div>
-        </div>
-
-        <div>
-            <button type="submit" class="text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[154px] h-[35px] font-medium my-7 cursor-pointer inline-block">Ajouter</button>
-        </div>
-
-        </div>
-    </main>
+        </main>
+    </body>
 {% endblock %}
