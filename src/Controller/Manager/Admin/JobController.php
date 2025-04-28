@@ -66,23 +66,32 @@ class JobController extends AbstractController
 
     //PAGE AJOUTER JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
     #[Route('/administration-ajouter-job', name: 'app_administration_ajouter_job', methods:['POST'])]
-    public function addJob(Request $request, EntityManagerInterface $entityManager): Response
+    public function addJob(PositionRepository $repository, Request $request, EntityManagerInterface $entityManager): Response
     {
         // Créer une nouvelle instance de Position
         $position = new Position();
-
+        $positions = $repository->findBy([],[]);
+        $verif = false; 
         // Créer le formulaire et le traiter
         $form = $this->createForm(AddJobForm::class, $position);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Sauvegarder la nouvelle position
-            $entityManager->persist($position);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Le poste a été ajouté avec succès.');
-
-            return $this->redirectToRoute('app_administration_job');
+            foreach($positions as $row){
+                if($position->getName() == $row->getName()){
+                    $verif = true; 
+                };
+            }
+            if($verif === true){
+                $this->addFlash('error','Erreur ce poste existe déjà');
+            }else{
+                $entityManager->persist($position);
+                $entityManager->flush();
+                $this->addFlash('success','Poste ajouté');
+                return $this->redirectToRoute('app_administration_job');
+            }
+            
         }
 
         return $this->render('manager/admin/job/add_job.html.twig', [

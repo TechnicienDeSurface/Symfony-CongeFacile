@@ -39,6 +39,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface{
             $user->setRoles($personData['role']);
             $user->setPerson($this->getReference($personData['name'], Person::class));
             $user->setCreatedAt(new \DateTimeImmutable());
+            $user->setIsVerified(true);
             $manager->persist($user);
 
             $this->addReference($personData['email'], $user);
