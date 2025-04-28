@@ -59,12 +59,11 @@ class RequestRepository extends ServiceEntityRepository
         // Correction : jointure correcte avec l'entité person
         $qb->leftJoin('request.collaborator', 'collaborator');
         $qb->leftJoin('request.request_type', 'request_type');
-
         if (!empty($filters['collaborator'])) {
             $qb->andWhere('collaborator.last_name LIKE :last_name')
-                ->setParameter('last_name', '%' . $filters['collaborator']->getLastName() . '%');
+                ->setParameter('last_name', '%' . $filters['collaborator']. '%');
             $qb->orWhere('collaborator.first_name LIKE :first_name')
-                ->setParameter('first_name', '%' . $filters['collaborator']->getFirstName() . '%');
+                ->setParameter('first_name', '%' . $filters['collaborator']. '%');
         }
 
         if (!empty($filters['start_at']) && !empty($filters['end_at'])) {
@@ -74,23 +73,24 @@ class RequestRepository extends ServiceEntityRepository
         }
 
         if (!empty($filters['request_type'])) {
-            $qb->andWhere('request_type = :request_type')
+            $qb->andWhere('request_type.name LIKE :request_type')
                 ->setParameter('request_type', $filters['request_type']);
         }
 
         if (!empty($filters['answer'])) {
-            if ($filters['answer'] == "none") {  //condition pour aller chercher les answer null avec la valeur none
+            if ($filters['answer'] === "none") {  // condition pour aller chercher les answer null avec la valeur none
                 $qb->andWhere('request.answer IS NULL');
-            } else {
-                $qb->andWhere('request.answer LIKE :answer')
-                    ->setParameter('answer', $filters['answer']);
+            } elseif ($filters['answer'] === true) {
+                $qb->andWhere('request.answer = true');
+            } elseif ($filters['answer'] === false) {
+                $qb->andWhere('request.answer = false');
             }
         }
+        
 
         if (!empty($order)) {
             $qb->orderBy('request.id', $order);
         }
-
         return $qb->getQuery();
     }
 
@@ -205,7 +205,7 @@ class RequestRepository extends ServiceEntityRepository
                     ->setParameter('answer', $filters['answer']);
             }
         }
-
+        
 
         return $qb->getQuery();
     }

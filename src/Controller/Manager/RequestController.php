@@ -163,7 +163,7 @@ class RequestController extends AbstractController
     }
 
     //PAGE HISTORIQUE DES DEMANDES
-    #[Route('/history-request', name: 'app_history_request_manager', methods: ['GET', 'POST'])]
+    #[Route('/history-request/{page}', name: 'app_history_request_manager', methods: ['GET', 'POST'])]
     public function viewRequestHistory(RequestFondation $request, RequestRepository $repository, int $page = 1): Response
     {
         $requests = $repository->findBy([], []);

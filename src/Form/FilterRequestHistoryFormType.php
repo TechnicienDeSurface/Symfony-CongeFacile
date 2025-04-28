@@ -78,7 +78,7 @@ class FilterRequestHistoryFormType extends AbstractType
                 'choices' => [
                     'Validé' => true,
                     'Refusé' => false,
-                    'En attente' => null,
+                    'En attente' => "none",
                 ],
                 'placeholder' => 'Sélectionner un statut...',
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'],
