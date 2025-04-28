@@ -1,0 +1,48 @@
+{# templates/Manager/detail_request_pending.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<title>
+		{% block title %}Manager - Consulter une demande
+		{% endblock %}
+	</title>
+
+	{% include 'layout/menu/_header.html.twig' %}
+
+	<main style="display: flex;">
+
+		{% include 'layout/menu/_sidebar.html.twig' %}
+
+		<div class="w-full p-8 overflow-y-auto">
+
+			<h1 class="text-left font-bold text-2xl mb-4 " style='color : #004C6C'>Demande de
+				{{ request.collaborator.firstname }}
+				{{ request.collaborator.lastname }}</h1>
+			<h2 class="text-left font-semibold text-m mb-4" style='color : #38738c'>Demande du
+				{{ request.createdAt|date('d/m/Y H:i') }}</h2>
+
+			<p class="my-2">Période :
+				{{ request.startAt|date('d/m/Y') }}
+				au
+				{{ request.endAt|date('d/m/Y') }}</p>
+			<p class="my-2">Type de demande :
+				{{ request.requestType.name }}</p>
+			<p class="my-2">Nombre de jours :
+				{{ request.collaborator.totalLeaveDays }}
+				{% if request.collaborator.totalLeaveDays <= 1 %}
+					jour
+				{% else %}
+					jours
+				{% endif %}
+			</p>
+
+			<p class="mb-2 mt-5">Commentaire supplémentaire</p>
+			<textarea id="" class="w-[55%] h-[25%] bg-white border border-[#dfe4ea] rounded-md p-5 resize-none font-[5]" readonly>{{ request.comment }}</textarea>
+
+			<button type="submit" class="text-[#004c6c] bg-[#ebf1f4] border-none rounded-md w-[300px] h-[35px] font-medium my-7 cursor-pointer block">Télécharger le justificatif</button>
+
+		</div>
+	</main>
+{% endblock %}

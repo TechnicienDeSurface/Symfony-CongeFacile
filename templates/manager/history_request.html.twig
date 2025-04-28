@@ -71,10 +71,10 @@
                                     {% endif %}
                                 </div>
                             </td>
-                            <td class="px-4 py-2 border-t border-b border-gray-300">
-                                <a href="" class="text-gray-600 bg-[#ecf3f9] px-5 font-medium py-2 rounded">
-                                    Détails
-                                </a>
+                            <td class="py-6 px-6">
+                                <form method="POST" action="{{ path('app_detail_history_request', {'id': request.id}) }}">
+                                    <button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
+                                </form>
                             </td>
                         </tr>
                     {% else %}
