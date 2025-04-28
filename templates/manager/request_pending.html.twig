@@ -83,8 +83,8 @@
 									<td class="py-6 px-6">{{ request.endAt|date('d/m/Y') }}
 															                                
 									</td>
-									<td class="py-6 px-6">{{ collaborator.totalLeaveDays }} {% if collaborator.totalLeaveDays <= 1 %} jour {% else %} jours {% endif %}
-									</td>
+									{# <td class="py-6 px-6">{{ WorkingDays }} {% if WorkingDays <= 1 %} jour {% else %} jours {% endif %}
+									</td> #}
 									<td class="py-6 px-6">
 										<form method="POST" action="{{ path('app_detail_request_pending', {'id': request.id}) }}">
 											<button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>

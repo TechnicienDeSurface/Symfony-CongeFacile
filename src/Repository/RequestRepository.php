@@ -53,24 +53,47 @@ class RequestRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function searchRequest(array $filters,  string $order = ''): Query
+    public function searchRequest(array $filters, string $order = ''): Query
     {
         $qb = $this->createQueryBuilder('request');
-        // Correction : jointure correcte avec l'entité person
         $qb->leftJoin('request.collaborator', 'collaborator');
         $qb->leftJoin('request.request_type', 'request_type');
 
         if (!empty($filters['collaborator'])) {
-            $qb->andWhere('collaborator.last_name LIKE :last_name')
-                ->setParameter('last_name', '%' . $filters['collaborator']->getLastName() . '%');
-            $qb->orWhere('collaborator.first_name LIKE :first_name')
-                ->setParameter('first_name', '%' . $filters['collaborator']->getFirstName() . '%');
+            $qb->andWhere('collaborator.id = :collaboratorId')
+                ->setParameter('collaboratorId', $filters['collaborator']->getId());
         }
 
         if (!empty($filters['start_at']) && !empty($filters['end_at'])) {
-            $qb->andWhere('request.start_at BETWEEN :startDate AND :endDate AND request.end_at BETWEEN :startDate AND :endDate')
-                ->setParameter('startDate', $filters['start_at'])
-                ->setParameter('endDate', $filters['end_at']);
+            // Si les deux dates sont renseignées => filtre entre les deux dates
+            $qb->andWhere('request.start_at BETWEEN :start_at AND :end_at')
+                ->setParameter('start_at', $filters['start_at'])
+                ->setParameter('end_at', $filters['end_at']);
+        } elseif (!empty($filters['start_at'])) {
+            // Si seulement start_at est renseignée => start_at >= date donnée
+            $qb->andWhere('request.start_at >= :start_at')
+                ->setParameter('start_at', $filters['start_at']);
+        } elseif (!empty($filters['end_at'])) {
+            // Si seulement end_at est renseignée => filtre sur la date de fin exacte
+            $qb->andWhere('request.end_at = :end_at')
+                ->setParameter('end_at', $filters['end_at']);
+        }
+
+        if (!empty($filters['created_at'])) {
+            if ($filters['created_at'] instanceof \DateTime) {
+                $startOfDay = (clone $filters['created_at'])->setTime(0, 0, 0);
+
+                $qb->andWhere('request.created_at >= :start_date')
+                    ->setParameter('start_date', $startOfDay);
+            } else {
+                $createdAt = \DateTime::createFromFormat('Y-m-d', $filters['created_at']);
+                if ($createdAt) {
+                    $startOfDay = (clone $createdAt)->setTime(0, 0, 0);
+
+                    $qb->andWhere('request.created_at >= :start_date')
+                        ->setParameter('start_date', $startOfDay);
+                }
+            }
         }
 
         if (!empty($filters['request_type'])) {
@@ -79,7 +102,7 @@ class RequestRepository extends ServiceEntityRepository
         }
 
         if (!empty($filters['answer'])) {
-            if ($filters['answer'] == "none") {  //condition pour aller chercher les answer null avec la valeur none
+            if ($filters['answer'] === "none") {
                 $qb->andWhere('request.answer IS NULL');
             } else {
                 $qb->andWhere('request.answer LIKE :answer')
@@ -94,6 +117,7 @@ class RequestRepository extends ServiceEntityRepository
         return $qb->getQuery();
     }
 
+
     //    public function findOneBySomeField($value): ?Request
     //    {
     //        return $this->createQueryBuilder('r')
@@ -103,6 +127,28 @@ class RequestRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function calculateDayWorking(\DateTime $date1, \DateTime $date2): int
+    {
+        $joursOuvres = 0;
+
+        // Assure-toi que la date1 est avant ou égale à la date2
+        if ($date1 > $date2) {
+            return 0;
+        }
+
+        // Parcours les jours entre les deux dates
+        while ($date1 <= $date2) {
+            $jourSemaine = $date1->format('w'); // 0 = dimanche, 6 = samedi
+            if ($jourSemaine != 0 && $jourSemaine != 6) { // Exclure le samedi (6) et le dimanche (0)
+                $joursOuvres++;
+            }
+            $date1->modify('+1 day'); // Incrémente la date d'un jour
+        }
+
+        return $joursOuvres;
+    }
+
 
     public function HistoryRequestfindByFilters(array $filters, string $order = ''): Query
     {
