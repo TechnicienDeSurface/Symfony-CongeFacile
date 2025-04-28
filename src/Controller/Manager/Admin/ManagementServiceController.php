@@ -5,6 +5,8 @@ namespace App\Controller\Manager\Admin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 
 use App\Entity\Department;
 
@@ -14,17 +16,33 @@ use Symfony\Component\HttpFoundation\Request;
 class ManagementServiceController extends AbstractController
 {
     //PAGE MANAGEMENTS ET SERVICES VIA ADMINISTRATION MANAGER
-    #[Route('/administration-management-service', name: 'app_administration_management_service')]
-    public function viewManagementService(EntityManagerInterface $entityManager): Response
+    #[Route('/administration-management-service/{page}', name: 'app_administration_management_service')]
+    public function viewManagementService(EntityManagerInterface $entityManager, int $page = 1): Response
     {
-        $departments = $entityManager->getRepository(Department::class)->findBy([], ['name' => 'ASC']);
+        $departments = $entityManager->getRepository(Department::class)->createQueryBuilder('d')
+        ->orderBy('d.name', 'ASC')
+        ->getQuery();
+        
+        //PAGINATION
+        $adapter = new QueryAdapter($departments);
+        $pagerfanta = new Pagerfanta($adapter);
+        $pagerfanta->setMaxPerPage(10);
 
-
+        try {
+            //A DECOMMENTER SI ON VEUT QUE LA PAGE REVIENNE A 1 APRES UN FILTRE
+            //if($form->isSubmitted()) {
+            //    $page = 1;
+            //}
+            $pagerfanta->setCurrentPage($page);
+        } catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
+            throw $this->createNotFoundException('La page demandée n\'existe pas.');
+        }
 
 
         return $this->render('manager/admin/management-service/management_service.html.twig', [
             'page' => 'administration-management-service',
-            'departments' => $departments,
+            'departments' => $pagerfanta->getCurrentPageResults(),
+            'pager' => $pagerfanta,
         ]);
     }
 

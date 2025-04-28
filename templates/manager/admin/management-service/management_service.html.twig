@@ -3,11 +3,8 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
     <title>{% block title %}Administration - Directions/Services{% endblock %}</title>
-
     {% include 'layout/menu/_header.html.twig' %}
-
     <main style="display: flex;">
 
         {% include 'layout/menu/_sidebar.html.twig' %}
@@ -15,53 +12,55 @@
         <div class=" flex-grow p-7 ">
 
             <h1 class="text-left font-bold text-2xl mb-2 inline-block" style='color : #004C6C'>Directions/Services</h1>
-            <a href="{{ path('app_administration_ajouter_management_service') }}" ><button type="submit" class="mx-2 text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[220px] h-[35px] font-medium my-7 cursor-pointer inline-block">Ajouter directions/services</button></a>
-
-            <div class=" justify-center items-center h-max">
-                <table class=" mt-2 bg-[#F9FAFB] w-full">
-                    <thead class="rounded-lg">
-                        
-                        <tr class="text-gray-700 border-x border-t border-[#EAECF0] ">
-                            <td class="py-4 px-6 pr-0 w-1/6">
-
-                                <div class="my-2 ">
+            <form method="POST" action="{{ path('app_administration_add_type_of_request') }}">
+                <button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Ajouter directions/services</button>
+            </form>
+               	
+            <div class="flex w-full justify-center items-center h-max">
+                <table class="w-full mt-6">
+                    <thead>
+                        <tr class="bg-[#F9FAFB] text-gray-700 border-x border-t border-[#EAECF0] rounded-lg">
+                            <td class="py-4 px-6 pr-0 w-full">
+                                <div class="my-2">
                                     <label for="" class="block text-sm/6 font-medium text-[#004C6C]">Nom de la direction ou du service</label>
                                     <div class="mt-2">
-                                        <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                                        <div class="flex w-full items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
                                             <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="Nom">
-                                            <div class="grid shrink-0 grid-cols-1 focus-within:relative">
-                                            </div>
                                         </div>
                                     </div>
                                 </div> 
-
                             </td>
                         </tr>
                     </thead>
 
-                    <tbody class="bg-white">
-                        
+                    <tbody>
+                        {% if departments is empty %}
+                            <tr class="border-t">
+                                <td class="py-6 px-6">Aucun résultat</td>
+                            </tr>
+                        {% endif %}
                         {% for department in departments %}
-                            <tr class="border-x border-b mt-4 overflow-x-auto">
-                                <td class="w-[80%] py-6 px-6 ">{{ department.name }}</td>
+                            <tr class="border-t">
+                                <td class="py-6 px-6">{{ department.name }}</td>
                                 <td class="py-6 px-6">
-                                    {# <form method="POST" action="{{ path('app_administration_detail_management_service', {'id': items.id}) }}">
-                                        <a href="{{ path('app_administration_detail_management_service', {id: department.id}) }}"><button type="submit" class="text-gray-600 bg-[#ecf3f9] px-5 font-medium py-2 rounded">Détails</button></a>
-                                    </form> #}
-
-                                    
-                                    <a class="text-gray-600 bg-[#ecf3f9] px-5 font-medium py-2 rounded" href="{{ path('app_administration_detail_management_service', { id: department.id }) }}">
-                                        Détails
-                                    </a>
+                                    <form method="POST" action="{{ path('app_administration_detail_management_service', {'id': department.id}) }}">
+                                        <button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
+                                    </form>
                                 </td>
                             </tr>
                         {% endfor %}
                     </tbody>
-
-
                 </table>
             </div>
-
+            <div class="flex w-full justify-center items-center h-max mt-10">
+                {% if pager.hasPreviousPage %}
+                    <a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path('app_administration_management_service', { page: pager.previousPage }) }}">Précédent</a>
+                {% endif %}
+                    <p>Page {{ pager.currentPage }} sur {{ pager.nbPages }}</p>
+                {% if pager.hasNextPage %}
+                    <a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path('app_administration_management_service', { page: pager.nextPage }) }}">Suivant</a>
+                {% endif %}
+            </div>
         </div>
     </main>
 {% endblock %}

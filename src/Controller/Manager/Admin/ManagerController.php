@@ -62,6 +62,9 @@ class ManagerController extends AbstractController
         $pagerfanta->setMaxPerPage(10);
 
         try {
+            if($form->isSubmitted()) {
+                $page = 1;
+            }
             $pagerfanta->setCurrentPage($page);
         } catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
             throw $this->createNotFoundException('La page demandée n\'existe pas.');

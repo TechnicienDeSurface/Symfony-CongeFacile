@@ -40,12 +40,12 @@
                         <tbody>
                             {% for items in requesttype %}
                                 <tr class="border-t">
-                                    <td class="p-3">{{ items.name }}</td>
-									<td class="p-3">
+                                     <td class="py-6 px-6">{{ items.name }}</td>
+									 <td class="py-6 px-6">
 										{{ items.totalnbdemande }} 
 										{% if items.totalnbdemande <= 1 %} demande {% else %} demandes {% endif %}
 									</td>
-                                    <td class="p-3">
+                                     <td class="py-6 px-6">
                                     <form method="POST" action="{{ path('app_administration_detail_type_of_request', {'id': items.id}) }}">
                                         <button type="submit" class="text-gray-600 bg-[#ecf3f9] px-5 font-medium py-2 rounded">Détails</button>
                                     </form>
