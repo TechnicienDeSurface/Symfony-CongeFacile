@@ -12,6 +12,8 @@
         <div class="w-full p-8 overflow-y-auto">
             <h2 class="text-left font-bold text-2xl mb-4">Types de demandes</h2>
             <form method="POST" action="{{ path('app_administration_type_of_request', {id: requestType.id}) }}" class="mb-4">
+                <input type="hidden" name="_token" value="{{ csrf_token('edit' ~ requestType.id) }}">
+
                 <div class="mb-3">
                     {{ form_label(form.name) }}
                     {{ form_widget(form.name, { 'attr': {'class': 'form-control mt-1 block w-[250px] rounded-md p-2 border border-gray-400 shadow-sm'} }) }}
