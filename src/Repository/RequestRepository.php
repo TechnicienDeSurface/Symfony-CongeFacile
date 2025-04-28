@@ -100,10 +100,12 @@ class RequestRepository extends ServiceEntityRepository
         if (!empty($filters['collaborator'])) {
             $qb->andWhere('collaborator.id = :collaboratorId')
                 ->setParameter('collaboratorId', $filters['collaborator']->getId());
+        
             $qb->andWhere('collaborator.last_name LIKE :last_name')
-                ->setParameter('last_name', '%' . $filters['collaborator'] . '%');
+                ->setParameter('last_name', '%' . $filters['collaborator']->getLastName() . '%');
+        
             $qb->orWhere('collaborator.first_name LIKE :first_name')
-                ->setParameter('first_name', '%' . $filters['collaborator'] . '%');
+                ->setParameter('first_name', '%' . $filters['collaborator']->getFirstName() . '%');
         }
 
         if (!empty($filters['start_at']) && !empty($filters['end_at'])) {
@@ -139,8 +141,8 @@ class RequestRepository extends ServiceEntityRepository
         }
 
         if (!empty($filters['request_type'])) {
-            $qb->andWhere('request_type.name LIKE :request_type')
-                ->setParameter('request_type', $filters['request_type']);
+            $qb->andWhere('r.request_type = :request_type')
+               ->setParameter('request_type', $filters['request_type']);
         }
 
         if (array_key_exists('answer', $filters)) {

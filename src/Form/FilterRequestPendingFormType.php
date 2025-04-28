@@ -55,11 +55,6 @@ class FilterRequestPendingFormType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
             ])
-            ->add('nbdays', TextType::class, [
-                'label' => 'Nombre de congés posés :',
-                'required' => false,
-                'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline']
-            ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Rechercher',
                 'attr' => ['class' => 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'],

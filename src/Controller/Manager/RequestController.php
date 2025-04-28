@@ -86,7 +86,6 @@ class RequestController extends AbstractController
                 'collaborator'      => $formData['collaborator'] ?? null,
                 'start_at'          => $formData['start_at'] ?? null,
                 'end_at'            => $formData['end_at'] ?? null,
-                'nbdays'            => $formData['nbdays'] ?? null,
                 'created_at'        => $formData['created_at'] ?? null,
             ];
 
@@ -104,10 +103,6 @@ class RequestController extends AbstractController
 
             if (!empty($formData['created_at'])) {
                 $filters['created_at'] = $formData['created_at'];
-            }
-
-            if (!empty($formData['nbdays'])) {
-                $filters['nbdays'] = $formData['nbdays'];
             }
 
             if (!empty($formData['request_type'])) {
@@ -151,7 +146,6 @@ class RequestController extends AbstractController
                 ];
             }
         }
-
 
         $adapter = new ArrayAdapter($collaborators);
         $pagerfanta = new Pagerfanta($adapter);
