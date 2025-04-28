@@ -53,24 +53,29 @@
 								{{ form_end(form) }}
 							</thead>
 						<tbody>
-
-							{# Chaque résultat doit se présenter sous cette forme : #}
-							{% for items in team %}
+							{% if team is empty %}
 								<tr class="border-x border-b mt-4">
-									<td class="py-6 px-6">{{items.lastname}}</td>
-									<td class="py-6 px-6">{{items.firstname}}</td>
-									<td class="py-6 px-6">{{ items.user.email|default('Non défini')}}</td>
-									<td class="py-6 px-6">{{items.positionid.name}}</td>
-									<td class="py-6 px-6">{{items.totalleavedays}}
-									{% if items.totalleavedays <= 1 %} jour {% else %} jours {% endif %}
-									</td>
-									<td class="py-6 px-6">
-										<form method="POST" action="{{ path('app_detail_team', {'id': items.id}) }}">
-											<button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
-										</form>
-									</td>
+									<td class="py-6 px-6">Aucun résultat</td>
 								</tr>
-							{% endfor %}
+							{% else %}
+								{# Chaque résultat doit se présenter sous cette forme : #}
+								{% for items in team %}
+									<tr class="border-x border-b mt-4">
+										<td class="py-6 px-6">{{items.lastname}}</td>
+										<td class="py-6 px-6">{{items.firstname}}</td>
+										<td class="py-6 px-6">{{ items.user.email|default('Non défini')}}</td>
+										<td class="py-6 px-6">{{items.positionid.name}}</td>
+										<td class="py-6 px-6">{{items.totalleavedays}}
+										{% if items.totalleavedays <= 1 %} jour {% else %} jours {% endif %}
+										</td>
+										<td class="py-6 px-6">
+											<form method="POST" action="{{ path('app_detail_team', {'id': items.id}) }}">
+												<button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
+											</form>
+										</td>
+									</tr>
+								{% endfor %}
+							{% endif %}
 						</tbody>
 					</table>
 				</div>

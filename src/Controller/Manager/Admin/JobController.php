@@ -45,7 +45,7 @@ class JobController extends AbstractController
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);
         $pagerfanta = new Pagerfanta($adapter);
-        $pagerfanta->setMaxPerPage(5);
+        $pagerfanta->setMaxPerPage(10);
 
         try{
             $pagerfanta->setCurrentPage($page);
