@@ -14,22 +14,24 @@
 
         <div class=" p-8 overflow-y-auto">
 
-        <h1 class="text-left font-bold text-2xl mb-4 " style='color : #004C6C'>BU Symfony</h1>
+            <h1 class="text-left font-bold text-2xl mb-4 " style='color : #004C6C'>Créer un nouveau département</h1>
 
-        <div class="my-3 ">
-            <label for=" " class="block text-sm/6 font-medium text-gray-900">Nom du service</label>
-            <div class="mt-2">
-                <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                    <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="Nom du service">
-                    <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+            <form method="post">
+                <div class="my-3 ">
+                    <label for="name" class="block text-sm/6 font-medium text-gray-900">Nom du service</label>
+                    <div class="mt-2">
+                        <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+                            <input type="text" name="name" id="name" class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="Nom du service">
+                            <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div>
-            <button type="submit" class="mx-3 text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[154px] h-[35px] font-medium my-7 cursor-pointer inline-block">Ajouter</button>
-        </div>
+                <div>
+                    <button type="submit" class="text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[154px] h-[35px] font-medium my-7 cursor-pointer inline-block">Ajouter</button>
+                </div>
+            </form>
 
         </div>
     </main>
