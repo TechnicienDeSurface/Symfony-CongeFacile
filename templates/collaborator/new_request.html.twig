@@ -14,6 +14,7 @@
 			{% include 'layout/menu/_sidebar.html.twig' %}
 			<div class="w-full p-8">
 				<h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Effectuer une nouvelle demande</h1>
+				 {% include 'layout/_addFlash.html.twig'%} {# include pour appeler le message flash dans le formulaire#}
 				<form method="post" class="space-y-4 w-1/2">
 					{{ form_start(form) }}
 					<div class="w-1/2 mb-6">

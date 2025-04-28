@@ -40,26 +40,26 @@ class RequestController extends AbstractController
         }
         $request->setCollaborator($person);
         $request->setDepartment($person->getDepartment());
-
         // Créez le formulaire avec l'instance de Request
         $form = $this->createForm(RequestType::class, $request);
 
         $form->handleRequest($request_bd);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                // Si valide : j'enregistre les données dans la BDD.
-                $data = $form->getData();
-                $registry->getManager()->persist($data);
-                $registry->getManager()->flush();
-                $this->addFlash('success', 'La demande a été créée');
-            } catch (NotFoundHttpException $e) {
-                $this->addFlash('error', 'Error to add request');
+        if ($form->isSubmitted()) {
+            if($form->isValid()){
+                try {
+                    // Si valide : j'enregistre les données dans la BDD.
+                    $data = $form->getData();
+                    $registry->getManager()->persist($data);
+                    $registry->getManager()->flush();
+                    $this->addFlash('success', 'La demande a été créée');
+                } catch (NotFoundHttpException $e) {
+                    $this->addFlash('error', 'Erreur lors de la création de la demande');
+                }
+            }else {
+                $this->addFlash('error', 'Erreur lors de la validation de la demande');
             }
-        } else {
-            $this->addFlash('error', 'Error to add request');
         }
-
         return $this->render('collaborator/new_request.html.twig', [
             'page' => 'new-request',
             'form' => $form,
