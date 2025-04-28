@@ -139,8 +139,7 @@ class ManagerController extends AbstractController
     #[Route('/administration-detail-manager/{id}', name: 'app_administration_detail_manager', methods: ['GET','POST'])]
     public function editManager(DepartmentRepository $department_repository, PersonRepository $repository, int $id, EntityManagerInterface $entityManager,Request $request,UserRepository $user_repository): Response
     {
-        $manager = $repository->find($id);
-        $user = $manager->getUser();
+        $manager = $repository->find(12);
         if(!$manager){
             throw $this->createNotFoundException('No manager found for id ' . $id);
         }
@@ -157,7 +156,7 @@ class ManagerController extends AbstractController
         if($form->isSubmitted()){
             if($form->isValid()){
                 $formData = $form->getData();
-                if($formData['newPassword'] == $formData['confirmPassword']){
+                if(empty($formData['newPassword']) && empty($formData['confirmPassword'])){
                     try{
                         if($manager->getFirstName() != $formData['first_name']){
                             $manager->setFirstName($formData['first_name']);
@@ -175,13 +174,9 @@ class ManagerController extends AbstractController
                     }catch(\Exception $e){
 
                     }try{
-                        $password_hash = $this->passwordHasher->hashPassword($user, $formData['newPassword']) ;
                         if($user->getEmail() != $formData['email']){
                             $user->setEmail($formData['email']);
-                        }
-                        if($password_hash != $user->getPassword()){
-                            $user->setPassword($password_hash);
-                        }  
+                        } 
                         $entityManager->persist($user);
                         $entityManager->flush();
                         $this->addFlash('success', 'Succès pour la mise à jour l\'utilisateur');
@@ -189,7 +184,40 @@ class ManagerController extends AbstractController
                         $this->addFlash('error', 'Erreur pour la mise à jour utilisateur'); 
                     }
                 }else{
-                    $this->addFlash('error','Confirmation mot de passe incorrect');
+                    if($formData['newPassword'] == $formData['confirmPassword']){
+                        try{
+                            if($manager->getFirstName() != $formData['first_name']){
+                                $manager->setFirstName($formData['first_name']);
+                            }
+                            if($manager->getLastName() != $formData['last_name']){
+                                $manager->setLastName($formData['last_name']);
+                            }
+                            if($manager->getDepartment != $formData['department']){
+                                $department = $department_repository->find($formData['department']);
+                                $manager->setDepartment($department);
+                            }
+                            $entityManager->persist($manager);
+                            $entityManager->flush();
+                            $this->addFlash('success', 'Succès pour la mise à jour le manager');
+                        }catch(\Exception $e){
+
+                        }try{
+                            $password_hash = $this->passwordHasher->hashPassword($user, $formData['newPassword']) ;
+                            if($user->getEmail() != $formData['email']){
+                                $user->setEmail($formData['email']);
+                            }
+                            if($password_hash != $user->getPassword()){
+                                $user->setPassword($password_hash);
+                            }  
+                            $entityManager->persist($user);
+                            $entityManager->flush();
+                            $this->addFlash('success', 'Succès pour la mise à jour l\'utilisateur');
+                        }catch(\Exception $e ){
+                            $this->addFlash('error', 'Erreur pour la mise à jour utilisateur'); 
+                        }
+                    }else{
+                        $this->addFlash('error','Confirmation mot de passe incorrect');
+                    }
                 }
             }
         }else{
