@@ -30,8 +30,28 @@ class ManagementServiceController extends AbstractController
 
     //PAGE AJOUTER MANAGEMENTS ET SERVICES VIA ADMINISTRATION MANAGER
     #[Route('/administration-ajouter-management-service', name: 'app_administration_ajouter_management_service')]
-    public function addManagementService(): Response
+    public function addManagementService(Request $request, EntityManagerInterface $entityManager): Response
     {
+
+        if ($request->isMethod('POST')) {
+            $name = trim($request->request->get('name'));
+
+            if (!empty($name)) {
+                $department = new Department();
+                $department->setName($name);
+
+                $entityManager->persist($department);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Le département a été créé avec succès.');
+
+                return $this->redirectToRoute('app_administration_management_service');
+            } else {
+                $this->addFlash('error', 'Le nom du département ne peut pas être vide.');
+            }
+        }
+
+
         return $this->render('manager/admin/management-service/add_management_service.html.twig', [
             'page' => 'administration-ajouter-management-service',
         ]);
