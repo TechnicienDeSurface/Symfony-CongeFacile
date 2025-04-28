@@ -15,6 +15,13 @@
                 <div class="mb-3">
                     {{ form_label(form.name) }}
                     {{ form_widget(form.name, { 'attr': {'class': 'form-control mt-1 block w-[250px] rounded-md p-2 border border-gray-400 shadow-sm'} }) }}
+                    {% if form.name.vars.errors|length > 0 %}
+                        <div class="mb-4 p-4 rounded-lg text-sm bg-red-100 text-red-800 mt-[10px]">
+                            {% for error in form.name.vars.errors %}
+                                {{ error.message }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="flex gap-4">
