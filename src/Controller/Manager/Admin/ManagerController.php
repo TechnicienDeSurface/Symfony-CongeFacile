@@ -107,7 +107,7 @@ class ManagerController extends AbstractController
                         $registry->getManager()->flush();
                         $this->addFlash('success', 'Succès pour ajouter le manager');
                     }catch(\Exception $e){
-                        $this->addFlash('error', 'Erreur pour l\'ajout de manager'); 
+                        $this->addFlash('error', 'Erreur pour l\'ajout du manager'); 
                     }try{
                         $person = $registry->getManager()->getRepository(Person::class)->find($new_manager->getId());
                         $new_user = New User();
@@ -120,9 +120,10 @@ class ManagerController extends AbstractController
                         $new_user->setEnabled(true);
                         $registry->getManager()->persist($new_user);
                         $registry->getManager()->flush();
-                        $this->addFlash('success', 'Succès pour ajouter l\'utilisateur');
+                        $this->addFlash('success', 'Succès pour ajouter de l\'utilisateur');
+                        return $this->redirectToRoute('app_administration_manager');
                     }catch(\Exception $e ){
-                        $this->addFlash('error', 'Erreur pour l\'ajout utilisateur'); 
+                        $this->addFlash('error', 'Erreur pour l\'ajout de l\'utilisateur'); 
                     }
                 }
             }
@@ -139,7 +140,7 @@ class ManagerController extends AbstractController
     #[Route('/administration-detail-manager/{id}', name: 'app_administration_detail_manager', methods: ['GET','POST'])]
     public function editManager(DepartmentRepository $department_repository, PersonRepository $repository, int $id, EntityManagerInterface $entityManager,Request $request,UserRepository $user_repository): Response
     {
-        $manager = $repository->find(12);
+        $manager = $repository->find($id);
         if(!$manager){
             throw $this->createNotFoundException('No manager found for id ' . $id);
         }
@@ -170,7 +171,7 @@ class ManagerController extends AbstractController
                         }
                         $entityManager->persist($manager);
                         $entityManager->flush();
-                        $this->addFlash('success', 'Succès pour la mise à jour le manager');
+                        $this->addFlash('success', 'Succès pour la mise à jour du manager');
                     }catch(\Exception $e){
 
                     }try{
@@ -179,9 +180,10 @@ class ManagerController extends AbstractController
                         } 
                         $entityManager->persist($user);
                         $entityManager->flush();
-                        $this->addFlash('success', 'Succès pour la mise à jour l\'utilisateur');
+                        $this->addFlash('success', 'Succès pour la mise à jour de l\'utilisateur');
+                        return $this->redirectToRoute('app_administration_manager');
                     }catch(\Exception $e ){
-                        $this->addFlash('error', 'Erreur pour la mise à jour utilisateur'); 
+                        $this->addFlash('error', 'Erreur pour la mise à jour de l\'utilisateur'); 
                     }
                 }else{
                     if($formData['newPassword'] == $formData['confirmPassword']){
@@ -211,9 +213,10 @@ class ManagerController extends AbstractController
                             }  
                             $entityManager->persist($user);
                             $entityManager->flush();
-                            $this->addFlash('success', 'Succès pour la mise à jour l\'utilisateur');
+                            $this->addFlash('success', 'Succès pour la mise à jour de l\'utilisateur');
+                            return $this->redirectToRoute('app_administration_manager');
                         }catch(\Exception $e ){
-                            $this->addFlash('error', 'Erreur pour la mise à jour utilisateur'); 
+                            $this->addFlash('error', 'Erreur pour la mise à jour de l\'utilisateur'); 
                         }
                     }else{
                         $this->addFlash('error','Confirmation mot de passe incorrect');
