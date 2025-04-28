@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class ManagerType extends AbstractType
 {
+    private $entityManager; 
     public function __construct(PositionRepository $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -135,7 +136,6 @@ class ManagerType extends AbstractType
 
             // Bouton de soumission
             ->add('submit', SubmitType::class, [
-                'label' => 'Mettre à jour',
                 'attr' => [
                     'class' => 'w-full text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition',
                     'style' => 'background-color: #004C6C;',

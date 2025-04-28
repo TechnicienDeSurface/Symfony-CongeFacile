@@ -208,47 +208,47 @@ class ManagerController extends AbstractController
         ]);
     }
 
-    #[Route('/administration-supprimer-manager/{id}', name: 'app_administration_supprimer_manager', methods: ['POST', 'GET'])]
-    public function deleteManager(PersonRepository $repository, Request $request, int $id, ManagerRegistry $registry,EntityManagerInterface $entityManager): Response
-    {
-        $manager = $repository->find($id);
-        $user = $manager->getUser();
-        $confirmation = $this->createForm(DeleteType::class, null, [
-            'csrf_token_id' => 'submit', //Ajout du token csrf id car formulaire non lié à une entité 
-        ]);
-        $confirmation->handleRequest($request);
+    // #[Route('/administration-supprimer-manager/{id}', name: 'app_administration_supprimer_manager', methods: ['POST', 'GET'])]
+    // public function deleteManager(PersonRepository $repository, Request $request, int $id, ManagerRegistry $registry,EntityManagerInterface $entityManager): Response
+    // {
+    //     $manager = $repository->find($id);
+    //     $user = $manager->getUser();
+    //     $confirmation = $this->createForm(DeleteType::class, null, [
+    //         'csrf_token_id' => 'submit', //Ajout du token csrf id car formulaire non lié à une entité 
+    //     ]);
+    //     $confirmation->handleRequest($request);
 
-        $form = $this->createForm(ManagerType::class, null, [
-            'csrf_token_id' => 'submit', //Ajout du token csrf id car formulaire non lié à une entité 
-        ]);
-        $form->handleRequest($request);
-        if (!$manager) {
-            throw $this->createNotFoundException('Manager introuvable.');
-        }
+    //     $form = $this->createForm(ManagerType::class, null, [
+    //         'csrf_token_id' => 'submit', //Ajout du token csrf id car formulaire non lié à une entité 
+    //     ]);
+    //     $form->handleRequest($request);
+    //     if (!$manager) {
+    //         throw $this->createNotFoundException('Manager introuvable.');
+    //     }
 
-        if (!$user) {
-            throw $this->createNotFoundException('Utilisateur lié au manager introuvable.');
-        }
-        if($confirmation->isSubmitted())
-        {
-            if($confirmation->isValid()){
-                try {
-                    $entityManager->remove($manager);
-                    $entityManager->remove($user);
-                    $entityManager->flush();
-                    $this->addFlash('success', 'Manager supprimé avec succès.');
-                } catch (\Exception $e) {
-                    $this->addFlash('error', 'Une erreur est survenue lors de la suppression.');
-                }
-                return $this->redirectToRoute('app_administration_manager');
-            }
-        }
-        return $this->render('manager/admin/manager/detail_manager.html.twig', [
-            'page' => 'administration-supprimer-manager',
-            'confirmation'=>$confirmation->createView(), 
-            'form'=>$form->createView(),
-            'manager'=>$manager,
-            'user'=>$user,
-        ]);
-    }
+    //     if (!$user) {
+    //         throw $this->createNotFoundException('Utilisateur lié au manager introuvable.');
+    //     }
+    //     if($confirmation->isSubmitted())
+    //     {
+    //         if($confirmation->isValid()){
+    //             try {
+    //                 $entityManager->remove($manager);
+    //                 $entityManager->remove($user);
+    //                 $entityManager->flush();
+    //                 $this->addFlash('success', 'Manager supprimé avec succès.');
+    //             } catch (\Exception $e) {
+    //                 $this->addFlash('error', 'Une erreur est survenue lors de la suppression.');
+    //             }
+    //             return $this->redirectToRoute('app_administration_manager');
+    //         }
+    //     }
+    //     return $this->render('manager/admin/manager/detail_manager.html.twig', [
+    //         'page' => 'administration-supprimer-manager',
+    //         'confirmation'=>$confirmation->createView(), 
+    //         'form'=>$form->createView(),
+    //         'manager'=>$manager,
+    //         'user'=>$user,
+    //     ]);
+    // }
 }
