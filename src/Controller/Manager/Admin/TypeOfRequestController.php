@@ -69,6 +69,11 @@ class TypeOfRequestController extends AbstractController
         ]);
         $form->handleRequest($request);
 
+        if (!$this->isCsrfTokenValid('add_type_of_request', $request->request->get('_token'))) {
+            $this->addFlash('warning', 'Le jeton CSRF est invalide. Veuillez réessayer.');
+            return $this->redirectToRoute('app_administration_type_of_request');
+        }
+        
         if($form->isSubmitted() && $form->isValid()) {
             $requestType = $form->getData();
             $entityManagerInterface->persist($requestType);
@@ -90,18 +95,20 @@ class TypeOfRequestController extends AbstractController
     {
         $form = $this->createForm(RequestTypeForm::class, $typeDemande);
         $form->handleRequest($request);
-        
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
             $this->addFlash('success', 'Le type de demande a été modifié avec succès.');
             return $this->redirectToRoute('app_administration_type_of_request');
         }
-
+    
         return $this->render('manager/admin/type-of-request/detail_type_of_request.html.twig', [
             'form' => $form->createView(),
             'page' => 'administration-type-de-demande',
+            'requestType' => $typeDemande,
         ]);
     }
+    
 
     //SUPPRIMER TYPE DE DEMANDE VIA L'ADMINISTRATION DU PORTAIL MANAGER
     #[Route('/administration-supprimer-type-de-demande/{id}', name: 'app_administration_delete_type_of_request', methods: ['POST', 'DELETE'])]
@@ -113,6 +120,10 @@ class TypeOfRequestController extends AbstractController
             $this->addFlash('success', 'Le type de demande a été supprimé avec succès.');
             return $this->redirectToRoute('app_administration_type_of_request');
         }
-        return $this->redirectToRoute('app_administration_type_of_request');
+
+        else{
+            $this->addFlash('warning', 'Le jeton est invalide. Veuillez réessayer.');
+            return $this->redirectToRoute('app_administration_type_of_request');
+        }
     }
 }

@@ -22,7 +22,7 @@
                     </div>
                 {% endfor %}
             {% endfor %}
-        <div class="flex items-center gap-5">
+        <div class="flex flex-col items-start gap-5">
             <h1 class="text-left font-bold text-2xl mb-2 inline-block" style='color : #004C6C'>Directions/Services</h1>
             <form method="POST" action="{{ path('app_administration_add_type_of_request') }}">
                 <button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Ajouter directions/services</button>
