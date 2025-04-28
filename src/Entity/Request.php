@@ -114,7 +114,7 @@ class Request
         return $this->start_at;
     }
 
-    public function setStartAt(\DateTime $start_at): static
+    public function setStartAt(?\DateTime $start_at): static
     {
         $this->start_at = $start_at;
 
@@ -126,7 +126,7 @@ class Request
         return $this->end_at;
     }
 
-    public function setEndAt(\DateTime $end_at): static
+    public function setEndAt(?\DateTime $end_at): static
     {
         $this->end_at = $end_at;
 

@@ -53,6 +53,7 @@ class RequestController extends AbstractController
                     $registry->getManager()->persist($data);
                     $registry->getManager()->flush();
                     $this->addFlash('success', 'La demande a été créée');
+                    return $this->redirectToRoute('app_request_history_collaborator');
                 } catch (NotFoundHttpException $e) {
                     $this->addFlash('error', 'Erreur lors de la création de la demande');
                 }
