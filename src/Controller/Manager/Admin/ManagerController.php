@@ -86,7 +86,7 @@ class ManagerController extends AbstractController
         if (!$manager instanceof \App\Entity\User) {
             throw new \LogicException('L\'utilisateur connecté n\'est pas une instance de App\Entity\User.');
         }
-        $form = $this->createForm(ManagerType::class); 
+        $form = $this->createForm(ManagerType::class, null,['submit_label' => 'Ajouter']); 
         $form->handleRequest($request); 
         if($form->isSubmitted())
         {
@@ -135,6 +135,7 @@ class ManagerController extends AbstractController
             'page' => 'administration-ajouter-manager',
             'manager'=>$manager,
             'form'=>$form,
+            'submit_label' => 'Ajouter',
         ]);
     }
 
@@ -148,6 +149,7 @@ class ManagerController extends AbstractController
         }
         $form = $this->createForm(ManagerType::class, null, [
             'csrf_token_id' => 'submit', //Ajout du token csrf id car formulaire non lié à une entité 
+            'submit_label' => 'Mettre à jour'
         ]);
         $form->handleRequest($request);
         $users = $user_repository->findBy([],[]);

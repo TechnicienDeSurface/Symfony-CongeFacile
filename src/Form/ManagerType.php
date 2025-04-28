@@ -7,6 +7,7 @@ use App\Entity\Department;
 use App\Repository\PositionRepository; 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,20 +20,28 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class ManagerType extends AbstractType
 {
-    private $entityManager; 
+    private $entityManager;
     public function __construct(PositionRepository $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $option): void
     {
         $inputClass = 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500';
         $labelClass = 'block text-sm font-medium text-gray-700';
         $defaultPosition1 = $this->entityManager->findByName('Manager');
         $defaultPosition = $defaultPosition1[0];
-
         $builder
+            // Nom de famille
+            ->add('last_name', TextType::class, [
+                'label' => 'Nom de famille - champ obligatoire',
+                'label_attr' => ['class' => $labelClass],
+                'attr' => ['class' => $inputClass],
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'Le nom de famille est obligatoire']),
+                ],
+            ])
             // Prénom
             ->add('first_name', TextType::class, [
                 'label' => 'Prénom - champ obligatoire',
@@ -40,16 +49,6 @@ class ManagerType extends AbstractType
                 'attr' => ['class' => $inputClass],
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'Le prénom est obligatoire']),
-                ],
-            ])
-
-            // Nom de famille
-            ->add('last_name', TextType::class, [
-                'label' => 'Nom de  - champ obligatoire',
-                'label_attr' => ['class' => $labelClass],
-                'attr' => ['class' => $inputClass],
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le nom de famille est obligatoire']),
                 ],
             ])
 
@@ -136,6 +135,7 @@ class ManagerType extends AbstractType
 
             // Bouton de soumission
             ->add('submit', SubmitType::class, [
+                'label'=>$option['submit_label'],
                 'attr' => [
                     'class' => 'w-full text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition',
                     'style' => 'background-color: #004C6C;',
@@ -151,6 +151,7 @@ class ManagerType extends AbstractType
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
             'csrf_token_id' => 'manager_form', // Intention unique pour le formulaire
+            'submit_label' => 'Mettre à jour', // ici on déclare submit_label
         ]);
     }
 }
