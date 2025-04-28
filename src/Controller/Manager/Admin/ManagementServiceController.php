@@ -17,7 +17,8 @@ class ManagementServiceController extends AbstractController
     #[Route('/administration-management-service', name: 'app_administration_management_service')]
     public function viewManagementService(EntityManagerInterface $entityManager): Response
     {
-        $departments = $entityManager->getRepository(Department::class)->findAll();
+        $departments = $entityManager->getRepository(Department::class)->findBy([], ['name' => 'ASC']);
+
 
 
 
