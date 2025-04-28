@@ -33,7 +33,6 @@ class JobController extends AbstractController
 
         // Si le formulaire est soumis et valide, on utilise ses données
         if ($form->isSubmitted() && $form->isValid()) {
-            dd($form->getData());
             $filters = array_merge($filters, $form->getData());
         }
 
