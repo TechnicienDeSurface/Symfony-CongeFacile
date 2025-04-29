@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
     
 class InformationController extends AbstractController
 {
@@ -22,6 +23,7 @@ class InformationController extends AbstractController
     {
         $this->passwordHasher = $passwordHasher;
     }
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/information-manager', name: 'app_information_manager')]
     public function viewInformationManager(Security $security,UserPasswordHasherInterface $hash,EntityManagerInterface $entityManager, Request $request): Response
     {

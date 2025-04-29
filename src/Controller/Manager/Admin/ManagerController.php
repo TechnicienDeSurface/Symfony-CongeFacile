@@ -23,6 +23,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ManagerController extends AbstractController
 {
@@ -31,6 +32,7 @@ class ManagerController extends AbstractController
     }
 
     //PAGE MANAGER VIA ADMINISTRATION MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-manager/{page}', name: 'app_administration_manager', methods: ['GET', 'POST'])]
     public function viewManager(Request $request, UserRepository $UserRepository, int $page = 1): Response
     {
@@ -81,6 +83,7 @@ class ManagerController extends AbstractController
     }
 
     //PAGE AJOUTER MANAGER VIA ADMINISTRATION MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-ajouter-manager', name: 'app_administration_ajouter_manager')]
     public function addManager(UserPasswordHasherInterface $hash, ManagerRegistry $registry, Security $security,Request $request, PositionRepository $position_repository, PersonRepository $person_repository, DepartmentRepository $department_repository, UserRepository $user_repository): Response
     {
@@ -156,6 +159,7 @@ class ManagerController extends AbstractController
     }
 
     //PAGE DETAIL MANAGER VIA ADMINISTRATION MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-detail-manager/{id}', name: 'app_administration_detail_manager', methods: ['GET','POST'])]
     public function editManager(DepartmentRepository $department_repository, PersonRepository $repository, int $id, EntityManagerInterface $entityManager,Request $request,UserRepository $user_repository): Response
     {
