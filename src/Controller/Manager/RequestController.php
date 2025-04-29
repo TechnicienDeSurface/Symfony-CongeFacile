@@ -2,8 +2,6 @@
 
 namespace App\Controller\Manager;
 
-use App\Entity\Department;
-use App\Form\FilterManagerFormType;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,11 +9,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request as RequestFondation;
 use App\Form\FilterRequestPendingFormType;
 use Symfony\Bundle\SecurityBundle\Security;
-use App\Entity\Request;
 use App\Entity\User;
-use App\Repository\DepartmentRepository;
-use App\Entity\Person;
-use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\RequestRepository;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
@@ -42,7 +37,7 @@ class RequestController extends AbstractController
         $allCollaborators = [];
 
         $department = $person->getDepartment();
-        $departmentId = $department->getId(); 
+        $departmentId = $department->getId();
 
         $collaborators = [];
         $collaborators = $personRepository->getPersonByIdDepartment($departmentId);
@@ -67,7 +62,6 @@ class RequestController extends AbstractController
                     'request' => $requestsFiltered,
                     'nbDaysWorking' => $nbDaysWorking
                 ];
-
             }
 
             $allCollaborators[] = $collaborator; // Ajout de la liste des collaborateurs
@@ -77,7 +71,6 @@ class RequestController extends AbstractController
                 'requests' => $requests,
                 'daysWorking' => $daysWorking,
             ];
-
         }
 
         // Créer le formulaire en passant les collaborateurs comme option
@@ -129,12 +122,12 @@ class RequestController extends AbstractController
             foreach ($collaborators as $collaboratorData) {
                 $collaboratorId = $collaboratorData->getId();
                 $collaborator = $personRepository->find($collaboratorId);
-            
+
                 // Filtrer les requêtes pour ce collaborateur
                 $requestsForCollaborator = array_filter($filteredRequests, function ($request) use ($collaboratorId) {
                     return $request->getCollaborator()->getId() === $collaboratorId;
                 });
-                
+
                 // Recalculer daysWorking pour chaque request filtrée
                 $daysWorking = [];
                 foreach ($requestsForCollaborator as $requestsFiltered) {
@@ -142,13 +135,13 @@ class RequestController extends AbstractController
                         $requestsFiltered->getStartAt(),
                         $requestsFiltered->getEndAt()
                     );
-            
+
                     $daysWorking[] = [
                         'request' => $requestsFiltered,
                         'nbDaysWorking' => $nbDaysWorking,
                     ];
                 }
-            
+
                 // Ajouter les résultats au tableau dans la même structure qu'au début
                 $allRequests[] = [
                     'collaborator' => $collaborator,
@@ -179,7 +172,7 @@ class RequestController extends AbstractController
 
     //PAGE DETAILS DES DEMANDES EN ATTENTE
     #[Route('/detail-request-pending', name: 'app_detail_request_pending')]
-    public function viewDetailRequestPending(Security $security, RequestRepository $requestRepository, RequestFondation $request,): Response
+    public function viewDetailRequestPending(Security $security, RequestRepository $requestRepository, RequestFondation $request, EntityManagerInterface $entityManager): Response
     {
         // Récupérez l'utilisateur connecté
         $user = $security->getUser();
@@ -190,6 +183,9 @@ class RequestController extends AbstractController
             throw new \LogicException('L\'utilisateur connecté n\'est pas valide.');
         }
 
+        $form = $this->createForm(RequestStatusFormType::class);
+        $form->handleRequest($request);
+
         $id = $request->request->get('id');
 
         $requestLoaded = $requestRepository->find($id);
@@ -197,12 +193,41 @@ class RequestController extends AbstractController
             throw $this->createNotFoundException('La demande n\'existe pas.');
         }
 
-        $form = $this->createForm(RequestStatusFormType::class);
-        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formData = $form->getData();
+
+            $id = $request->request->get('id');
+
+            if (!$id) {
+                throw new \InvalidArgumentException('ID manquant.');
+            }
+
+            $requestLoaded = $requestRepository->find($id);
+            if (!$requestLoaded) {
+                throw $this->createNotFoundException('La demande n\'existe pas.');
+            }
+
+            // Vérifie le bouton cliqué
+            if ($form->get('accept')->isClicked()) {
+                $answer = true;
+            } elseif ($form->get('refuse')->isClicked()) {
+                $answer = false;
+            } else {
+                throw new \LogicException('Aucun bouton valide cliqué.');
+            }
+
+            $requestLoaded->setAnswer($answer);
+            $requestLoaded->setAnswerComment($formData['answer']);
+            $requestLoaded->setAnswerAt(new \DateTime());
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_request_pending');
+        }
 
         return $this->render('manager/detail_request_pending.html.twig', [
             'page' => 'detail-request-pending',
             'request' => $requestLoaded,
+            'requestId' => $id,
             'form' => $form->createView(),
         ]);
     }
