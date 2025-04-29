@@ -93,6 +93,7 @@ class TeamController extends AbstractController
         $exist_email = false; 
         $form = $this->createForm(CollaborateurType::class, null, [
             'csrf_token_id' => 'submit', //Ajout du token csrf id car formulaire non lié à une entité 
+            'submit_label' => 'Mettre à jour',
         ]);
         $form->handleRequest($request);
         $users = $repository->findBy([],[]);
@@ -124,6 +125,9 @@ class TeamController extends AbstractController
                                 $department = $department_repository->find($formData['department']);
                                 $collaborator->setDepartment($department);
                             }
+                            if($collaborator->getUser->getEnabled() != $formData['enabled']){
+                                $collaborator->getUser()->setEnabled($formData['enabled']);
+                            }
                             $entityManager->persist($collaborator);
                             $entityManager->flush();
                             $this->addFlash('success', 'Succès pour la mise à jour du manager');
@@ -132,11 +136,11 @@ class TeamController extends AbstractController
                         }try{
                             if($user->getEmail() != $formData['email']){
                                 $user->setEmail($formData['email']);
-                            } 
+                            }
                             $entityManager->persist($user);
                             $entityManager->flush();
                             $this->addFlash('success', 'Succès pour la mise à jour de l\'utilisateur');
-                            return $this->redirectToRoute('app_administration_manager');
+                            return $this->redirectToRoute('app_team');
                         }catch(\Exception $e ){
                             $this->addFlash('error', 'Erreur pour la mise à jour de l\'utilisateur'); 
                         }
@@ -152,6 +156,9 @@ class TeamController extends AbstractController
                                 if($collaborator->getDepartment != $formData['department']){
                                     $department = $department_repository->find($formData['department']);
                                     $collaborator->setDepartment($department);
+                                }
+                                if($collaborator->getUser()->getEnabled() != $formData['enabled']){
+                                    $collaborator->getUser()->setEnabled($formData['enabled']);
                                 }
                                 $entityManager->persist($collaborator);
                                 $entityManager->flush();
@@ -187,6 +194,8 @@ class TeamController extends AbstractController
                 'first_name' => $collaborator->getFirstName(),
                 'last_name' => $collaborator->getLastName(),
                 'department' => $collaborator->getDepartment(),
+                'enabled'=>$user->isEnabled(),
+                'submit_label' => 'Mettre à jour',
             ]);
         }
         return $this->render('manager/detail_team.html.twig', [
@@ -274,6 +283,9 @@ class TeamController extends AbstractController
 
 
     // PAGE SUPPRESSION D'UN MEMBRE
-    //#[Route('/delete-member/{id}', name: 'app_delete_member', methods: ['POST', 'DELETE'])]
+    #[Route('/delete-member/{id}', name: 'app_delete_member', methods: ['POST', 'DELETE'])]
+    public function deleteTeam(){
+
+    }
 
 }

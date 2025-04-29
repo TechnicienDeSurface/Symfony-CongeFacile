@@ -12,6 +12,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -24,6 +25,17 @@ class CollaborateurType extends AbstractType
         $labelClass = 'block text-sm font-medium text-gray-700';
 
         $builder
+            //Enabled
+            ->add('enabled', CheckBoxType::class, [
+                'label' => '',
+                'required' => false,
+                'attr' => ['class' => 'hidden peer'], // Tailwind toggle compatible
+                'label_attr' => ['class' => 'inline-flex items-center cursor-pointer'],
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'L\'active est obligatoire']),
+                    // new Assert\TypeValidator()
+                ],
+            ])
             // Prénom
             ->add('first_name', TextType::class, [
                 'label' => 'Prénom - champ obligatoire',
@@ -77,8 +89,8 @@ class CollaborateurType extends AbstractType
                 'label' => 'Nouveau mot de passe - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
+                'required' => false,
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le mot de passe ne peut pas être vide.']),
                     new Assert\Length([
                         'min' => 10,
                         'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
@@ -103,8 +115,8 @@ class CollaborateurType extends AbstractType
                 'label' => 'Confirmation de mot de passe - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
+                'required' => false,
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le mot de passe ne peut pas être vide.']),
                     new Assert\Length([
                         'min' => 10,
                         'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
@@ -126,9 +138,9 @@ class CollaborateurType extends AbstractType
 
             // Bouton de soumission
             ->add('submit', SubmitType::class, [
-                'label' => 'Ajouter',
+                'label' => $options['submit_label'],
                 'attr' => [
-                    'class' => 'w-full text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition',
+                    'class' => 'text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[154px] h-[35px] font-medium cursor-pointer',
                     'style' => 'background-color: #004C6C;',
                 ],
             ])
