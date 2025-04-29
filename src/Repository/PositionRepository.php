@@ -29,6 +29,16 @@ class PositionRepository extends ServiceEntityRepository
            ;
        }
 
+    public function getPositionById($id): ?Position
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     public function findPagination(int $page, int $limit)
     {
         $offset = ($page - 1) * $limit;

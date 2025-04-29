@@ -2,6 +2,7 @@
 
 namespace App\Controller\Manager;
 
+use App\Entity\Department;
 use App\Form\FilterManagerFormType;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +13,7 @@ use App\Form\FilterRequestPendingFormType;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Entity\Request;
 use App\Entity\User;
+use App\Repository\DepartmentRepository;
 use App\Entity\Person;
 use App\Repository\UserRepository;
 use App\Repository\RequestRepository;
@@ -25,32 +27,40 @@ class RequestController extends AbstractController
 {
     // PAGE DES DEMANDES EN ATTENTE
     #[Route('/request-pending/{page}', name: 'app_request_pending')]
-    public function viewRequestPending(Security $security, RequestFondation $request, UserRepository $userRepository, RequestRepository $requestRepository, PersonRepository $personRepository, int $page = 1): Response
+    public function viewRequestPending(Security $security, RequestFondation $request, RequestRepository $requestRepository, PersonRepository $personRepository, int $page = 1): Response
     {
         // Récupérez l'utilisateur connecté
         $user = $security->getUser();
         // Vérifiez si l'utilisateur est une instance de User avant d'appeler getId()
         if ($user instanceof User) {
-            $userId = $user->getId();
+            $person = $user->getPerson();
         } else {
             throw new \LogicException('L\'utilisateur connecté n\'est pas valide.');
         }
 
         $filters = [];
+        $allCollaborators = [];
 
-        // Récupérer les collaborateurs du manager avant de créer le formulaire
-        $collaborators = $userRepository->findCollaboratorsByManager($userId);
+        $department = $person->getDepartment();
+        $departmentId = $department->getId(); 
 
-        $allRequests = [];
+        $collaborators = [];
+        $collaborators = $personRepository->getPersonByIdDepartment($departmentId);
+
+        $allRequests = []; // Debugging line
 
         foreach ($collaborators as $collaboratorData) {
-            $collaboratorId = $collaboratorData['person_id'];
+            $collaboratorId = $collaboratorData->getId();
             $collaborator = $personRepository->find($collaboratorId);
-            $requests = $requestRepository->getTeamRequest($collaboratorId);
+            $requests = $requestRepository->getRequestByPerson($collaboratorId);
 
             foreach ($requests as $requestsFiltered) {
                 // Calcul du nombre de jours ouvrés pour cette demande
-                $nbDaysWorking = $requestRepository->getWorkingDays($requestsFiltered->getStartAt(), $requestsFiltered->getEndAt());
+                if ($requestsFiltered !== null) {
+                    $nbDaysWorking = $requestRepository->getWorkingDays($requestsFiltered->getStartAt(), $requestsFiltered->getEndAt());
+                } else {
+                    $nbDaysWorking = 0; // Default value or handle the case appropriately
+                }
 
                 // Ajouter les jours ouvrés à un tableau pour ce collaborateur
                 $daysWorking[] = [
@@ -67,6 +77,7 @@ class RequestController extends AbstractController
                 'requests' => $requests,
                 'daysWorking' => $daysWorking,
             ];
+
         }
 
         // Créer le formulaire en passant les collaborateurs comme option
@@ -116,7 +127,7 @@ class RequestController extends AbstractController
             $filteredRequests = $requestRepository->searchRequest($filters, 'DESC')->getResult();
 
             foreach ($collaborators as $collaboratorData) {
-                $collaboratorId = $collaboratorData['person_id'];
+                $collaboratorId = $collaboratorData->getId();
                 $collaborator = $personRepository->find($collaboratorId);
             
                 // Filtrer les requêtes pour ce collaborateur
@@ -147,7 +158,7 @@ class RequestController extends AbstractController
             }
         }
 
-        $adapter = new ArrayAdapter($collaborators);
+        $adapter = new ArrayAdapter(is_array($collaborators) ? $collaborators : [$collaborators]);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage(10);
 

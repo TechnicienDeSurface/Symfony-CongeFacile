@@ -30,7 +30,6 @@ class DepartmentRepository extends ServiceEntityRepository
                ->getResult()
            ;
        }
-
     //    public function findOneBySomeField($value): ?Department
     //    {
     //        return $this->createQueryBuilder('d')

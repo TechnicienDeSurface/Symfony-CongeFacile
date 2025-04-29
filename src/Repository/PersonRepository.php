@@ -96,4 +96,22 @@ class PersonRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function getPersonById(int $id): ?Person
+    {
+        return $this->createQueryBuilder('person')
+            ->andWhere('person.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function getPersonByIdDepartment(int $id): ?array
+    {
+        return $this->createQueryBuilder('person')
+            ->andWhere('person.department = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult();
+    }
 }
