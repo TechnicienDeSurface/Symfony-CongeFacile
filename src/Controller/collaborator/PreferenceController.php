@@ -13,10 +13,12 @@ use App\Entity\User ;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Service\MailerService ;
 use PDOException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class PreferenceController extends AbstractController
 {
     //PAGE PREFERENCE "COLLABORATEUR"
+    #[IsGranted('ROLE_COLLABORATEUR')]
     #[Route('/preference-collaborateur', name: 'app_preference_collaborateur')]
     public function viewPreferenceCollaborateur(ManagerRegistry $registry, PersonRepository $repository, Request $request, MailerService $mailer ): Response
     {

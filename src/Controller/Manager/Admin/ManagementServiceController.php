@@ -13,6 +13,7 @@ use App\Entity\Department;
 
 
 use App\Form\DepartmentType;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 
@@ -21,6 +22,7 @@ use App\Form\DepartmentType;
 class ManagementServiceController extends AbstractController
 {
     //PAGE MANAGEMENTS ET SERVICES VIA ADMINISTRATION MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-management-service', name: 'app_administration_management_service', methods: ['GET', 'POST'])]
     public function viewManagementService(Request $request, EntityManagerInterface $entityManager, int $page = 1): Response
     {
@@ -52,6 +54,7 @@ class ManagementServiceController extends AbstractController
     }
 
     //PAGE AJOUTER MANAGEMENTS ET SERVICES VIA ADMINISTRATION MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-ajouter-management-service', name: 'app_administration_ajouter_management_service')]
     public function addManagementService(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -83,6 +86,7 @@ class ManagementServiceController extends AbstractController
 
 
     //PAGE DETAIL MANAGEMENTS ET SERVICES VIA ADMINISTRATION MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-detail-management-service/{id}', name: 'app_administration_detail_management_service', methods: ['GET', 'POST'])]
     public function editManagementService(Request $request, Department $department, EntityManagerInterface $entityManager): Response
     {
