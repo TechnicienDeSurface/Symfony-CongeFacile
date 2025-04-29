@@ -134,7 +134,7 @@ class RequestController extends AbstractController
                 $requestsForCollaborator = array_filter($filteredRequests, function ($request) use ($collaboratorId) {
                     return $request->getCollaborator()->getId() === $collaboratorId;
                 });
-            
+                
                 // Recalculer daysWorking pour chaque request filtrée
                 $daysWorking = [];
                 foreach ($requestsForCollaborator as $requestsFiltered) {

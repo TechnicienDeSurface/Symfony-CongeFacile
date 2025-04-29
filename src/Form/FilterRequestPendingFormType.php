@@ -72,6 +72,7 @@ class FilterRequestPendingFormType extends AbstractType
     {
         $resolver->setDefaults([
             'collaborators' => [],
+            'filters' => [],
         ]);
     }
 }
