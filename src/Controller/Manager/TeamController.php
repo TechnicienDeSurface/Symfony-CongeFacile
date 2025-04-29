@@ -100,6 +100,8 @@ class TeamController extends AbstractController
     #[Route('/administration-ajouter-collaborateur', name: 'app_administration_ajouter_collaborateur')]
     public function addCollaborateur(UserPasswordHasherInterface $hash, ManagerRegistry $registry, Security $security,Request $request, PositionRepository $position_repository, PersonRepository $person_repository, DepartmentRepository $department_repository, UserRepository $user_repository): Response
     {
+        $users = $user_repository->findBy([],[]);
+        $exist_email = false; 
         $manager = New User() ; 
         $manager = $security->getUser() ;
         if (!$manager instanceof User) {
@@ -111,38 +113,52 @@ class TeamController extends AbstractController
         {
             if($form->isValid()){
                 $formData = $form->getData();
-                if($formData['newPassword'] == $formData['confirmPassword']){
-                    try{
-                        $new_manager= new Person();
-                        $new_manager->setFirstName($formData['first_name']);
-                        $new_manager->setLastName($formData['last_name']);
-                        $new_manager->setDepartment($formData['department']);
-                        $new_manager->setAlertBeforeVacation(false);
-                        $new_manager->setAlertNewRequest(false);
-                        $new_manager->setAlertOnAnswer(true);
-                        $new_manager->setPosition($formData['position']);
-                        $new_manager->setManager($manager);
-                        $registry->getManager()->persist($new_manager);
-                        $registry->getManager()->flush();
-                        $this->addFlash('success', 'Succès pour ajouter le collaborateur');
-                    }catch(\Exception $e){
-                        $this->addFlash('error', 'Erreur pour l\'ajout de collaborateur'); 
-                    }try{
-                        $person = $registry->getManager()->getRepository(Person::class)->find($new_manager->getId());
-                        $new_user = New User();
-                        $new_user->setEmail($formData['email']);
-                        $password_hash = $this->passwordHasher->hashPassword($new_user, $formData['newPassword']) ;
-                        $new_user->setPassword($password_hash);
-                        $new_user->setPerson($person);
-                        $new_user->setRoles(["ROLE_COLLABORATEUR"]);
-                        $new_user->setIsVerified(true);
-                        $new_user->setEnabled(true);
-                        $registry->getManager()->persist($new_user);
-                        $registry->getManager()->flush();
-                        $this->addFlash('success', 'Succès pour ajouter l\'utilisateur');
-                    }catch(\Exception $e ){
-                        $this->addFlash('error', 'Erreur pour l\'ajout utilisateur'); 
+                if(!empty($formData['email'])){
+                    foreach($users as $row){
+                        if($row->getEmail() == $formData['email']){
+                            $exist_email = true; 
+                        }
                     }
+                }
+                if($formData['newPassword'] == $formData['confirmPassword']){
+                    if($exist_email === false){
+                        try{
+                            $new_collaborator= new Person();
+                            $new_collaborator->setFirstName($formData['first_name']);
+                            $new_collaborator->setLastName($formData['last_name']);
+                            $new_collaborator->setDepartment($formData['department']);
+                            $new_collaborator->setAlertBeforeVacation(false);
+                            $new_collaborator->setAlertNewRequest(false);
+                            $new_collaborator->setAlertOnAnswer(true);
+                            $new_collaborator->setPosition($formData['position']);
+                            $new_collaborator->setManager($manager);
+                            $registry->getManager()->persist($new_collaborator);
+                            $registry->getManager()->flush();
+                            $this->addFlash('success', 'Succès pour ajouter le collaborateur');
+                        }catch(\Exception $e){
+                            $this->addFlash('error', 'Erreur pour l\'ajout de collaborateur'); 
+                        }try{
+                            $person = $registry->getManager()->getRepository(Person::class)->find($new_collaborator->getId());
+                            $new_user = New User();
+                            $new_user->setEmail($formData['email']);
+                            $password_hash = $this->passwordHasher->hashPassword($new_user, $formData['newPassword']) ;
+                            $new_user->setPassword($password_hash);
+                            $new_user->setPerson($person);
+                            $new_user->setRoles(["ROLE_COLLABORATEUR"]);
+                            $new_user->setIsVerified(true);
+                            $new_user->setEnabled(true);
+                            $registry->getManager()->persist($new_user);
+                            $registry->getManager()->flush();
+                            $this->addFlash('success', 'Succès pour ajouter l\'utilisateur');
+                            return $this->redirectToRoute('app_team');
+                        }catch(\Exception $e ){
+                            $this->addFlash('error', 'Erreur pour l\'ajout utilisateur'); 
+                        }
+                    }else{
+                        $this->addFlash('error','Erreur l\'email existe déjà');    
+                    }
+                }else{
+                    $this->addFlash('error','Erreur la confirmation mot de passe n\'est pas identique au nouveau mot de passe');
                 }
             }
         }

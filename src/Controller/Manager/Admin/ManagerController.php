@@ -84,6 +84,8 @@ class ManagerController extends AbstractController
     #[Route('/administration-ajouter-manager', name: 'app_administration_ajouter_manager')]
     public function addManager(UserPasswordHasherInterface $hash, ManagerRegistry $registry, Security $security,Request $request, PositionRepository $position_repository, PersonRepository $person_repository, DepartmentRepository $department_repository, UserRepository $user_repository): Response
     {
+        $users = $user_repository->findBy([],[]);
+        $exist_email = false; 
         $manager = New User() ; 
         $manager = $security->getUser() ;
         if (!$manager instanceof \App\Entity\User) {
@@ -95,38 +97,49 @@ class ManagerController extends AbstractController
         {
             if($form->isValid()){
                 $formData = $form->getData();
+                if(!empty($formData['email'])){
+                    foreach($users as $row){
+                        if($row->getEmail() == $formData['email']){
+                            $exist_email = true; 
+                        }
+                    }
+                }
                 if($formData['newPassword'] == $formData['confirmPassword']){
-                    try{
-                        $new_manager= new Person();
-                        $new_manager->setFirstName($formData['first_name']);
-                        $new_manager->setLastName($formData['last_name']);
-                        $new_manager->setDepartment($formData['department']);
-                        $new_manager->setAlertBeforeVacation(false);
-                        $new_manager->setAlertNewRequest(false);
-                        $new_manager->setAlertOnAnswer(true);
-                        $new_manager->setPosition($formData['position']);
-                        $new_manager->setManager(null);
-                        $registry->getManager()->persist($new_manager);
-                        $registry->getManager()->flush();
-                        $this->addFlash('success', 'Succès pour ajouter le manager');
-                    }catch(\Exception $e){
-                        $this->addFlash('error', 'Erreur pour l\'ajout du manager'); 
-                    }try{
-                        $person = $registry->getManager()->getRepository(Person::class)->find($new_manager->getId());
-                        $new_user = New User();
-                        $new_user->setEmail($formData['email']);
-                        $password_hash = $this->passwordHasher->hashPassword($new_user, $formData['newPassword']) ;
-                        $new_user->setPassword($password_hash);
-                        $new_user->setPerson($person);
-                        $new_user->setRoles([1 => "ROLE_MANAGER"]);
-                        $new_user->setIsVerified(true);
-                        $new_user->setEnabled(true);
-                        $registry->getManager()->persist($new_user);
-                        $registry->getManager()->flush();
-                        $this->addFlash('success', 'Succès pour ajouter de l\'utilisateur');
-                        return $this->redirectToRoute('app_administration_manager');
-                    }catch(\Exception $e ){
-                        $this->addFlash('error', 'Erreur pour l\'ajout de l\'utilisateur'); 
+                    if($exist_email === false){
+                        try{
+                            $new_manager= new Person();
+                            $new_manager->setFirstName($formData['first_name']);
+                            $new_manager->setLastName($formData['last_name']);
+                            $new_manager->setDepartment($formData['department']);
+                            $new_manager->setAlertBeforeVacation(false);
+                            $new_manager->setAlertNewRequest(false);
+                            $new_manager->setAlertOnAnswer(true);
+                            $new_manager->setPosition($formData['position']);
+                            $new_manager->setManager(null);
+                            $registry->getManager()->persist($new_manager);
+                            $registry->getManager()->flush();
+                            $this->addFlash('success', 'Succès pour ajouter le manager');
+                        }catch(\Exception $e){
+                            $this->addFlash('error', 'Erreur pour l\'ajout du manager'); 
+                        }try{
+                            $person = $registry->getManager()->getRepository(Person::class)->find($new_manager->getId());
+                            $new_user = New User();
+                            $new_user->setEmail($formData['email']);
+                            $password_hash = $this->passwordHasher->hashPassword($new_user, $formData['newPassword']) ;
+                            $new_user->setPassword($password_hash);
+                            $new_user->setPerson($person);
+                            $new_user->setRoles([1 => "ROLE_MANAGER"]);
+                            $new_user->setIsVerified(true);
+                            $new_user->setEnabled(true);
+                            $registry->getManager()->persist($new_user);
+                            $registry->getManager()->flush();
+                            $this->addFlash('success', 'Succès pour ajouter de l\'utilisateur');
+                            return $this->redirectToRoute('app_administration_manager');
+                        }catch(\Exception $e ){
+                            $this->addFlash('error', 'Erreur pour l\'ajout de l\'utilisateur'); 
+                        }
+                    }else{
+                        $this->addFlash('error','Erreur l\'email existe déjà');    
                     }
                 }else{
                     $this->addFlash('error','Erreur la confirmation mot de passe n\'est pas identique au nouveau mot de passe');
@@ -146,7 +159,10 @@ class ManagerController extends AbstractController
     #[Route('/administration-detail-manager/{id}', name: 'app_administration_detail_manager', methods: ['GET','POST'])]
     public function editManager(DepartmentRepository $department_repository, PersonRepository $repository, int $id, EntityManagerInterface $entityManager,Request $request,UserRepository $user_repository): Response
     {
+        $users = $user_repository->findBy([],[]);
+        $exist_email = false; 
         $manager = $repository->find($id);
+        dd($manager->getUser()->getEmail());
         if(!$manager){
             throw $this->createNotFoundException('No manager found for id ' . $id);
         }
@@ -164,36 +180,15 @@ class ManagerController extends AbstractController
         if($form->isSubmitted()){
             if($form->isValid()){
                 $formData = $form->getData();
-                if(empty($formData['newPassword']) && empty($formData['confirmPassword'])){
-                    try{
-                        if($manager->getFirstName() != $formData['first_name']){
-                            $manager->setFirstName($formData['first_name']);
+                if(!empty($formData['email']) && $formData['email'] != $manager->getUser()->getEmail()){
+                    foreach($users as $row){
+                        if($row->getEmail() == $formData['email']){
+                            $exist_email = true; 
                         }
-                        if($manager->getLastName() != $formData['last_name']){
-                            $manager->setLastName($formData['last_name']);
-                        }
-                        if($manager->getDepartment != $formData['department']){
-                            $department = $department_repository->find($formData['department']);
-                            $manager->setDepartment($department);
-                        }
-                        $entityManager->persist($manager);
-                        $entityManager->flush();
-                        $this->addFlash('success', 'Succès pour la mise à jour du manager');
-                    }catch(\Exception $e){
-
-                    }try{
-                        if($user->getEmail() != $formData['email']){
-                            $user->setEmail($formData['email']);
-                        } 
-                        $entityManager->persist($user);
-                        $entityManager->flush();
-                        $this->addFlash('success', 'Succès pour la mise à jour de l\'utilisateur');
-                        return $this->redirectToRoute('app_administration_manager');
-                    }catch(\Exception $e ){
-                        $this->addFlash('error', 'Erreur pour la mise à jour de l\'utilisateur'); 
                     }
-                }else{
-                    if($formData['newPassword'] == $formData['confirmPassword']){
+                }
+                if($exist_email == false){
+                    if(empty($formData['newPassword']) && empty($formData['confirmPassword'])){
                         try{
                             if($manager->getFirstName() != $formData['first_name']){
                                 $manager->setFirstName($formData['first_name']);
@@ -207,17 +202,13 @@ class ManagerController extends AbstractController
                             }
                             $entityManager->persist($manager);
                             $entityManager->flush();
-                            $this->addFlash('success', 'Succès pour la mise à jour le manager');
+                            $this->addFlash('success', 'Succès pour la mise à jour du manager');
                         }catch(\Exception $e){
 
                         }try{
-                            $password_hash = $this->passwordHasher->hashPassword($user, $formData['newPassword']) ;
                             if($user->getEmail() != $formData['email']){
                                 $user->setEmail($formData['email']);
-                            }
-                            if($password_hash != $user->getPassword()){
-                                $user->setPassword($password_hash);
-                            }  
+                            } 
                             $entityManager->persist($user);
                             $entityManager->flush();
                             $this->addFlash('success', 'Succès pour la mise à jour de l\'utilisateur');
@@ -226,9 +217,45 @@ class ManagerController extends AbstractController
                             $this->addFlash('error', 'Erreur pour la mise à jour de l\'utilisateur'); 
                         }
                     }else{
-                        $this->addFlash('error','Erreur la confirmation mot de passe n\'est pas identique au nouveau mot de passe');
+                        if($formData['newPassword'] == $formData['confirmPassword']){
+                            try{
+                                if($manager->getFirstName() != $formData['first_name']){
+                                    $manager->setFirstName($formData['first_name']);
+                                }
+                                if($manager->getLastName() != $formData['last_name']){
+                                    $manager->setLastName($formData['last_name']);
+                                }
+                                if($manager->getDepartment != $formData['department']){
+                                    $department = $department_repository->find($formData['department']);
+                                    $manager->setDepartment($department);
+                                }
+                                $entityManager->persist($manager);
+                                $entityManager->flush();
+                                $this->addFlash('success', 'Succès pour la mise à jour le manager');
+                            }catch(\Exception $e){
+
+                            }try{
+                                $password_hash = $this->passwordHasher->hashPassword($user, $formData['newPassword']) ;
+                                if($user->getEmail() != $formData['email']){
+                                    $user->setEmail($formData['email']);
+                                }
+                                if($password_hash != $user->getPassword()){
+                                    $user->setPassword($password_hash);
+                                }  
+                                $entityManager->persist($user);
+                                $entityManager->flush();
+                                $this->addFlash('success', 'Succès pour la mise à jour de l\'utilisateur');
+                                return $this->redirectToRoute('app_administration_manager');
+                            }catch(\Exception $e ){
+                                $this->addFlash('error', 'Erreur pour la mise à jour de l\'utilisateur'); 
+                            }
+                        }else{
+                            $this->addFlash('error','Erreur la confirmation mot de passe n\'est pas identique au nouveau mot de passe');
+                        }
                     }
-                }
+                }else{
+                    $this->addFlash('error','Erreur l\'email existe déjà');  
+                }   
             }
         }else{
             $form = $this->createForm(ManagerType::class, [
