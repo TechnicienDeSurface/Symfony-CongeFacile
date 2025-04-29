@@ -9,13 +9,19 @@
 			{% include 'layout/menu/_sidebar.html.twig' %}
 
             <div class="w-full p-8">
-				  <h1 class="text-left font-bold text-2xl my-4 " style='color : #004C6C !important'>Ajouter un poste</h1>
-                {% include 'layout/_addFlash.html.twig'%}
-                
+				<h1 class="text-left font-bold text-2xl my-4 " style='color : #004C6C !important'>Ajouter un poste</h1>
+
                 {{ form_start(form) }}
                     <div class="mb-4 w-1/4">
                         <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Nom du poste :</label>
                         {{ form_widget(form.name, {'attr': {'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'}}) }}
+                        {% if form.name.vars.errors|length > 0 %}
+                            <div class="mb-4 p-4 rounded-lg text-sm bg-red-100 text-red-800 mt-[10px]">
+                                {% for error in form.name.vars.errors %}
+                                    {{ error.message }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="flex items-left">
                         {{ form_widget(form.add, {'attr': {'class': 'bg-[#004C6C] hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-2'}}) }}
