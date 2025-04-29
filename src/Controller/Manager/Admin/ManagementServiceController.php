@@ -3,19 +3,24 @@
 namespace App\Controller\Manager\Admin;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Department;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
+
+use App\Form\DepartmentType;
+
+
+
+
 
 class ManagementServiceController extends AbstractController
 {
     //PAGE MANAGEMENTS ET SERVICES VIA ADMINISTRATION MANAGER
-    #[Route('/administration-management-service', name: 'app_administration_management_service')]
-    public function viewManagementService(EntityManagerInterface $entityManager): Response
+    #[Route('/administration-management-service', name: 'app_administration_management_service', methods: ['GET', 'POST'])]
+    public function viewManagementService(Request $request, EntityManagerInterface $entityManager): Response
     {
         $departments = $entityManager->getRepository(Department::class)->findBy([], ['name' => 'ASC']);
 
@@ -64,45 +69,68 @@ class ManagementServiceController extends AbstractController
     public function editManagementService(Request $request, Department $department, EntityManagerInterface $entityManager): Response
     {
 
+        // if (!$department) {
+        //     throw $this->createNotFoundException('Le département n\'existe pas.');
+        // }
+
+        // if ($request->isMethod('POST')) {
+        //     $newName = $request->request->get('name');
+
+        //     if ($request->request->has('edit')) {
+        //         // Modifier le nom du département
+        //         $department->setName($newName);
+        //         $entityManager->flush();
+        //         $this->addFlash('success', 'Le département a été mis à jour.');
+
+        //         return $this->redirectToRoute('app_administration_management_service', [
+        //             'id' => $department->getId(),
+        //         ]);
+        //     }
+
+        //     if ($request->request->has('delete')) {
+        //         // Supprimer le département
+        //         $entityManager->remove($department);
+        //         $entityManager->flush();
+        //         $this->addFlash('warning', 'Le département a été supprimé.');
+
+        //         return $this->redirectToRoute('app_administration_management_service');
+        //     }
+        // }
+
+
         if (!$department) {
             throw $this->createNotFoundException('Le département n\'existe pas.');
         }
 
-        if ($request->isMethod('POST')) {
-            $newName = $request->request->get('name');
+        // Créer le formulaire
+        $form = $this->createForm(DepartmentType::class, $department);
 
-            if ($request->request->has('edit')) {
-                // Modifier le nom du département
-                $department->setName($newName);
-                $entityManager->flush();
+        $form->handleRequest($request);
+
+        // Si le formulaire est soumis
+        if ($form->isSubmitted()) {
+            // Action de mise à jour
+            if ($form->get('edit')->isClicked() && $form->isValid()) {
+                $entityManager->flush(); // Mettre à jour le département
                 $this->addFlash('success', 'Le département a été mis à jour.');
-
-                return $this->redirectToRoute('app_administration_detail_management_service', [
-                    'id' => $department->getId(),
-                ]);
+                return $this->redirectToRoute('app_administration_detail_management_service', ['id' => $department->getId()]);
             }
 
-            if ($request->request->has('delete')) {
-                // Supprimer le département
-                $entityManager->remove($department);
-                $entityManager->flush();
+            // Action de suppression
+            if ($form->get('delete')->isClicked()) {
+                $entityManager->remove($department); // Supprimer le département
+                $entityManager->flush(); // Appliquer la suppression
                 $this->addFlash('warning', 'Le département a été supprimé.');
-
-                return $this->redirectToRoute('app_administration_management_service');
+                return $this->redirectToRoute('app_administration_management_service'); // Rediriger vers la liste des départements
             }
         }
 
         return $this->render('manager/admin/management-service/detail_management_service.html.twig', [
             'page' => 'administration-detail-management-service',
             'department' => $department,
+            'form' => $form->createView(),
         ]);
-
-
-
-
-
-
-
+ 
         
     }
 
