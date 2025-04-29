@@ -29,7 +29,9 @@
             </div>
 
             <div>
-                <button type="submit" name="delete" class="text-[#ebf1f4] bg-[#E10E0E] rounded-lg w-[130px] h-[35px] font-medium my-7 cursor-pointer inline-block">Supprimer</button>
+                <form method="DELETE" action="{{ path('app_administration_delete_type_of_request', {'id': department.id}) }}">
+                    <button type="submit" class="bg-gray-200 px-3 py-1 rounded">Supprimer</button>
+                </form>
                 <button type="submit" name="edit" class="mx-3 text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[154px] h-[35px] font-medium my-7 cursor-pointer inline-block">Mettre à jour</button>
             </div>
             </form> #}

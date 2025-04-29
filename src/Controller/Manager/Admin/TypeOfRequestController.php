@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Doctrine\ORM\QueryAdapter as ORMQueryAdapter;
 use Pagerfanta\Pagerfanta;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class TypeOfRequestController extends AbstractController
 {
@@ -36,15 +37,17 @@ class TypeOfRequestController extends AbstractController
 
         $order = $filters['totalnbdemande'] ?? '';
 
-        // Recherche dans le repository avec les filtres
         $query = $requestTypeRepository->searchTypeOfRequest($filters, $order);
 
-        // Pagination avec QueryAdapter
+        //PAGINATION
         $adapter = new ORMQueryAdapter($query);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage(10);
 
         try {
+            if($form->isSubmitted()) {
+                $page = 1;
+            }
             $pagerfanta->setCurrentPage($page);
         } catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
             throw $this->createNotFoundException('La page demandée n\'existe pas.');
@@ -60,31 +63,54 @@ class TypeOfRequestController extends AbstractController
 
     //PAGE AJOUTER TYPE DE DEMANDE VIA ADMINISTRATION MANAGER
     #[Route('/administration-ajouter-type-de-demande', name: 'app_administration_add_type_of_request', methods: ['POST'])]
-    public function addTypeOfRequest(): Response
+    public function addTypeOfRequest(Request $request, EntityManagerInterface $entityManagerInterface): Response
     {
+        $form = $this->createForm(RequestTypeForm::class, null, [
+            'isAdd' => true,
+        ]);
+        $form->handleRequest($request);
+        
+        if($form->isSubmitted() && $form->isValid()) {
+            $requestType = $form->getData();
+            $entityManagerInterface->persist($requestType);
+            $entityManagerInterface->flush();
+
+            $this->addFlash('success', 'Le type de demande a été ajouté avec succès.');
+            return $this->redirectToRoute('app_administration_type_of_request');
+        }
+
         return $this->render('manager/admin/type-of-request/add_type_of_request.html.twig', [
             'page' => 'administration-type-de-demande',
+            'form' => $form->createView(),
         ]);
     }
 
     //PAGE DETAIL TYPE DE DEMANDE VIA ADMINISTRATION MANAGER
-    #[Route('/administration-detail-type-de-demande/{id}', name: 'app_administration_detail_type_of_request', methods: ['POST'])]
-    public function editRequestType(RequestType $typeDemande, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/administration-detail-type-de-demande/{id}', name: 'app_administration_detail_type_of_request', methods: ['GET', 'POST'])]
+    public function editRequestType(RequestType $typeDemande, Request $request, EntityManagerInterface $entityManager, CsrfTokenManagerInterface $csrfTokenManager): Response
     {
-        $form = $this->createForm(RequestTypeForm::class, $typeDemande);
+        $form = $this->createForm(RequestTypeForm::class, $typeDemande, [
+            'isAdd' => false
+        ]);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            if ($form->get('delete')->isClicked()) {
+                $entityManager->remove($typeDemande);
+                $entityManager->flush();
+                $this->addFlash('success', 'Le type de demande a été supprimé avec succès.');
+            } else {
+                $entityManager->flush();
+                $this->addFlash('success', 'Le type de demande a été modifié avec succès.');
+            }
+        
             return $this->redirectToRoute('app_administration_type_of_request');
         }
-
+    
         return $this->render('manager/admin/type-of-request/detail_type_of_request.html.twig', [
             'form' => $form->createView(),
             'page' => 'administration-type-de-demande',
+            'requestType' => $typeDemande,
         ]);
     }
-
-    //SUPPRIMER MANAGEMENTS ET SERVICES VIA L'ADMINISTRATION DU PORTAIL MANAGER
-    //#[Route('/administration-supprimer-type-de-demande/{id}', name: 'app_administration_supprimer_type_of_request', methods: ['POST', 'DELETE'])]
 }

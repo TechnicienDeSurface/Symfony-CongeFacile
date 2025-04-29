@@ -11,27 +11,36 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class RequestTypeForm extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('name', TextType::class, [
-                'label' => 'Nom du type',
-                'attr' => ['class' => 'form-control']
-            ])
-            ->add('supprimer', SubmitType::class, [
-                'label' => 'Supprimer',
-                'attr' => ['class' => 'btn btn-danger']
-            ])
-            ->add('mettreAJour', SubmitType::class, [
-                'label' => 'Mettre à jour',
-                'attr' => ['class' => 'btn btn-primary']
+        $builder->add('name', TextType::class, [
+            'label' => 'Nom du type',
+            'attr' => ['class' => 'form-control'],
+        ]);
+
+        if (!empty($options['isAdd'])) {
+            $builder->add('ajouter', SubmitType::class, [
+                'label' => 'Ajouter',
+                'attr' => ['class' => 'btn btn-success'],
             ]);
+        } else {
+            $builder
+                ->add('mettreAJour', SubmitType::class, [
+                    'label' => 'Mettre à jour',
+                    'attr' => ['class' => 'btn btn-primary'],
+                ])
+                ->add('delete', SubmitType::class, [
+                    'label' => 'Supprimer',
+                    'attr' => ['class' => 'btn btn-primary'],
+                ]);
+        }
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => RequestType::class,
+            'isAdd' => false,
         ]);
     }
 }

@@ -1,38 +1,49 @@
-{# templates/type_demande/form.html.twig #}
-
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<title>{% block title %}Type de demande{% endblock %}</title>
+    {% include 'layout/menu/_header.html.twig' %}
 
-	<title>
-		{% block title %}Manager - Consulter une demande
-		{% endblock %}
-	</title>
+    <main class="flex">
+        {% include 'layout/menu/_sidebar.html.twig' %}
 
-	{% include 'layout/menu/_header.html.twig' %}
-
-	<main style="display: flex;">
-
-		{% include 'layout/menu/_sidebar.html.twig' %}
-
-		<div class="w-full p-8 overflow-y-auto">
-
+        <div class="w-full p-8 overflow-y-auto">
             <h2 class="text-left font-bold text-2xl mb-4">Types de demandes</h2>
+            
+            {{ form_start(form, {
+                action: path('app_administration_detail_type_of_request', {id: requestType.id}),
+                attr: {class: 'mb-4'}
+            }) }}
+            
+            <div class="mb-3">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name, {
+                    'attr': {
+                        'class': 'form-control mt-1 block w-[250px] rounded-md p-2 border border-gray-400 shadow-sm'
+                    }
+                }) }}
+                {% if form.name.vars.errors|length > 0 %}
+                    <div class="mb-4 p-4 rounded-lg text-sm bg-red-100 text-red-800 mt-[10px]">
+                        {% for error in form.name.vars.errors %}
+                            {{ error.message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
 
-            {{ form_start(form) }}
-                <div class="mb-3">
-                    {{ form_label(form.name) }}
-                    {{ form_widget(form.name, { 'attr': {'class': 'form-control  mt-1 block w-[250px] rounded-md p-2 border border-gray-400 shadow-sm'} }) }}
-                </div>
-
-                <div class="d-flex gap-2">
-                    {{ form_widget(form.supprimer, { 'attr': {'class': 'w-[200px] text-white bg-red-700 hover:bg-red-800 border-none rounded-md h-[35px] font-medium cursor-pointer'} }) }}
-                    {{ form_widget(form.mettreAJour, { 'attr': {'class': 'w-[200px] text-white bg-blue-800 hover:bg-blue-900 border-none rounded-md h-[35px] font-medium cursor-pointer'} }) }}
-                </div>
+            <div class="flex gap-4">
+                {{ form_widget(form.mettreAJour, {
+                    'attr': {
+                        'class': 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+                    }
+                }) }}
+                {{ form_widget(form.delete, {
+                    'attr': {
+                        'class': 'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2'
+                    }
+                }) }}
+            </div>
             {{ form_end(form) }}
-
         </div>
-	</main>
-
-
+    </main>
 {% endblock %}
