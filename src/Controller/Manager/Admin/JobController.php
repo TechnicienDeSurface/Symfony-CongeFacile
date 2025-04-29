@@ -16,6 +16,8 @@ use App\Form\AddJobForm;
 use Symfony\Component\Form\FormFactoryInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+
 
 class JobController extends AbstractController
 {
@@ -90,7 +92,7 @@ class JobController extends AbstractController
             }else{
                 $entityManager->persist($position);
                 $entityManager->flush();
-                $this->addFlash('success','Poste ajouté');
+                $this->addFlash('success','Le poste a été ajouté avec succès.');
                 return $this->redirectToRoute('app_administration_job');
             }
             
@@ -104,33 +106,28 @@ class JobController extends AbstractController
     }
 
     //PAGE DETAIL JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
-    #[Route('/administration-detail-job/{id}', name: 'app_administration_detail_job', methods: ['POST'])]
-    public function editJob(Request $request, Position $position, EntityManagerInterface $entityManager): Response
+    #[Route('/administration-detail-job/{id}', name: 'app_administration_detail_job', methods: ['GET','POST'])]
+    public function editJob(Request $request, Position $position, EntityManagerInterface $entityManager, int $id): Response
     {
-        // Créer le formulaire et le traiter
         $form = $this->createForm(EditJobForm::class, $position);
         $form->handleRequest($request);
     
         if ($form->isSubmitted()) {
-            // Si le formulaire est soumis et valide
-    
-            if ($form->get('edit')) {
-                // Si le bouton "Mettre à jour" a été cliqué
+            if ($form->get('edit')->isClicked()) {
                 if ($form->isValid()) {
-                    $entityManager->flush(); // Mettre à jour l'entité
-                    $this->addFlash('success', 'Le poste a été mis à jour.');
-                    return $this->redirectToRoute('app_administration_detail_job', ['id' => $position->getId()]);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Le poste a été mis à jour avec succès.');
+                    return $this->redirectToRoute('app_administration_job');
                 }
-            } elseif ($form->get('delete')) {
-                // Si le bouton "Supprimer" a été cliqué
-                // Vérifier si la position existe encore
-                if ($position) {
-                    $entityManager->remove($position); // Supprimer l'entité
-                    $entityManager->flush(); // Appliquer la suppression en base
-                    $this->addFlash('warning', 'Le poste a été supprimé.');
-                    return $this->redirectToRoute('app_administration_job'); // Redirection après suppression
-                } else {
-                    $this->addFlash('error', 'Le poste n\'existe pas.');
+            } elseif ($form->get('delete')->isClicked()) {
+                try {
+                    $entityManager->remove($position);
+                    $entityManager->flush();
+                    $this->addFlash('warning', 'Le poste a été supprimé avec succès.');
+                    return $this->redirectToRoute('app_administration_job');
+                } catch (ForeignKeyConstraintViolationException $e) {
+                    $this->addFlash('error', 'Impossible de supprimer ce poste : il est encore utilisé par un ou plusieurs utilisateurs.');
+                    return $this->redirectToRoute('app_administration_detail_job', ['id' => $position->getId()]);
                 }
             }
         }
@@ -140,8 +137,4 @@ class JobController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    
 }
-
-    //SUPPRIMER JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
-    //#[Route('/administration-supprimer-job/{id}', name: 'app_administration_supprimer_job', methods: ['POST', 'DELETE'])]

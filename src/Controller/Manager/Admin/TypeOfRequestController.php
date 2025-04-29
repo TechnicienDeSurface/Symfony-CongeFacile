@@ -15,6 +15,7 @@ use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Doctrine\ORM\QueryAdapter as ORMQueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 
 class TypeOfRequestController extends AbstractController
 {
@@ -96,9 +97,17 @@ class TypeOfRequestController extends AbstractController
     
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get('delete')->isClicked()) {
-                $entityManager->remove($typeDemande);
-                $entityManager->flush();
-                $this->addFlash('success', 'Le type de demande a été supprimé avec succès.');
+                try {
+                    $entityManager->remove($typeDemande);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Le type de demande a été supprimé avec succès.');
+                    return $this->redirectToRoute('app_administration_type_of_request');
+                } catch (ForeignKeyConstraintViolationException $e) {
+                    $this->addFlash('error', 'Impossible de supprimer ce type de demande : il est encore utilisé par un ou plusieurs utilisateurs.');
+                    return $this->redirectToRoute('app_administration_detail_type_of_request', ['id' => $typeDemande->getId()]);
+                }
+
+
             } else {
                 $entityManager->flush();
                 $this->addFlash('success', 'Le type de demande a été modifié avec succès.');
