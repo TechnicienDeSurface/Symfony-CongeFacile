@@ -24,7 +24,7 @@ class RequestRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->select('COUNT(p.id)')
-            ->andWhere('r.collaborator_id = :val')
+            ->andWhere('r.collaborator = :val')
             ->setParameter('val', $value)
             ->orderBy('r.id', 'ASC')
             ->setMaxResults(10)
@@ -41,16 +41,16 @@ class RequestRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getTeamRequest($id): array
+    public function getRequestByPerson($id): ?array
     {
         return $this->createQueryBuilder('r')
-            ->andWhere('r.collaborator = :val')
-            ->setParameter('val', $id)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
+            ->join('r.collaborator', 'c')
+            ->andWhere('c.id = :id')    
+            ->setParameter('id', $id)
             ->getQuery()
             ->getResult();
     }
+    
 
     public function getWorkingDays(\DateTime $startAt, \DateTime $endAt)
     {
