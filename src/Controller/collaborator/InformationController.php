@@ -33,8 +33,7 @@ class InformationController extends AbstractController
         if (!$collaborator instanceof \App\Entity\User) {
             throw new \LogicException('L\'utilisateur connecté n\'est pas une instance de App\Entity\User.');
         }
-    
-
+        $person  = $collaborator->getPerson();
         $form_person= $this->createForm(InformationFormType::class, $person);
         $form_password = $this->createForm(MotDePasseType::class, $user);
         $form_password->handleRequest($request);
