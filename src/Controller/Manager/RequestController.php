@@ -178,8 +178,8 @@ class RequestController extends AbstractController
     }
 
     //PAGE DETAILS DES DEMANDES EN ATTENTE
-    #[Route('/detail-request-pending/{id}', name: 'app_detail_request_pending')]
-    public function viewDetailRequestPending(Security $security, int $id, RequestRepository $requestRepository, RequestFondation $request,): Response
+    #[Route('/detail-request-pending', name: 'app_detail_request_pending')]
+    public function viewDetailRequestPending(Security $security, RequestRepository $requestRepository, RequestFondation $request,): Response
     {
         // Récupérez l'utilisateur connecté
         $user = $security->getUser();
@@ -189,6 +189,8 @@ class RequestController extends AbstractController
         } else {
             throw new \LogicException('L\'utilisateur connecté n\'est pas valide.');
         }
+
+        $id = $request->request->get('id');
 
         $requestLoaded = $requestRepository->find($id);
         if (!$requestLoaded) {

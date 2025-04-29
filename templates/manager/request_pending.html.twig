@@ -125,7 +125,9 @@
 									</td>
 
 									<td class="py-6 px-6">
-										<form method="POST" action="{{ path('app_detail_request_pending', {'id': request.id}) }}">
+										<form method="POST" action="{{ path('app_detail_request_pending') }}">
+											<!-- Champ caché pour l'ID -->
+											<input type="hidden" name="id" value="{{ request.id }}">
 											<button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
 										</form>
 									</td>
@@ -142,20 +144,21 @@
 		<div class="flex w-full justify-center items-center h-max mt-10">
 			<div>
 				{% set queryParams = app.request.query.all %}
-				
+
 				<div class="flex w-full justify-center items-center h-max mt-10">
 					{% if pager.hasPreviousPage %}
-						<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4"
-						href="{{ path(app.request.attributes.get('_route'), queryParams|merge({'page': pager.previousPage})) }}">
+						<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path(app.request.attributes.get('_route'), queryParams|merge({'page': pager.previousPage})) }}">
 							Précédent
 						</a>
 					{% endif %}
 
-					<p>Page {{ pager.currentPage }} sur {{ pager.nbPages }}</p>
+					<p>Page
+						{{ pager.currentPage }}
+						sur
+						{{ pager.nbPages }}</p>
 
 					{% if pager.hasNextPage %}
-						<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4"
-						href="{{ path(app.request.attributes.get('_route'), queryParams|merge({'page': pager.nextPage})) }}">
+						<a class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6 m-4" href="{{ path(app.request.attributes.get('_route'), queryParams|merge({'page': pager.nextPage})) }}">
 							Suivant
 						</a>
 					{% endif %}
