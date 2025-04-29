@@ -25,11 +25,11 @@ class RequestStatusFormType extends AbstractType
             ])
             ->add('accept', SubmitType::class, [
                 'label' => 'Accepter la demande',
-                'attr' => ['class' => 'btn btn-danger mx-3 text-[#ebf1f4] bg-[#1A8245] rounded-lg w-[203px] h-[36px] font-medium my-7 cursor-pointer inline-block']
+                'attr' => ['class' => 'btn btn-success mx-3 text-[#ebf1f4] bg-[#1A8245] rounded-lg w-[203px] h-[36px] font-medium my-7 cursor-pointer inline-block']
             ])
             ->add('refuse', SubmitType::class, [
                 'label' => 'Refuser la demande',
-                'attr' => ['class' => 'btn btn-primary text-[#ebf1f4] bg-[#E10E0E] rounded-lg w-[210px] h-[36px] font-medium my-7 cursor-pointer inline-block']
+                'attr' => ['class' => 'btn btn-danger btn-primary text-[#ebf1f4] bg-[#E10E0E] rounded-lg w-[210px] h-[36px] font-medium my-7 cursor-pointer inline-block']
             ]);
     }
 }

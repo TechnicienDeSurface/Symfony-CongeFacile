@@ -50,6 +50,7 @@
             </div>
             <div class="flex space-x-4">
                 <div class="w-1/4">
+				<input type="hidden" name="id" value="{{ requestId }}">
                     {{ form_row(form.refuse, {'attr': {'class': 'w-full text-white bg-red-500 hover:bg-red-600 border-none rounded-md h-[35px] font-medium cursor-pointer'}}) }}
                 </div>
                 <div class="w-1/4">
