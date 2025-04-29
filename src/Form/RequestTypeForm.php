@@ -28,6 +28,10 @@ class RequestTypeForm extends AbstractType
                 ->add('mettreAJour', SubmitType::class, [
                     'label' => 'Mettre à jour',
                     'attr' => ['class' => 'btn btn-primary'],
+                ])
+                ->add('delete', SubmitType::class, [
+                    'label' => 'Supprimer',
+                    'attr' => ['class' => 'btn btn-primary'],
                 ]);
         }
     }
