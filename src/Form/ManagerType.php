@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class ManagerType extends AbstractType
 {
+    private $entityManager; 
     public function __construct(PositionRepository $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -86,8 +87,8 @@ class ManagerType extends AbstractType
                 'label' => 'Nouveau mot de passe - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
+                'required'=>false,
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le mot de passe ne peut pas être vide.']),
                     new Assert\Length([
                         'min' => 10,
                         'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
@@ -109,11 +110,11 @@ class ManagerType extends AbstractType
 
             // Confirmation du mot de passe
             ->add('confirmPassword', PasswordType::class, [
+                'required'=>false,
                 'label' => 'Confirmation de mot de passe - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le mot de passe ne peut pas être vide.']),
                     new Assert\Length([
                         'min' => 10,
                         'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
@@ -135,7 +136,6 @@ class ManagerType extends AbstractType
 
             // Bouton de soumission
             ->add('submit', SubmitType::class, [
-                'label' => 'Mettre à jour',
                 'attr' => [
                     'class' => 'w-full text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition',
                     'style' => 'background-color: #004C6C;',

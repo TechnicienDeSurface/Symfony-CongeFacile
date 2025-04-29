@@ -86,7 +86,6 @@ class RequestController extends AbstractController
                 'collaborator'      => $formData['collaborator'] ?? null,
                 'start_at'          => $formData['start_at'] ?? null,
                 'end_at'            => $formData['end_at'] ?? null,
-                'nbdays'            => $formData['nbdays'] ?? null,
                 'created_at'        => $formData['created_at'] ?? null,
             ];
 
@@ -106,10 +105,6 @@ class RequestController extends AbstractController
                 $filters['created_at'] = $formData['created_at'];
             }
 
-            if (!empty($formData['nbdays'])) {
-                $filters['nbdays'] = $formData['nbdays'];
-            }
-
             if (!empty($formData['request_type'])) {
                 $filters['request_type'] = $formData['request_type'];
             }
@@ -120,24 +115,37 @@ class RequestController extends AbstractController
 
             $filteredRequests = $requestRepository->searchRequest($filters, 'DESC')->getResult();
 
-            // Regrouper les résultats par collaborateur (comme dans la première partie)
             foreach ($collaborators as $collaboratorData) {
                 $collaboratorId = $collaboratorData['person_id'];
                 $collaborator = $personRepository->find($collaboratorId);
-
+            
                 // Filtrer les requêtes pour ce collaborateur
                 $requestsForCollaborator = array_filter($filteredRequests, function ($request) use ($collaboratorId) {
                     return $request->getCollaborator()->getId() === $collaboratorId;
                 });
-
-                // Ajouter les résultats au tableau dans la même structure
+            
+                // Recalculer daysWorking pour chaque request filtrée
+                $daysWorking = [];
+                foreach ($requestsForCollaborator as $requestsFiltered) {
+                    $nbDaysWorking = $requestRepository->getWorkingDays(
+                        $requestsFiltered->getStartAt(),
+                        $requestsFiltered->getEndAt()
+                    );
+            
+                    $daysWorking[] = [
+                        'request' => $requestsFiltered,
+                        'nbDaysWorking' => $nbDaysWorking,
+                    ];
+                }
+            
+                // Ajouter les résultats au tableau dans la même structure qu'au début
                 $allRequests[] = [
                     'collaborator' => $collaborator,
                     'requests' => $requestsForCollaborator,
+                    'daysWorking' => $daysWorking,
                 ];
             }
         }
-
 
         $adapter = new ArrayAdapter($collaborators);
         $pagerfanta = new Pagerfanta($adapter);
@@ -229,6 +237,34 @@ class RequestController extends AbstractController
             'requests' => $pagerfanta->getCurrentPageResults(),
             'pager' => $pagerfanta,
             'filters' => $filters,
+        ]);
+    }
+
+    //PAGE DETAILS HISTORIQUE DES DEMANDES
+    #[Route('/detail-history-request/{id}', name: 'app_detail_history_request')]
+    public function viewDetailRequestHistory(Security $security, int $id, RequestRepository $requestRepository, RequestFondation $request,): Response
+    {
+        // Récupérez l'utilisateur connecté
+        $user = $security->getUser();
+        // Vérifiez si l'utilisateur est une instance de User avant d'appeler getId()
+        if ($user instanceof User) {
+            $userId = $user->getId();
+        } else {
+            throw new \LogicException('L\'utilisateur connecté n\'est pas valide.');
+        }
+
+        $requestLoaded = $requestRepository->find($id);
+        if (!$requestLoaded) {
+            throw $this->createNotFoundException('La demande n\'existe pas.');
+        }
+
+        $form = $this->createForm(RequestStatusFormType::class);
+        $form->handleRequest($request);
+
+        return $this->render('manager/detail_history_request.html.twig', [
+            'page' => 'detail-history-request',
+            'request' => $requestLoaded,
+            'form' => $form->createView(),
         ]);
     }
 }

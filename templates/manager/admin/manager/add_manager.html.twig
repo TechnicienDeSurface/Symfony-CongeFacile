@@ -57,7 +57,8 @@
                 </div>
 
                 <div class="mt-6">
-                    {{ form_widget(form.submit)}}
+                    {{ form_label(form.submit, 'Ajouter') }} 
+                    {{ form_widget(form.submit) }}
                 </div>
 
                 {{ form_end(form) }}

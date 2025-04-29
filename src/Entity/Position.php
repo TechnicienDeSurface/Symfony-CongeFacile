@@ -8,6 +8,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PositionRepository::class)]
+#[ORM\Table(name: 'position', uniqueConstraints: [
+    new ORM\UniqueConstraint(name:'name', columns: ['name'])
+])]
 class Position
 {
     #[ORM\Id]
@@ -15,7 +18,7 @@ class Position
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'position', targetEntity: Person::class, cascade: ["persist", "remove"])]
