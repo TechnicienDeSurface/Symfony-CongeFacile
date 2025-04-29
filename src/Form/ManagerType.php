@@ -87,8 +87,8 @@ class ManagerType extends AbstractType
                 'label' => 'Nouveau mot de passe - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
+                'required'=>false,
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le mot de passe ne peut pas être vide.']),
                     new Assert\Length([
                         'min' => 10,
                         'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
@@ -110,11 +110,11 @@ class ManagerType extends AbstractType
 
             // Confirmation du mot de passe
             ->add('confirmPassword', PasswordType::class, [
+                'required'=>false,
                 'label' => 'Confirmation de mot de passe - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
                 'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le mot de passe ne peut pas être vide.']),
                     new Assert\Length([
                         'min' => 10,
                         'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères.',

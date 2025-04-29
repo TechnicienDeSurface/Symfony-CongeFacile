@@ -83,14 +83,6 @@
                                 {{form_widget(form.submit)}}
                             {{ form_end(form) }}
                         </div>
-                        <div class="w-1/2">
-                            <form method="post" action="{{ path('app_administration_supprimer_manager', {'id': manager.id}) }}">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ manager.id) }}">
-                                <button type="submit" class="bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition">
-                                    Supprimer
-                                </button>
-                            </form>
-                        </div>
                     </div>
                 {% endif %}
             </div>

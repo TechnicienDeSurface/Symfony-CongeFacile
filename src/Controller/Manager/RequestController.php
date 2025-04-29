@@ -250,4 +250,32 @@ class RequestController extends AbstractController
             'filters' => $filters,
         ]);
     }
+
+    //PAGE DETAILS HISTORIQUE DES DEMANDES
+    #[Route('/detail-history-request/{id}', name: 'app_detail_history_request')]
+    public function viewDetailRequestHistory(Security $security, int $id, RequestRepository $requestRepository, RequestFondation $request,): Response
+    {
+        // Récupérez l'utilisateur connecté
+        $user = $security->getUser();
+        // Vérifiez si l'utilisateur est une instance de User avant d'appeler getId()
+        if ($user instanceof User) {
+            $userId = $user->getId();
+        } else {
+            throw new \LogicException('L\'utilisateur connecté n\'est pas valide.');
+        }
+
+        $requestLoaded = $requestRepository->find($id);
+        if (!$requestLoaded) {
+            throw $this->createNotFoundException('La demande n\'existe pas.');
+        }
+
+        $form = $this->createForm(RequestStatusFormType::class);
+        $form->handleRequest($request);
+
+        return $this->render('manager/detail_history_request.html.twig', [
+            'page' => 'detail-history-request',
+            'request' => $requestLoaded,
+            'form' => $form->createView(),
+        ]);
+    }
 }
