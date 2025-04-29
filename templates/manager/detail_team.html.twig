@@ -1,136 +1,102 @@
-{# templates/Manager/detail_team.html.twig #}
-
 {% extends 'base.html.twig' %}
 
 {% block body %}
 
-    <title>{% block title %}Manager - Mon équipe - Détails{% endblock %}</title>
+    <script src="{{ asset('assets/js/ViewPassword.js') }}"></script>
 
-    {% include 'layout/menu/_header.html.twig' %}
+    <title>
+        {% block title %}Information du manager{% endblock %}
+    </title>
+    
+    <body>
+        {% include 'layout/menu/_header.html.twig' %}
+        <main style="display: flex;">
+            {% include 'layout/menu/_sidebar.html.twig' %}
+            <div class="w-full p-8">
+                <h1 class="text-2xl font-bold text-gray-800 mb-6">{{ collaborator.lastName ~ ' ' ~ collaborator.firstName }}</h1>
+                {% include 'layout/_addFlash.html.twig' %}
 
-    <main style="display: flex;">
+                {{ form_start(form) }}
 
-        {% include 'layout/menu/_sidebar.html.twig' %}
-
-        <div class="w-full p-8 overflow-y-auto">
-
-
-            
-            <h1 class="text-left font-bold text-2xl mb-4" style='color : #004C6C'>Lucas Dupas</h1>
-
-            <div>
-                <label class="inline-flex items-center cursor-pointer">
-                    <input type="checkbox" value="" class="sr-only peer">
-                    <div class="relative w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
-                </label>
-                
-                <p class="font-sm inline-block mx-3">Profil actif depuis 05/05/2024<p>
-            </div>
-
-            <div class="my-3">
-                <label for=" " class="block text-sm/6 font-medium text-gray-900">Adresse email - champ obligatoire</label>
-                <div class="mt-2">
-                    <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                    <div class="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M64 112c-8.8 0-16 7.2-16 16l0 22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1l0-22.1c0-8.8-7.2-16-16-16L64 112zM48 212.2L48 384c0 8.8 7.2 16 16 16l384 0c8.8 0 16-7.2 16-16l0-171.8L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64l384 0c35.3 0 64 28.7 64 64l0 256c0 35.3-28.7 64-64 64L64 448c-35.3 0-64-28.7-64-64L0 128z"/></svg>
-                    </div>
-                    <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="Email">
-                    <div class="grid shrink-0 grid-cols-1 focus-within:relative">
-                    </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="inline-grid grid-cols-2 gap-3">
-
-                <div class="my-3 ">
-                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Nom de famille - champ obligatoire</label>
-                    <div class="mt-2">
-                        <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                        <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="Nom">
-                        <div class="grid shrink-0 grid-cols-1 focus-within:relative">
-                        </div>
-                        </div>
-                    </div>
-                </div> 
-
-                <div class="my-3 ">
-                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Prénom - champ obligatoire</label>
-                    <div class="mt-2">
-                        <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                        <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="Prénom">
-                        <div class="grid shrink-0 grid-cols-1 focus-within:relative">
-                        </div>
-                        </div>
-                    </div>
-                </div> 
-
-                <div class="my-3">
-                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Direction/Service - champ obligatoire</label>
-                    <select class="w-80 h-9 border border-gray-300 rounded-md px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
-                        <option value="option1">BU Symfony</option>
-                        <option value="option2">Wordpress</option>
-                        <option value="option3">Option 3</option>
-                    </select>
-                </div> 
-
-                <div class="my-3">
-                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Poste - champ obligatoire</label>
-                    <select class="w-80 h-9 border border-gray-300 rounded-md px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
-                        <option value="option1">Alternant Développeur</option>
-                        <option value="option2">Développeur</option>
-                        <option value="option3">Option 3</option>
-                    </select>
-                </div> 
-            </div>
-
-            <div class="my-3 ">
-                <label for=" " class="block text-sm/6 font-medium text-gray-900">Manager - champ obligatoire</label>
-                <div class="mt-2">
-                    <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-gray-100 pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                        <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 bg-gray-100 text-base text-black-900 placeholder:text-black-900 focus:outline-none sm:text-sm/6 cursor-not-allowed focus:outline-none" placeholder="Nom du Manager" readonly>
-                        <div class="grid shrink-0 grid-cols-1 focus-within:relative">
-                        </div>
-                    </div>
-                </div>
-            </div> 
-
-            <div class="inline-grid grid-cols-2 gap-4">
-                <div class="my-3">
-                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Nouveau mot de passe</label>
-                    <div class="mt-2">
-                        <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                            <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="">
-                            <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="flex items-center gap-4">
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    {{ form_widget(form.enabled, {
+                                        'attr': {
+                                            'class': 'sr-only peer',
+                                            'id': form.enabled.vars.id
+                                        }
+                                    }) }}
+                                    <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full peer-checked:after:border-white"></div>
+                                </label>
+                                <h1>Profil Actif depuis le {{ collaborator.user.createdAt|date('d/m/Y') }}</h1>
                             </div>
+                            {% if form_errors(form.enabled) %}
+                                <p class="text-red-500 text-sm mt-1">{{ form_errors(form.enabled) }}</p>
+                            {% endif %}
                         </div>
-                    </div>
-                </div> 
 
-                <div class="my-3">
-                    <label for=" " class="block text-sm/6 font-medium text-gray-900">Confirmation de mot de passe</label>
-                    <div class="mt-2">
-                        <div class="flex w-80 items-center border border-gray-300 rounded-md px-3 bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
-                            <input type="text" name=" " id=" " class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" placeholder="">
-                            <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                        <br>
+
+                        <div>
+                            {{ form_label(form.email, null, {'label_attr': {'class': ' block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.email, {'attr': {'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm'}}) }}
+                            <h3 class="text-red-500">{{ form_errors(form.email) }}</h3>
+                        </div>
+
+                        <br>
+
+                        <div>
+                            {{ form_label(form.last_name, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.last_name, {'attr': {'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm'}}) }}
+                            <h3 class="text-red-500">{{ form_errors(form.last_name) }}</h3>
+                        </div>
+
+                        <div>
+                            {{ form_label(form.first_name, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.first_name, {'attr': {'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm'}}) }}
+                            <h3 class="text-red-500">{{ form_errors(form.first_name) }}</h3>
+                        </div>
+
+                        <div>
+                            {{ form_label(form.department, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.department, {'attr': {'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm'}}) }}
+                            <h3 class="text-red-500">{{ form_errors(form.department) }}</h3>
+                        </div>
+
+                        <div>
+                            {{ form_label(form.position, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.position, {'attr': {'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm'}}) }}
+                            <h3 class="text-red-500">{{ form_errors(form.position) }}</h3>
+                        </div>
+
+                        <div>
+                            {{ form_label(form.newPassword, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            <div class="relative">
+                                {{ form_widget(form.newPassword, {'attr': {'class': 'mt-1 block w-full rounded-md p-2 border border-gray-400 shadow-sm pr-10'}}) }}
                             </div>
+                            <h3 class="text-red-500">{{ form_errors(form.newPassword) }}</h3>
                         </div>
+
+                        <div>
+                            {{ form_label(form.confirmPassword, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            <div class="relative">
+                                {{ form_widget(form.confirmPassword, {'attr': {'class': 'mt-1 block w-full p-2 rounded-md border border-gray-400 shadow-sm pr-10'}}) }}
+                            </div>
+                            <h3 class="text-red-500">{{ form_errors(form.confirmPassword) }}</h3>
+                        </div>
+                    </div>                
+
+                    <div class="flex items-center gap-3 mt-6">
+                        <a href="{{ path('app_delete_member', {'id': collaborator.id}) }}" class="text-[#ebf1f4] text-center bg-[#E10E0E] rounded-lg w-[216px] p-2 font-medium cursor-pointer">
+                            Supprimer ce compte
+                        </a>
+                        {{form_widget(form.submit)}}
                     </div>
-                </div> 
+
+                {{ form_end(form) }}
             </div>
-
-
-            <div>
-                <button type="submit" class="text-[#ebf1f4] bg-[#E10E0E] rounded-lg w-[216px] h-[35px] font-medium my-7 cursor-pointer inline-block">Supprimer le compte</button>
-                <button type="submit" class="mx-3 text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[154px] h-[35px] font-medium my-7 cursor-pointer inline-block">Mettre à jour</button>
-            </div>
-
-
-
-
-
-
-        </div>
-    </main>
-
+        </main>
+    </body>
 {% endblock %}
