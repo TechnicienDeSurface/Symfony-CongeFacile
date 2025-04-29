@@ -18,7 +18,7 @@ class InformationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $isManager = $options['is_manager'] ?? false;
-
+        // dd($options);
         $inputClass = $isManager 
         ? 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2' 
         : 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200';
@@ -32,7 +32,7 @@ class InformationFormType extends AbstractType
             ],
             'attr' => [
             'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
-            'value' => $options['person']->getLastName(),
+            'value' => $options['data']->getLastName(),
             'disabled' => 'disabled'
             ],
         ])
@@ -43,7 +43,7 @@ class InformationFormType extends AbstractType
             ],
             'attr' => [
             'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
-            'value' => $options['person']->getFirstName(),
+            'value' => $options['data']->getFirstName(),
             'disabled' => 'disabled'
             ],
         ])
@@ -56,7 +56,7 @@ class InformationFormType extends AbstractType
             'attr' => [
                 'class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2 bg-gray-200',
                 'readonly' => true,
-                'value' => $options['user']->getEmail(),
+                'value' => $options['data']?->getUser()?->getEmail(),
                 'disabled' => 'disabled'
             ],
         ])
@@ -108,6 +108,5 @@ class InformationFormType extends AbstractType
         ]);
 
         $resolver->setDefined('user');
-        $resolver->setDefined('person'); // Définis user comme une option (sinon ça marche pas)
     }
 }
