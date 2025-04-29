@@ -24,8 +24,8 @@ class FilterAdminDemandeFormType extends AbstractType
                 'label' => 'Nb demandes associées :',
                 'required' => false,
                 'choices' => [
-                    'Croissant' => 'ASC',
-                    'Décroissant' => 'DESC',
+                    'Croissant' => 'DESC',
+                    'Décroissant' => 'ASC',
                 ],
                 'attr' => ['class' => 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'],
                 'placeholder' => 'Choisir l\'ordre',
