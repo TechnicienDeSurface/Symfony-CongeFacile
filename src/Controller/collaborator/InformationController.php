@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class InformationController extends AbstractController
 
@@ -23,6 +24,7 @@ class InformationController extends AbstractController
         
     }
     //PAGE INFORMATIONS "COLLABORATEUR"
+    #[IsGranted('ROLE_COLLABORATEUR')]
     #[Route('/information-collaborateur', name: 'app_information_collaborateur')]
     public function viewInformationCollaborateur(ManagerRegistry $registry, Security $security, Request $request,UserPasswordHasherInterface $hash,EntityManagerInterface $entityManager): Response
     {

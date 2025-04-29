@@ -55,8 +55,8 @@ class DepartmentFixtures extends Fixture {
 
         // Fixture 8
         $department8 = new Department();
-        $department8->setName("");
-        $this->addReference('', $department8);
+        $department8->setName("Réseau");
+        $this->addReference('Réseau', $department8);
         $manager->persist($department8);
 
         $manager->flush();

@@ -21,6 +21,7 @@ use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class TeamController extends AbstractController
 {
@@ -30,6 +31,7 @@ class TeamController extends AbstractController
     }
 
     //PAGE DE L'EQUIPE GERER PAR LE MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/team-manager/{page}', name: 'app_team', methods: ['GET', 'POST'])]
     public function viewTeam(Security $security,Request $request , PersonRepository $personRepository, int $page = 1): Response 
     {

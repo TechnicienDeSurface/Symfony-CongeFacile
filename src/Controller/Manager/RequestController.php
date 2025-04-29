@@ -17,10 +17,12 @@ use Pagerfanta\Pagerfanta;
 use App\Form\FilterHistoRequestType;
 use App\Repository\PersonRepository;
 use App\Form\RequestStatusFormType;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class RequestController extends AbstractController
 {
     // PAGE DES DEMANDES EN ATTENTE
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/request-pending/{page}', name: 'app_request_pending')]
     public function viewRequestPending(Security $security, RequestFondation $request, RequestRepository $requestRepository, PersonRepository $personRepository, int $page = 1): Response
     {
@@ -171,6 +173,7 @@ class RequestController extends AbstractController
     }
 
     //PAGE DETAILS DES DEMANDES EN ATTENTE
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/detail-request-pending', name: 'app_detail_request_pending')]
     public function viewDetailRequestPending(Security $security, RequestRepository $requestRepository, RequestFondation $request, EntityManagerInterface $entityManager): Response
     {
@@ -233,6 +236,7 @@ class RequestController extends AbstractController
     }
 
     //PAGE HISTORIQUE DES DEMANDES
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/history-request/{page}', name: 'app_history_request_manager', methods: ['GET', 'POST'])]
     public function viewRequestHistory(RequestFondation $request, RequestRepository $repository, int $page = 1): Response
     {
@@ -279,6 +283,7 @@ class RequestController extends AbstractController
     }
 
     //PAGE DETAILS HISTORIQUE DES DEMANDES
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/detail-history-request/{id}', name: 'app_detail_history_request')]
     public function viewDetailRequestHistory(Security $security, int $id, RequestRepository $requestRepository, RequestFondation $request,): Response
     {

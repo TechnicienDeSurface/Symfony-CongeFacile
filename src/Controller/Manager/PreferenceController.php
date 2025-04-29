@@ -12,10 +12,12 @@ use App\Entity\User;
 use App\Entity\Person;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class PreferenceController extends AbstractController
 {
     //PAGE DES PREFERENCES POUR LE MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/preference-manager', name: 'app_preference_manager')]
     public function viewPreferenceManager(EntityManagerInterface $entityManager, Request $request, Security $security): Response
     {

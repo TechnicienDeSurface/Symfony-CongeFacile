@@ -17,11 +17,13 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 class JobController extends AbstractController
 {
     //PAGE JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-job/{page}', name: 'app_administration_job', methods:['GET', 'POST'])]
     public function viewJob(Request $request, PositionRepository $positionRepository, int $page = 1): Response
     {
@@ -69,6 +71,7 @@ class JobController extends AbstractController
     }
 
     //PAGE AJOUTER JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-ajouter-job', name: 'app_administration_ajouter_job', methods:['POST'])]
     public function addJob(PositionRepository $repository, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -106,6 +109,7 @@ class JobController extends AbstractController
     }
 
     //PAGE DETAIL JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-detail-job/{id}', name: 'app_administration_detail_job', methods: ['GET','POST'])]
     public function editJob(Request $request, Position $position, EntityManagerInterface $entityManager, int $id): Response
     {

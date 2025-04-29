@@ -12,38 +12,17 @@ class ManagerIdFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        $personRepo = $manager->getRepository(Person::class);
-        $userRepo = $manager->getRepository(User::class);
+        $managerUser = $this->getReference('Jane@example.com', User::class);
 
-        $person = $personRepo->find(1);
-        $managerUser = $userRepo->find(5);
+        $personNames = ['Alice', 'Bob', 'Charlie', 'Adrien', 'John'];
 
-        $person->setManager($managerUser);
-        $manager->flush();
+        foreach ($personNames as $name) {
+            $person = $this->getReference($name, Person::class);
+            $person->setManager($managerUser);
+            $manager->persist($person);
+        }
 
-        $person = $personRepo->find(3);
-        $managerUser = $userRepo->find(5);
-
-        $person->setManager($managerUser);
-        $manager->flush();
-
-        $person = $personRepo->find(4);
-        $managerUser = $userRepo->find(5);
-
-        $person->setManager($managerUser);
-        $manager->flush();
-
-        $person = $personRepo->find(5);
-        $managerUser = $userRepo->find(5);
-
-        $person->setManager($managerUser);
-        $manager->flush();
-
-        $person = $personRepo->find(6);
-        $managerUser = $userRepo->find(5);
-
-        $person->setManager($managerUser);
-        $manager->flush();
+        $manager->flush(); 
     }
     
     public function getDependencies() : array

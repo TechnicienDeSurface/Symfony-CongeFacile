@@ -18,11 +18,13 @@ use Pagerfanta\Pagerfanta;
 use App\Entity\Person ; 
 use App\Entity\User ; 
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class RequestController extends AbstractController
 { 
 
     //PAGE NOUVELLE DEMANDE "COLLABORATEUR"
+    #[IsGranted('ROLE_COLLABORATEUR')]
     #[Route('/new-request', name: 'app_new_request')]
     public function viewNewRequest(Security $security, RequestFondation $request_bd, RequestRepository $repository, ManagerRegistry $registry, PersonRepository $personRepository): Response
     {
@@ -69,6 +71,7 @@ class RequestController extends AbstractController
 
 
     //PAGE HISTORIQUE DES DEMANDES "COLLABORATEUR"
+    #[IsGranted('ROLE_COLLABORATEUR')]
     #[Route('/request-history-collaborator/{page}', name: 'app_request_history_collaborator', methods: ['GET', 'POST'])]
     public function viewRequestHistory(RequestFondation $request, RequestRepository $requestRepository, int $page = 1): Response
     {
@@ -119,6 +122,7 @@ class RequestController extends AbstractController
     }
 
     //PAGE DETAILS DES DEMANDES "COLLABORATEUR"
+    #[IsGranted('ROLE_COLLABORATEUR')]
     #[Route('/detail-request-collaborator/{id}', name: 'app_detail_request_collaborator')]
     public function detailRequest(): Response
     {

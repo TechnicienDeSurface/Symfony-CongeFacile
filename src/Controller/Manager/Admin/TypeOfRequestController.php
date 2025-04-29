@@ -16,10 +16,12 @@ use Pagerfanta\Doctrine\ORM\QueryAdapter as ORMQueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class TypeOfRequestController extends AbstractController
 {
     //PAGE TYPE DE DEMANDE VIA ADMINISTRATION MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-type-de-demande/{page}', name: 'app_administration_type_of_request', methods: ['GET', 'POST'])]
     public function viewTypeOfRequest(Request $request, RequestTypeRepository $requestTypeRepository, int $page = 1): Response
     {
@@ -63,6 +65,7 @@ class TypeOfRequestController extends AbstractController
     }
 
     //PAGE AJOUTER TYPE DE DEMANDE VIA ADMINISTRATION MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-ajouter-type-de-demande', name: 'app_administration_add_type_of_request', methods: ['POST'])]
     public function addTypeOfRequest(Request $request, EntityManagerInterface $entityManagerInterface): Response
     {
@@ -87,6 +90,7 @@ class TypeOfRequestController extends AbstractController
     }
 
     //PAGE DETAIL TYPE DE DEMANDE VIA ADMINISTRATION MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-detail-type-de-demande/{id}', name: 'app_administration_detail_type_of_request', methods: ['GET', 'POST'])]
     public function editRequestType(RequestType $typeDemande, Request $request, EntityManagerInterface $entityManager, CsrfTokenManagerInterface $csrfTokenManager): Response
     {

@@ -7,9 +7,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class StatisticController extends AbstractController
 {
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/statistic-manager', name: 'app_statistic')]
     public function viewStatistic(EntityManagerInterface $entityManagerInterface): Response
     {
