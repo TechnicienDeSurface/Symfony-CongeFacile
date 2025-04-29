@@ -9,6 +9,7 @@ use App\Form\CollaborateurType;
 use App\Repository\PersonRepository;
 use App\Repository\PositionRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\DepartmentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -81,18 +82,119 @@ class TeamController extends AbstractController
     }
 
     //PAGE DETAILS DE L'EQUIPE GERER PAR LE MANAGER
-    #[Route('/detail-team-manager/{id}', name: 'app_detail_team', methods: ['POST'])]
-    public function viewDetailTeam(int $id, ManagerRegistry $registry, UserRepository $repository, Request $request): Response
+    #[Route('/detail-team-manager/{id}', name: 'app_detail_team', methods: ['GET','POST'])]
+    public function viewDetailTeam(int $id, ManagerRegistry $registry, UserRepository $repository, Request $request,DepartmentRepository $department_repository, PersonRepository $person_repository, EntityManagerInterface $entityManager,): Response
     {
         $user = $repository->find($id);
-
+        $collaborator = $person_repository->find($id);
         if (!$user) {
-            throw $this->createNotFoundException('No category found for id ' . $id);
+            throw $this->createNotFoundException('Pas d\'utilisateur avec cette id ' . $id);
         }
+        $exist_email = false; 
+        $form = $this->createForm(CollaborateurType::class, null, [
+            'csrf_token_id' => 'submit', //Ajout du token csrf id car formulaire non lié à une entité 
+        ]);
+        $form->handleRequest($request);
+        $users = $repository->findBy([],[]);
+        foreach($users as $row){
+            if($row->getPerson()->getId() === $id){
+                $user = $row;
+            }
+        }
+        if($form->isSubmitted()){
+            if($form->isValid()){
+                $formData = $form->getData();
+                if(!empty($formData['email']) && $formData['email'] != $user->getEmail()){
+                    foreach($users as $row){
+                        if($row->getEmail() == $formData['email']){
+                            $exist_email = true; 
+                        }
+                    }
+                }
+                if($exist_email == false){
+                    if(empty($formData['newPassword']) && empty($formData['confirmPassword'])){
+                        try{
+                            if($collaborator->getFirstName() != $formData['first_name']){
+                                $collaborator->setFirstName($formData['first_name']);
+                            }
+                            if($collaborator->getLastName() != $formData['last_name']){
+                                $collaborator->setLastName($formData['last_name']);
+                            }
+                            if($collaborator->getDepartment != $formData['department']){
+                                $department = $department_repository->find($formData['department']);
+                                $collaborator->setDepartment($department);
+                            }
+                            $entityManager->persist($collaborator);
+                            $entityManager->flush();
+                            $this->addFlash('success', 'Succès pour la mise à jour du manager');
+                        }catch(\Exception $e){
 
+                        }try{
+                            if($user->getEmail() != $formData['email']){
+                                $user->setEmail($formData['email']);
+                            } 
+                            $entityManager->persist($user);
+                            $entityManager->flush();
+                            $this->addFlash('success', 'Succès pour la mise à jour de l\'utilisateur');
+                            return $this->redirectToRoute('app_administration_manager');
+                        }catch(\Exception $e ){
+                            $this->addFlash('error', 'Erreur pour la mise à jour de l\'utilisateur'); 
+                        }
+                    }else{
+                        if($formData['newPassword'] == $formData['confirmPassword']){
+                            try{
+                                if($collaborator->getFirstName() != $formData['first_name']){
+                                    $collaborator->setFirstName($formData['first_name']);
+                                }
+                                if($collaborator->getLastName() != $formData['last_name']){
+                                    $collaborator->setLastName($formData['last_name']);
+                                }
+                                if($collaborator->getDepartment != $formData['department']){
+                                    $department = $department_repository->find($formData['department']);
+                                    $collaborator->setDepartment($department);
+                                }
+                                $entityManager->persist($collaborator);
+                                $entityManager->flush();
+                                $this->addFlash('success', 'Succès pour la mise à jour le manager');
+                            }catch(\Exception $e){
+
+                            }try{
+                                $password_hash = $this->passwordHasher->hashPassword($user, $formData['newPassword']) ;
+                                if($user->getEmail() != $formData['email']){
+                                    $user->setEmail($formData['email']);
+                                }
+                                if($password_hash != $user->getPassword()){
+                                    $user->setPassword($password_hash);
+                                }  
+                                $entityManager->persist($user);
+                                $entityManager->flush();
+                                $this->addFlash('success', 'Succès pour la mise à jour de l\'utilisateur');
+                                return $this->redirectToRoute('app_administration_manager');
+                            }catch(\Exception $e ){
+                                $this->addFlash('error', 'Erreur pour la mise à jour de l\'utilisateur'); 
+                            }
+                        }else{
+                            $this->addFlash('error','Erreur la confirmation mot de passe n\'est pas identique au nouveau mot de passe');
+                        }
+                    }
+                }else{
+                    $this->addFlash('error','Erreur l\'email existe déjà');  
+                }   
+            }
+        }else{
+            $form = $this->createForm(CollaborateurType::class, [
+                'email' => $user->getEmail(),
+                'first_name' => $collaborator->getFirstName(),
+                'last_name' => $collaborator->getLastName(),
+                'department' => $collaborator->getDepartment(),
+            ]);
+        }
         return $this->render('manager/detail_team.html.twig', [
             'controller_name' => 'Team',
             'user' => $user,
+            'collaborator' => $collaborator,
+            'page'=>'team-detail',
+            'form' => $form,
         ]);
     }
 

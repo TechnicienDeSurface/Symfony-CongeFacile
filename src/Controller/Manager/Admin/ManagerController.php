@@ -162,7 +162,6 @@ class ManagerController extends AbstractController
         $users = $user_repository->findBy([],[]);
         $exist_email = false; 
         $manager = $repository->find($id);
-        dd($manager->getUser()->getEmail());
         if(!$manager){
             throw $this->createNotFoundException('No manager found for id ' . $id);
         }

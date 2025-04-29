@@ -139,6 +139,10 @@ class CollaborateurType extends AbstractType
     {
         $resolver->setDefaults([
             // Configure your form options here
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
+            'csrf_token_id' => 'manager_form', // Intention unique pour le formulaire
+            'submit_label' => 'Mettre à jour', // ici on déclare submit_label
         ]);
     }
 }
