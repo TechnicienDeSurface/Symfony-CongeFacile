@@ -18,7 +18,7 @@ class PersonRepository extends ServiceEntityRepository
         parent::__construct($registry, Person::class);
     }
 
-    public function searchTeamMembers(array $filters,User $manager, string $order = ''): Query
+    public function searchTeamMembers(array $filters,User $manager, $order): Query
     {
         $qb = $this->createQueryBuilder('person');
 
@@ -58,7 +58,7 @@ class PersonRepository extends ServiceEntityRepository
         }
 
         if ($order) {
-            $qb->orderBy('person.last_name', $order);
+            $qb->orderBy('person.id', $order);
         }
 
         return $qb->getQuery();

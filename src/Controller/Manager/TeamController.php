@@ -54,7 +54,7 @@ class TeamController extends AbstractController
             $filters = array_merge($filters, $form->getData());
         }
 
-        $order = $filters['totalleavedays'] ?? '';
+        $order = $filters['nbdays'] ?? '';
 
         // Recherche dans le repository avec les filtres
         $query = $personRepository->searchTeamMembers($filters, $manager, $order);
