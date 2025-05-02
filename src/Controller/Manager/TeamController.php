@@ -178,7 +178,7 @@ class TeamController extends AbstractController
                                 $entityManager->persist($user);
                                 $entityManager->flush();
                                 $this->addFlash('success', 'Succès pour la mise à jour de l\'utilisateur');
-                                return $this->redirectToRoute('app_administration_manager');
+                                return $this->redirectToRoute('app_team');
                             }catch(\Exception $e ){
                                 $this->addFlash('error', 'Erreur pour la mise à jour de l\'utilisateur'); 
                             }
@@ -282,12 +282,4 @@ class TeamController extends AbstractController
             'form'=>$form,
         ]);
     }
-
-
-    // PAGE SUPPRESSION D'UN MEMBRE
-    #[Route('/delete-member/{id}', name: 'app_delete_member', methods: ['POST', 'DELETE'])]
-    public function deleteTeam(){
-
-    }
-
 }
