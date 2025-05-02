@@ -17,6 +17,6 @@ class RequestCounterService
     public function getPendingRequestCount(int $managerId): int
     {
         // Appel à la méthode de comptage des demandes en attente pour le manager
-        return $this->requestRepository->findRequestPendingByManager($managerId);
+        return $this->requestRepository->findCountRequestPendingByManager($managerId);
     }
 }
