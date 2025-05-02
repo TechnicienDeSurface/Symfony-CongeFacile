@@ -116,7 +116,13 @@
 			{% if is_granted('ROLE_COLLABORATEUR') or is_granted('ROLE_MANAGER') %}
 				<a href="{{ path('app_new_request') }}" class="{% if app.request.get('_route') == 'app_new_request' %}active{% endif %}">Nouvelle demande</a>
 				<a href="{{ path('app_request_pending') }}" class="{% if app.request.get('_route') == 'app_request_pending' %}active{% endif %}">Demandes en attente
-					<span class="notif">5{#{{nombre}}#}</span>
+					<span class="notif">
+						{% if nombre is defined %}
+						{{nombre}}
+						{% else %}
+						0
+						{% endif %}
+					</span>
 				</a>
 			{% endif %}
 
