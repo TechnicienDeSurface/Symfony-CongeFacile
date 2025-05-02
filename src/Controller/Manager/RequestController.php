@@ -66,7 +66,6 @@ class RequestController extends AbstractController
                     'nbDaysWorking' => $nbDaysWorking
                 ];
             }
-
             $allCollaborators[] = $collaborator; // Ajout de la liste des collaborateurs
 
             $allRequests[] = [
@@ -119,7 +118,7 @@ class RequestController extends AbstractController
             if (!empty($formData['answer'])) {
                 $filters['answer'] = $formData['answer'];
             }
-
+            
             $filteredRequests = $requestRepository->findRequestPendingByFilters($user->getId(), $filters, 'DESC');
 
             foreach ($collaborators as $collaboratorData) {
@@ -130,10 +129,9 @@ class RequestController extends AbstractController
                 $requestsForCollaborator = array_filter($filteredRequests, function ($request) use ($collaboratorId) {
                     return $request->getCollaborator()->getId() === $collaboratorId;
                 });
-
                 // Recalculer daysWorking pour chaque request filtrée
                 $daysWorking = [];
-                foreach ($requestsForCollaborator as $requestsFiltered) {
+                foreach ($filteredRequests as $requestsFiltered) {
                     $nbDaysWorking = $requestRepository->getWorkingDays(
                         $requestsFiltered->getStartAt(),
                         $requestsFiltered->getEndAt()
