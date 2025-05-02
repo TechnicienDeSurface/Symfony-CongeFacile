@@ -4,18 +4,21 @@ namespace App\Repository;
 
 use App\Entity\Request;
 use Doctrine\ORM\Query;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 /**
  * @extends ServiceEntityRepository<Request>
  */
 class RequestRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $entityManager;
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, Request::class);
+        $this->entityManager = $entityManager;
     }
+
 
     /**
      * @return Request[] Returns an array of Request objects
@@ -252,4 +255,38 @@ class RequestRepository extends ServiceEntityRepository
 
         return $qb->getQuery();
     }
+
+    // DEMANDES EN ATTENTES
+    /**
+     * @var Request[] $requests
+     */
+    public function findRequestPendingByManager($managerId)
+    {
+        return $this->createQueryBuilder('r')
+            ->select('r','p')
+            ->innerJoin('r.collaborator', 'p')
+            ->where('p.manager = :managerId')
+            ->andWhere('r.answer IS NULL')
+            ->setParameter('managerId', $managerId)
+            ->getQuery()
+            ->getResult();
+    }
+    
+
+    //COMPTEURS DE DEMANDES EN ATTENTES
+    public function findCountRequestPendingByManager($managerId): int
+    {
+        return (int) $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->innerJoin('r.collaborator', 'p')
+            ->where('p.manager = :managerId')
+            ->andWhere('r.answer IS NULL')
+            ->setParameter('managerId', $managerId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+
+
+
 }

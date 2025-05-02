@@ -27,6 +27,7 @@ class RequestController extends AbstractController
     public function viewRequestPending(Security $security, RequestFondation $request, RequestRepository $requestRepository, PersonRepository $personRepository, int $page = 1): Response
     {
         // Récupérez l'utilisateur connecté
+        /** @var App\Entity\User $user */
         $user = $security->getUser();
         // Vérifiez si l'utilisateur est une instance de User avant d'appeler getId()
         if ($user instanceof User) {
@@ -49,7 +50,7 @@ class RequestController extends AbstractController
         foreach ($collaborators as $collaboratorData) {
             $collaboratorId = $collaboratorData->getId();
             $collaborator = $personRepository->find($collaboratorId);
-            $requests = $requestRepository->getRequestByPerson($collaboratorId);
+            $requests = $requestRepository->findRequestPendingByManager($user->getId());
 
             foreach ($requests as $requestsFiltered) {
                 // Calcul du nombre de jours ouvrés pour cette demande
@@ -218,7 +219,7 @@ class RequestController extends AbstractController
             } else {
                 throw new \LogicException('Aucun bouton valide cliqué.');
             }
-
+            dd($requestLoaded);
             $requestLoaded->setAnswer($answer);
             $requestLoaded->setAnswerComment($formData['answer']);
             $requestLoaded->setAnswerAt(new \DateTime());
