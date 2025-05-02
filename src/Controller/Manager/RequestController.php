@@ -219,7 +219,6 @@ class RequestController extends AbstractController
             } else {
                 throw new \LogicException('Aucun bouton valide cliqué.');
             }
-            dd($requestLoaded);
             $requestLoaded->setAnswer($answer);
             $requestLoaded->setAnswerComment($formData['answer']);
             $requestLoaded->setAnswerAt(new \DateTime());
