@@ -46,8 +46,7 @@ class InformationController extends AbstractController
         $form_person = $this->createForm(InformationFormType::class, $person, [
             'is_manager' => true,
             'data_class' => Person::class, // Ensure the form expects a Person object
-            'user' => $user, 
-            'person' => $person,
+            'user' => $user,
         ]);
         
         $form_password = $this->createForm(MotDePasseType::class, $user, [
