@@ -58,61 +58,119 @@
 			{{ form_end(formInfo) }}
 
 			<h2 class="text-xl font-semibold text-gray-900 mt-8 mb-4">Réinitialiser mon mot de passe</h2>
-			{% include 'layout/_addFlash.html.twig'%}
+			{% include 'layout/_addFlash.html.twig' %}
 			{{ form_start(formMdp) }}
 			<div class="space-y-6">
 				<div class="grid grid-cols-2 gap-4">
 					<div class="col-span-1 relative">
-					{{ form_label(formMdp.currentPassword)}}
-						{{ form_widget(formMdp.currentPassword, { 'attr': {'id': 'currentPassword', 'class': 'w-full px-4 py-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-300' } }) }}
-						<button type="button" id="togglePassword" class="absolute inset-y-0 right-3 flex items-center">
-							<img id="eyeIcon" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
-						</button>
-						{% for label, messages in app.flashes('error_current') %}
-							{% for message in messages %}
-								<div class="alert alert-{{ label }}">
-									{{ message }}
-								</div>
-							{% endfor %}
+					{{ form_label(formMdp.currentPassword) }}
+					{{ form_widget(formMdp.currentPassword, {
+						'attr': {
+							'id': 'currentPassword',
+							'class': 'w-full px-4 py-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-300'
+						}
+					}) }}
+					{# Erreurs en rouge #}
+					{% if formMdp.currentPassword.vars.errors|length %}
+						<div class="text-red-600 text-sm mt-1">
+						{{ form_errors(formMdp.currentPassword) }}
+						</div>
+					{% endif %}
+
+					<button type="button" id="togglePassword" class="absolute inset-y-0 right-3 flex items-center">
+						<img id="eyeIcon"
+							src="{{ asset('assets/image/eye-slash-solid.svg') }}"
+							data-eye-open="{{ asset('assets/image/eye-solid.svg') }}"
+							data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}"
+							alt="Afficher/Masquer"
+							class="w-5 h-5">
+					</button>
+
+					{% for label, messages in app.flashes('error_current') %}
+						{% for message in messages %}
+						<div class="alert alert-{{ label }}">
+							{{ message }}
+						</div>
 						{% endfor %}
+					{% endfor %}
 					</div>
 				</div>
+
 				<div class="grid grid-cols-2 gap-4">
 					<div class="relative">
-						{{ form_label(formMdp.newPassword)}}
-						{{ form_widget(formMdp.newPassword, { 'attr': {'id': 'newPassword', 'class': 'w-full px-4 py-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-300' } }) }}
-						<button type="button" id="togglePasswordNew" class="absolute inset-y-0 right-3 flex items-center">
-							<img id="eyeIconNew" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
-						</button>
-						{% for label, messages in app.flashes('error_repeat') %}
-							{% for message in messages %}
-								<div class="alert alert-{{ label }}">
-									{{ message }}
-								</div>
-							{% endfor %}
+					{{ form_label(formMdp.newPassword) }}
+					{{ form_widget(formMdp.newPassword, {
+						'attr': {
+							'id': 'newPassword',
+							'class': 'w-full px-4 py-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-300'
+						}
+					}) }}
+					{% if formMdp.newPassword.vars.errors|length %}
+						<div class="text-red-600 text-sm mt-1">
+						{{ form_errors(formMdp.newPassword) }}
+						</div>
+					{% endif %}
+
+					<button type="button" id="togglePasswordNew" class="absolute inset-y-0 right-3 flex items-center">
+						<img id="eyeIconNew"
+							src="{{ asset('assets/image/eye-slash-solid.svg') }}"
+							data-eye-open="{{ asset('assets/image/eye-solid.svg') }}"
+							data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}"
+							alt="Afficher/Masquer"
+							class="w-5 h-5">
+					</button>
+
+					{% for label, messages in app.flashes('error_repeat') %}
+						{% for message in messages %}
+						<div class="alert alert-{{ label }}">
+							{{ message }}
+						</div>
 						{% endfor %}
+					{% endfor %}
 					</div>
+
 					<div class="relative">
-						{{ form_label(formMdp.confirmPassword)}}
-						{{ form_widget(formMdp.confirmPassword, { 'attr': {'id': 'confirmPassword', 'class': 'w-full px-4 py-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-300' } }) }}
-						<button type="button" id="togglePasswordConfirm" class="absolute inset-y-0 right-3 flex items-center">
-							<img id="eyeIconConfirm" src="{{ asset('assets/image/eye-slash-solid.svg') }}" data-eye-open="{{ asset('assets/image/eye-solid.svg') }}" data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
-						</button>
-						{% for label, messages in app.flashes('error_comfirm') %}
-							{% for message in messages %}
-								<div class="alert alert-danger">
-									<span>{{ message }}</span>
-								</div>
-							{% endfor %}
+					{{ form_label(formMdp.confirmPassword) }}
+					{{ form_widget(formMdp.confirmPassword, {
+						'attr': {
+							'id': 'confirmPassword',
+							'class': 'w-full px-4 py-3 border border-gray-300 rounded-md focus:ring focus:ring-blue-300'
+						}
+					}) }}
+					{% if formMdp.confirmPassword.vars.errors|length %}
+						<div class="text-red-600 text-sm mt-1">
+						{{ form_errors(formMdp.confirmPassword) }}
+						</div>
+					{% endif %}
+
+					<button type="button" id="togglePasswordConfirm" class="absolute inset-y-0 right-3 flex items-center">
+						<img id="eyeIconConfirm"
+							src="{{ asset('assets/image/eye-slash-solid.svg') }}"
+							data-eye-open="{{ asset('assets/image/eye-solid.svg') }}"
+							data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}"
+							alt="Afficher/Masquer"
+							class="w-5 h-5">
+					</button>
+
+					{% for label, messages in app.flashes('error_confirm') %}
+						{% for message in messages %}
+						<div class="alert alert-danger">
+							<span class="text-red-600">{{ message }}</span>
+						</div>
 						{% endfor %}
+					{% endfor %}
 					</div>
+
 					<div class="mt-6">
-						{{ form_widget(formMdp.Submit, { 'attr': {'class': 'w-full bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-3 px-6'} }) }}
+					{{ form_widget(formMdp.Submit, {
+						'attr': {
+							'class': 'w-full bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-3 px-6'
+						}
+					}) }}
 					</div>
 				</div>
 			</div>
-			</div>
-		</div>
-		{{ form_end(formMdp) }}
+			{{ form_end(formMdp) }}
+
 	</div>
 </main>{% endblock %}
