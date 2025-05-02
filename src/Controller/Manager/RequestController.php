@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request as RequestFondation;
+use Symfony\Component\HttpFoundation\Request;
 use App\Form\FilterRequestPendingFormType;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Entity\User;
@@ -18,6 +19,7 @@ use App\Form\FilterHistoRequestType;
 use App\Repository\PersonRepository;
 use App\Form\RequestStatusFormType;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class RequestController extends AbstractController
 {
@@ -174,7 +176,7 @@ class RequestController extends AbstractController
     //PAGE DETAILS DES DEMANDES EN ATTENTE
     #[IsGranted('ROLE_MANAGER')]
     #[Route('/detail-request-pending', name: 'app_detail_request_pending')]
-    public function viewDetailRequestPending(Security $security, RequestRepository $requestRepository, RequestFondation $request, EntityManagerInterface $entityManager): Response
+    public function viewDetailRequestPending(SessionInterface $session, Security $security, RequestRepository $requestRepository, Request $requestHttp, EntityManagerInterface $entityManager): Response
     {
         // Récupérez l'utilisateur connecté
         $user = $security->getUser();
@@ -186,26 +188,32 @@ class RequestController extends AbstractController
         }
 
         $form = $this->createForm(RequestStatusFormType::class);
-        $form->handleRequest($request);
+        $form->handleRequest($requestHttp);
 
-        $id = $request->request->get('id');
+        $id = $requestHttp->request->get('id');
+        if ($id == null || empty($id)) {
+            // juste avant le find :
+            $id = $session->get('pending_request_id');
+        }
 
         $requestLoaded = $requestRepository->find($id);
         if (!$requestLoaded) {
             throw $this->createNotFoundException('La demande n\'existe pas.');
         }
-
+        
+    
         if ($form->isSubmitted() && $form->isValid()) {
             try{
                 $formData = $form->getData();
-
-                $id = $request->request->get('id');
+                
+                $id = $requestHttp->request->get('id');
 
                 if (!$id) {
                     throw new \InvalidArgumentException('ID manquant.');
                 }
 
                 $requestLoaded = $requestRepository->find($id);
+                
                 if (!$requestLoaded) {
                     throw $this->createNotFoundException('La demande n\'existe pas.');
                 }
