@@ -29,12 +29,8 @@ class CollaborateurType extends AbstractType
             ->add('enabled', CheckBoxType::class, [
                 'label' => '',
                 'required' => false,
-                'attr' => ['class' => 'hidden peer'], // Tailwind toggle compatible
+                'attr' => ['class' => 'hidden peer'],
                 'label_attr' => ['class' => 'inline-flex items-center cursor-pointer'],
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'L\'active est obligatoire']),
-                    // new Assert\TypeValidator()
-                ],
             ])
             // Prénom
             ->add('first_name', TextType::class, [

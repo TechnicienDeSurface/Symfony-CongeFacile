@@ -89,7 +89,7 @@
                     </div>                
 
                     <div class="flex items-center gap-3 mt-6">
-                        <a href="{{ path('app_delete_member', {'id': collaborator.id}) }}" class="text-[#ebf1f4] text-center bg-[#E10E0E] rounded-lg w-[216px] p-2 font-medium cursor-pointer">
+                        <a href="{{ path('app_admin_delete_collaborator', {'id': collaborator.id}) }}" class="text-[#ebf1f4] text-center bg-[#E10E0E] rounded-lg w-[216px] p-2 font-medium cursor-pointer">
                             Supprimer ce compte
                         </a>
                         {{form_widget(form.submit)}}

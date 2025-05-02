@@ -214,11 +214,13 @@ class TeamController extends AbstractController
     {
         $users = $user_repository->findBy([],[]);
         $exist_email = false; 
-        $manager = New User() ; 
-        $manager = $security->getUser() ;
+        $manager = New User();
+        $manager = $security->getUser();
+
         if (!$manager instanceof User) {
             throw new \LogicException('L\'utilisateur connecté n\'est pas une instance de App\Entity\User.');
         }
+
         $form = $this->createForm(CollaborateurType::class); 
         $form->handleRequest($request); 
 
@@ -282,5 +284,29 @@ class TeamController extends AbstractController
             'manager'=>$manager,
             'form'=>$form,
         ]);
+    }
+
+    //PAGE SUPPRIMER UN COLLABORATEUR
+    #[Route('/admin-delete-collaborator/{id}', name: 'app_admin_delete_collaborator')]
+    public function deleteCollaborateur(int $id, ManagerRegistry $registry, UserRepository $repository, Request $request, PersonRepository $person_repository, EntityManagerInterface $entityManager): Response
+    {
+        $user = $repository->find($id);
+        if (!$user) {
+            throw $this->createNotFoundException('Pas d\'utilisateur avec cette id ' . $id);
+        }
+        $collaborator = $person_repository->find($id);
+        if (!$collaborator) {
+            throw $this->createNotFoundException('Pas de collaborateur avec cette id ' . $id);
+        }
+        if($request->isMethod('POST')){
+            try{
+                $entityManager->remove($collaborator);
+                $entityManager->flush();
+                return $this->redirectToRoute('app_team');
+            }catch(\Exception $e){
+                return new Response('Erreur pour la suppression du collaborateur', 500);
+            }
+        }
+        return $this->redirectToRoute('app_team');
     }
 }

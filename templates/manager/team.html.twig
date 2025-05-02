@@ -10,7 +10,7 @@
 			<div class="w-full p-8">
 				<div class="flex items-center gap-5">
 					<h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Mon équipe</h1>
-					<form method="POST" action="{{ path('app_administration_ajouter_collaborateur') }}"> <!--AUCUNE PAGE AJOUTER COLLABORATEUR(PROVISOIRE)-->
+					<form method="POST" action="{{ path('app_administration_ajouter_collaborateur') }}">
 						<button type="submit" class="bg-[#004c6c] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Ajouter un collaborateur</button>
 					</form>
 				</div>
@@ -63,7 +63,7 @@
 									<tr class="border-x border-b mt-4">
 										<td class="py-6 px-6">{{items.lastname}}</td>
 										<td class="py-6 px-6">{{items.firstname}}</td>
-										<td class="py-6 px-6">{{ items.user.email|default('Non défini')}}</td>
+										<td class="py-6 px-6">{{items.user.email|default('Non défini')}}</td>
 										<td class="py-6 px-6">{{items.positionid.name}}</td>
 										<td class="py-6 px-6">{{items.totalleavedays}}
 										{% if items.totalleavedays <= 1 %} jour {% else %} jours {% endif %}
