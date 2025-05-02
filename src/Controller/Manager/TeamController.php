@@ -84,19 +84,16 @@ class TeamController extends AbstractController
 
     //PAGE DETAILS DE L'EQUIPE GERER PAR LE MANAGER
     #[Route('/detail-team-manager/{id}', name: 'app_detail_team', methods: ['GET','POST'])]
-    public function viewDetailTeam(int $id, ManagerRegistry $registry, UserRepository $repository, Request $request,DepartmentRepository $department_repository, PersonRepository $person_repository, EntityManagerInterface $entityManager,): Response
+    public function viewDetailTeam(int $id, ManagerRegistry $registry, UserRepository $repository, Request $request,DepartmentRepository $department_repository, PersonRepository $person_repository, EntityManagerInterface $entityManager, PositionRepository $position_repository): Response
     {
-        $user = $repository->find($id);
         $collaborator = $person_repository->find($id);
-        if (!$user) {
-            throw $this->createNotFoundException('Pas d\'utilisateur avec cette id ' . $id);
-        }
         $exist_email = false; 
         $form = $this->createForm(CollaborateurType::class, null, [
             'csrf_token_id' => 'submit', //Ajout du token csrf id car formulaire non lié à une entité 
             'submit_label' => 'Mettre à jour',
         ]);
         $form->handleRequest($request);
+
         $users = $repository->findBy([],[]);
         foreach($users as $row){
             if($row->getPerson()->getId() === $id){
@@ -122,12 +119,20 @@ class TeamController extends AbstractController
                             if($collaborator->getLastName() != $formData['last_name']){
                                 $collaborator->setLastName($formData['last_name']);
                             }
-                            if($collaborator->getDepartment != $formData['department']){
+                            if (!empty($formData['department'])) {
                                 $department = $department_repository->find($formData['department']);
-                                $collaborator->setDepartment($department);
+                                if ($department && $collaborator->getDepartment() != $department) {
+                                    $collaborator->setDepartment($department);
+                                }
                             }
-                            if($collaborator->getUser->getEnabled() != $formData['enabled']){
-                                $collaborator->getUser()->setEnabled($formData['enabled']);
+                            if($formData['position'] != $collaborator->getPositionId()){
+                                $position = $position_repository->find($formData['position']);
+                                if ($position) {
+                                    $collaborator->setPosition($position);
+                                }
+                            }
+                            if ($collaborator->getUser()->isEnabled() != $formData['enabled']) {
+                                $collaborator->getUser()->setEnabled((bool)$formData['enabled']);
                             }
                             $entityManager->persist($collaborator);
                             $entityManager->flush();
@@ -154,13 +159,23 @@ class TeamController extends AbstractController
                                 if($collaborator->getLastName() != $formData['last_name']){
                                     $collaborator->setLastName($formData['last_name']);
                                 }
-                                if($collaborator->getDepartment != $formData['department']){
+                                if (!empty($formData['department'])) {
                                     $department = $department_repository->find($formData['department']);
-                                    $collaborator->setDepartment($department);
+                                    if ($department && $collaborator->getDepartment() != $department) {
+                                        $collaborator->setDepartment($department);
+                                    }
                                 }
-                                if($collaborator->getUser()->getEnabled() != $formData['enabled']){
-                                    $collaborator->getUser()->setEnabled($formData['enabled']);
+
+                                if($formData['position'] != $collaborator->getPositionId()){
+                                    $position = $position_repository->find($formData['position']);
+                                    if ($position) {
+                                        $collaborator->setPosition($position);
+                                    }
                                 }
+                                if ($collaborator->getUser()->isEnabled() != $formData['enabled']) {
+                                    $collaborator->getUser()->setEnabled((bool)$formData['enabled']);
+                                }
+                                
                                 $entityManager->persist($collaborator);
                                 $entityManager->flush();
                                 $this->addFlash('success', 'Succès pour la mise à jour le manager');
@@ -195,6 +210,7 @@ class TeamController extends AbstractController
                 'first_name' => $collaborator->getFirstName(),
                 'last_name' => $collaborator->getLastName(),
                 'department' => $collaborator->getDepartment(),
+                'position' => $collaborator->getPositionId(),
                 'enabled'=>$user->isEnabled(),
                 'submit_label' => 'Mettre à jour',
             ]);
@@ -290,10 +306,6 @@ class TeamController extends AbstractController
     #[Route('/admin-delete-collaborator/{id}', name: 'app_admin_delete_collaborator')]
     public function deleteCollaborateur(int $id, ManagerRegistry $registry, UserRepository $repository, Request $request, PersonRepository $person_repository, EntityManagerInterface $entityManager): Response
     {
-        $user = $repository->find($id);
-        if (!$user) {
-            throw $this->createNotFoundException('Pas d\'utilisateur avec cette id ' . $id);
-        }
         $collaborator = $person_repository->find($id);
         if (!$collaborator) {
             throw $this->createNotFoundException('Pas de collaborateur avec cette id ' . $id);
