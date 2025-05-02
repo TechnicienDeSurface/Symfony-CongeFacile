@@ -252,4 +252,14 @@ class RequestRepository extends ServiceEntityRepository
 
         return $qb->getQuery();
     }
+
+    //COMPTEURS DE DEMANDES EN ATTENTES
+    public function countPendingRequests(): int
+    {
+        return (int) $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->where('r.answer IS NULL')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }
