@@ -50,7 +50,6 @@ class TeamController extends AbstractController
             'first_name'        => $request->query->get('firstname'),
             'email'             => $request->query->get('email'),
             'name'              => $request->query->get('name'),
-            'totalleavedays'    => $request->query->get('totalleavedays'),
         ];
 
         // Si le formulaire est soumis et valide, on utilise ses données
@@ -220,8 +219,10 @@ class TeamController extends AbstractController
         if (!$manager instanceof User) {
             throw new \LogicException('L\'utilisateur connecté n\'est pas une instance de App\Entity\User.');
         }
-        $form = $this->createForm(CollaborateurType::class) ; 
-        $form->handleRequest($request) ; 
+        $form = $this->createForm(CollaborateurType::class); 
+        $form->handleRequest($request); 
+
+
         if($form->isSubmitted())
         {
             if($form->isValid()){
