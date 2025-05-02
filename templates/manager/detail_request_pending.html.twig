@@ -24,14 +24,14 @@
 				{{ request.createdAt|date('d/m/Y H:i') }}</h2>
 
 			<p class="my-2">Période :
-				{{ request.startAt|date('d/m/Y') }}
+				{{ request.startAt|date('d/m/Y H:i') }}
 				au
-				{{ request.endAt|date('d/m/Y') }}</p>
+				{{ request.endAt|date('d/m/Y H:i') }}</p>
 			<p class="my-2">Type de demande :
 				{{ request.requestType.name }}</p>
 			<p class="my-2">Nombre de jours :
-				{{ request.collaborator.totalLeaveDays }}
-				{% if request.collaborator.totalLeaveDays <= 1 %}
+				{{ nbDaysWorking }}
+				{% if nbDaysWorking <= 1 %}
 					jour
 				{% else %}
 					jours
