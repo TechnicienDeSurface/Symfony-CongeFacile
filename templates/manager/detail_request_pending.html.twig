@@ -14,8 +14,8 @@
 	<main style="display: flex;">
 
 		{% include 'layout/menu/_sidebar.html.twig' %}
-
-		<div class="w-full p-8 overflow-y-auto">
+	
+		<div class="w-full p-8 overflow-y-hidden">
 
 			<h1 class="text-left font-bold text-2xl mb-4 " style='color : #004C6C'>Demande de
 				{{ request.collaborator.firstname }}
@@ -24,14 +24,14 @@
 				{{ request.createdAt|date('d/m/Y H:i') }}</h2>
 
 			<p class="my-2">Période :
-				{{ request.startAt|date('d/m/Y') }}
+				{{ request.startAt|date('d/m/Y H:i') }}
 				au
-				{{ request.endAt|date('d/m/Y') }}</p>
+				{{ request.endAt|date('d/m/Y H:i') }}</p>
 			<p class="my-2">Type de demande :
 				{{ request.requestType.name }}</p>
 			<p class="my-2">Nombre de jours :
-				{{ request.collaborator.totalLeaveDays }}
-				{% if request.collaborator.totalLeaveDays <= 1 %}
+				{{ nbDaysWorking }}
+				{% if nbDaysWorking <= 1 %}
 					jour
 				{% else %}
 					jours
@@ -48,7 +48,7 @@
             <div>
 			{{ form_row(form.answer) }}
             </div>
-            <div class="flex space-x-4">
+            <div class="flex space-x-4 h-screen">
                 <div class="w-1/4">
 				<input type="hidden" name="id" value="{{ requestId }}">
                     {{ form_row(form.refuse, {'attr': {'class': 'w-full text-white bg-red-500 hover:bg-red-600 border-none rounded-md h-[35px] font-medium cursor-pointer'}}) }}

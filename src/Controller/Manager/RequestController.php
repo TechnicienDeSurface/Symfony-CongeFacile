@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request as RequestFondation;
+use Symfony\Component\HttpFoundation\Request;
 use App\Form\FilterRequestPendingFormType;
 use Symfony\Bundle\SecurityBundle\Security;
 use App\Entity\User;
@@ -18,6 +19,7 @@ use App\Form\FilterHistoRequestType;
 use App\Repository\PersonRepository;
 use App\Form\RequestStatusFormType;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class RequestController extends AbstractController
 {
@@ -46,7 +48,7 @@ class RequestController extends AbstractController
         $collaborators = $personRepository->getPersonByIdDepartment($departmentId);
 
         $allRequests = []; // Debugging line
-
+        $daysWorking = []; 
         foreach ($collaborators as $collaboratorData) {
             $collaboratorId = $collaboratorData->getId();
             $collaborator = $personRepository->find($collaboratorId);
@@ -66,7 +68,6 @@ class RequestController extends AbstractController
                     'nbDaysWorking' => $nbDaysWorking
                 ];
             }
-
             $allCollaborators[] = $collaborator; // Ajout de la liste des collaborateurs
 
             $allRequests[] = [
@@ -119,8 +120,8 @@ class RequestController extends AbstractController
             if (!empty($formData['answer'])) {
                 $filters['answer'] = $formData['answer'];
             }
-
-            $filteredRequests = $requestRepository->searchRequest($filters, 'DESC')->getResult();
+            
+            $filteredRequests = $requestRepository->findRequestPendingByFilters($user->getId(), $filters, 'DESC');
 
             foreach ($collaborators as $collaboratorData) {
                 $collaboratorId = $collaboratorData->getId();
@@ -130,10 +131,9 @@ class RequestController extends AbstractController
                 $requestsForCollaborator = array_filter($filteredRequests, function ($request) use ($collaboratorId) {
                     return $request->getCollaborator()->getId() === $collaboratorId;
                 });
-
                 // Recalculer daysWorking pour chaque request filtrée
                 $daysWorking = [];
-                foreach ($requestsForCollaborator as $requestsFiltered) {
+                foreach ($filteredRequests as $requestsFiltered) {
                     $nbDaysWorking = $requestRepository->getWorkingDays(
                         $requestsFiltered->getStartAt(),
                         $requestsFiltered->getEndAt()
@@ -148,7 +148,7 @@ class RequestController extends AbstractController
                 // Ajouter les résultats au tableau dans la même structure qu'au début
                 $allRequests[] = [
                     'collaborator' => $collaborator,
-                    'requests' => $requestsForCollaborator,
+                    'requests' => $filteredRequests,
                     'daysWorking' => $daysWorking,
                 ];
             }
@@ -176,7 +176,7 @@ class RequestController extends AbstractController
     //PAGE DETAILS DES DEMANDES EN ATTENTE
     #[IsGranted('ROLE_MANAGER')]
     #[Route('/detail-request-pending', name: 'app_detail_request_pending')]
-    public function viewDetailRequestPending(Security $security, RequestRepository $requestRepository, RequestFondation $request, EntityManagerInterface $entityManager): Response
+    public function viewDetailRequestPending(SessionInterface $session, Security $security, RequestRepository $requestRepository, Request $requestHttp, EntityManagerInterface $entityManager): Response
     {
         // Récupérez l'utilisateur connecté
         $user = $security->getUser();
@@ -188,43 +188,94 @@ class RequestController extends AbstractController
         }
 
         $form = $this->createForm(RequestStatusFormType::class);
-        $form->handleRequest($request);
+        $form->handleRequest($requestHttp);
 
-        $id = $request->request->get('id');
+        $id = $requestHttp->request->get('id');
+        if ($id == null || empty($id)) {
+            // juste avant le find :
+            $id = $session->get('pending_request_id');
+        }
 
         $requestLoaded = $requestRepository->find($id);
+        /** @var \DateTimeInterface $startInterface */
+        $startInterface = $requestLoaded->getStartAt();
+        /** @var \DateTimeInterface $endInterface */
+        $endInterface   = $requestLoaded->getEndAt();
+
+        // Si tu utilises DateTimeImmutable partout dans Doctrine, remplace createFromMutable par createFromInterface.
+        $start = \DateTime::createFromInterface($startInterface);
+        $end   = \DateTime::createFromInterface($endInterface);
+
+        // Normaliser l’ordre
+        if ($end < $start) {
+            [$start, $end] = [$end, $start];
+        }
+
+        $period = new \DatePeriod(
+            (clone $start)->setTime(0, 0, 0),
+            new \DateInterval('P1D'),
+            (clone $end)->setTime(0, 0, 0)->modify('+1 day')
+        );
+
+        $totalBusinessSeconds = 0;
+        foreach ($period as $day) {
+            $dow = (int) $day->format('w');
+            if ($dow === 0 || $dow === 6) {
+                continue;
+            }
+
+            $workStart = (clone $day)->setTime(9, 0, 0);
+            $workEnd   = (clone $day)->setTime(17, 0, 0);
+
+            $intervalStart = $start > $workStart ? $start : $workStart;
+            $intervalEnd   = $end   < $workEnd   ? $end   : $workEnd;
+
+            if ($intervalEnd > $intervalStart) {
+                $totalBusinessSeconds += $intervalEnd->getTimestamp()
+                                        - $intervalStart->getTimestamp();
+            }
+        }
+
+        $daysFloat      = $totalBusinessSeconds / 28800;
+        $nbDaysWorking  = round($daysFloat * 2) / 2;
+
         if (!$requestLoaded) {
             throw $this->createNotFoundException('La demande n\'existe pas.');
         }
-
+        
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            $formData = $form->getData();
+            try{
+                $formData = $form->getData();
+                
+                $id = $requestHttp->request->get('id');
 
-            $id = $request->request->get('id');
+                if (!$id) {
+                    throw new \InvalidArgumentException('ID manquant.');
+                }
 
-            if (!$id) {
-                throw new \InvalidArgumentException('ID manquant.');
+                $requestLoaded = $requestRepository->find($id);
+                
+                if (!$requestLoaded) {
+                    throw $this->createNotFoundException('La demande n\'existe pas.');
+                }
+
+                // Vérifie le bouton cliqué
+                if ($form->get('accept')->isClicked()) {
+                    $answer = true;
+                } elseif ($form->get('refuse')->isClicked()) {
+                    $answer = false;
+                } else {
+                    throw new \LogicException('Aucun bouton valide cliqué.');
+                }
+                $requestLoaded->setAnswer($answer);
+                $requestLoaded->setAnswerComment($formData['answer']);
+                $requestLoaded->setAnswerAt(new \DateTime());
+                $entityManager->flush();
+                $this->addFlash('sucess','Réponse enregistré');
+            }catch(\Exception $e){
+                $this->addFlash('error','Erreur lors de la réponse');
             }
-
-            $requestLoaded = $requestRepository->find($id);
-            if (!$requestLoaded) {
-                throw $this->createNotFoundException('La demande n\'existe pas.');
-            }
-
-            // Vérifie le bouton cliqué
-            if ($form->get('accept')->isClicked()) {
-                $answer = true;
-            } elseif ($form->get('refuse')->isClicked()) {
-                $answer = false;
-            } else {
-                throw new \LogicException('Aucun bouton valide cliqué.');
-            }
-            dd($requestLoaded);
-            $requestLoaded->setAnswer($answer);
-            $requestLoaded->setAnswerComment($formData['answer']);
-            $requestLoaded->setAnswerAt(new \DateTime());
-            $entityManager->flush();
-
             return $this->redirectToRoute('app_request_pending');
         }
 
@@ -233,6 +284,7 @@ class RequestController extends AbstractController
             'request' => $requestLoaded,
             'requestId' => $id,
             'form' => $form->createView(),
+            'nbDaysWorking' => $nbDaysWorking,
         ]);
     }
 
