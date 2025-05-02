@@ -192,7 +192,7 @@ class RequestController extends AbstractController
 
         $id = $request->request->get('id');
 
-        $requestLoaded = $requestRepository->findRequestPendingByManager($id);
+        $requestLoaded = $requestRepository->find($id);
         if (!$requestLoaded) {
             throw $this->createNotFoundException('La demande n\'existe pas.');
         }

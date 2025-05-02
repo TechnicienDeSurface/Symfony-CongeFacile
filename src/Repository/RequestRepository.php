@@ -263,7 +263,7 @@ class RequestRepository extends ServiceEntityRepository
     public function findRequestPendingByManager($managerId)
     {
         return $this->createQueryBuilder('r')
-            ->select('r')
+            ->select('r','p')
             ->innerJoin('r.collaborator', 'p')
             ->where('p.manager = :managerId')
             ->andWhere('r.answer IS NULL')
