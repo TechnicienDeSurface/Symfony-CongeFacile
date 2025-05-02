@@ -46,7 +46,7 @@ class RequestController extends AbstractController
         $collaborators = $personRepository->getPersonByIdDepartment($departmentId);
 
         $allRequests = []; // Debugging line
-
+        $daysWorking = []; 
         foreach ($collaborators as $collaboratorData) {
             $collaboratorId = $collaboratorData->getId();
             $collaborator = $personRepository->find($collaboratorId);
@@ -120,7 +120,7 @@ class RequestController extends AbstractController
                 $filters['answer'] = $formData['answer'];
             }
 
-            $filteredRequests = $requestRepository->searchRequest($filters, 'DESC')->getResult();
+            $filteredRequests = $requestRepository->findRequestPendingByFilters($user->getId(), $filters, 'DESC');
 
             foreach ($collaborators as $collaboratorData) {
                 $collaboratorId = $collaboratorData->getId();
@@ -148,7 +148,7 @@ class RequestController extends AbstractController
                 // Ajouter les résultats au tableau dans la même structure qu'au début
                 $allRequests[] = [
                     'collaborator' => $collaborator,
-                    'requests' => $requestsForCollaborator,
+                    'requests' => $filteredRequests,
                     'daysWorking' => $daysWorking,
                 ];
             }
@@ -198,32 +198,36 @@ class RequestController extends AbstractController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $formData = $form->getData();
+            try{
+                $formData = $form->getData();
 
-            $id = $request->request->get('id');
+                $id = $request->request->get('id');
 
-            if (!$id) {
-                throw new \InvalidArgumentException('ID manquant.');
+                if (!$id) {
+                    throw new \InvalidArgumentException('ID manquant.');
+                }
+
+                $requestLoaded = $requestRepository->find($id);
+                if (!$requestLoaded) {
+                    throw $this->createNotFoundException('La demande n\'existe pas.');
+                }
+
+                // Vérifie le bouton cliqué
+                if ($form->get('accept')->isClicked()) {
+                    $answer = true;
+                } elseif ($form->get('refuse')->isClicked()) {
+                    $answer = false;
+                } else {
+                    throw new \LogicException('Aucun bouton valide cliqué.');
+                }
+                $requestLoaded->setAnswer($answer);
+                $requestLoaded->setAnswerComment($formData['answer']);
+                $requestLoaded->setAnswerAt(new \DateTime());
+                $entityManager->flush();
+                $this->addFlash('sucess','Réponse enregistré');
+            }catch(\Exception $e){
+                $this->addFlash('error','Erreur lors de la réponse');
             }
-
-            $requestLoaded = $requestRepository->find($id);
-            if (!$requestLoaded) {
-                throw $this->createNotFoundException('La demande n\'existe pas.');
-            }
-
-            // Vérifie le bouton cliqué
-            if ($form->get('accept')->isClicked()) {
-                $answer = true;
-            } elseif ($form->get('refuse')->isClicked()) {
-                $answer = false;
-            } else {
-                throw new \LogicException('Aucun bouton valide cliqué.');
-            }
-            $requestLoaded->setAnswer($answer);
-            $requestLoaded->setAnswerComment($formData['answer']);
-            $requestLoaded->setAnswerAt(new \DateTime());
-            $entityManager->flush();
-
             return $this->redirectToRoute('app_request_pending');
         }
 

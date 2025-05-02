@@ -271,7 +271,54 @@ class RequestRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    
+
+    // FILTRES DEMANDES EN ATTENTES
+    /**
+     * @var Request[] $requests
+     */
+    public function findRequestPendingByFilters($managerId, $filters, $order)
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->select('r', 'p')
+            ->innerJoin('r.collaborator', 'p')
+            ->where('p.manager = :managerId')
+            ->andWhere('r.answer IS NULL')
+            ->setParameter('managerId', $managerId);
+
+        // Ajouter des conditions de filtrage dynamiques en fonction des valeurs présentes dans $filters
+        if (!empty($filters['request_type'])) {
+            $qb->andWhere('r.request_type = :requestType')
+            ->setParameter('requestType', $filters['request_type']);
+        }
+
+        if (!empty($filters['collaborator'])) {
+            $qb->andWhere('p.id = :collaboratorId')
+            ->setParameter('collaboratorId', $filters['collaborator']);
+        }
+
+        if (!empty($filters['start_at'])) {
+            $qb->andWhere('r.start_at >= :startAt')
+            ->setParameter('startAt', $filters['start_at']);
+        }
+
+        if (!empty($filters['end_at'])) {
+            $qb->andWhere('r.end_at <= :endAt')
+            ->setParameter('endAt', $filters['end_at']);
+        }
+
+        if (!empty($filters['created_at'])) {
+            $qb->andWhere('r.created_at >= :createdAt')
+            ->setParameter('createdAt', $filters['created_at']);
+        }
+
+        // Ajouter un ordre de tri (si applicable)
+        if ($order) {
+            $qb->orderBy('r.created_at', $order); // Ou tout autre critère d'ordre
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 
     //COMPTEURS DE DEMANDES EN ATTENTES
     public function findCountRequestPendingByManager($managerId): int
