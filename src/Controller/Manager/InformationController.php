@@ -55,26 +55,30 @@ class InformationController extends AbstractController
         ]);
 
         $form_password->handleRequest($request);
-        if ($form_password->isSubmitted() && $form_password->isValid()) {
-            $currentPassword = $form_password->get('currentPassword')->getData();
-            $newPassword = $form_password->get('newPassword')->getData();
-            $confirmPassword = $form_password->get('confirmPassword')->getData();
+        if ($form_password->isSubmitted()) {
+            if($form_password->isValid()){
+                $currentPassword = $form_password->get('currentPassword')->getData();
+                $newPassword = $form_password->get('newPassword')->getData();
+                $confirmPassword = $form_password->get('confirmPassword')->getData();
 
-            if ($hash->isPasswordValid($user, $currentPassword)) {
-            if ($newPassword === $confirmPassword) {
-                if ($newPassword !== $currentPassword) {
-                $password = $this->passwordHasher->hashPassword($user, $newPassword);
-                $user->setPassword($password);
-                $entityManager->flush();
-                $this->addFlash('success', 'Mot de passe modifié avec succès.');
+                if ($hash->isPasswordValid($user, $currentPassword)) {
+                    if ($newPassword === $confirmPassword) {
+                        if ($newPassword !== $currentPassword) {
+                            $password = $this->passwordHasher->hashPassword($user, $newPassword);
+                            $user->setPassword($password);
+                            $entityManager->flush();
+                            $this->addFlash('success', 'Mot de passe modifié avec succès.');
+                        } else {
+                        $this->addFlash('error', 'Le nouveau mot de passe ne peut pas être identique à l\'ancien.');
+                        }
+                    } else {
+                        $this->addFlash('error', 'La confirmation du mot de passe ne correspond pas.');
+                    }
                 } else {
-                $this->addFlash('error_repeat', 'Le nouveau mot de passe ne peut pas être identique à l\'ancien.');
+                    $this->addFlash('error', 'Le mot de passe actuel est incorrect.');
                 }
-            } else {
-                $this->addFlash('error_comfirm', 'La confirmation du mot de passe ne correspond pas.');
-            }
-            } else {
-            $this->addFlash('error_current', 'Le mot de passe actuel est incorrect.');
+            }else{
+                $this->addFlash('error', 'Données insérées incorrects.');
             }
         }
 
