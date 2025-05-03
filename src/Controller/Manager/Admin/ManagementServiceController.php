@@ -10,14 +10,8 @@ use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Department;
-
-
 use App\Form\DepartmentType;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-
-
-
-
 
 class ManagementServiceController extends AbstractController
 {
@@ -36,10 +30,6 @@ class ManagementServiceController extends AbstractController
         $pagerfanta->setMaxPerPage(10);
 
         try {
-            //A DECOMMENTER SI ON VEUT QUE LA PAGE REVIENNE A 1 APRES UN FILTRE
-            //if($form->isSubmitted()) {
-            //    $page = 1;
-            //}
             $pagerfanta->setCurrentPage($page);
         } catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
             throw $this->createNotFoundException('La page demandée n\'existe pas.');
@@ -91,35 +81,6 @@ class ManagementServiceController extends AbstractController
     public function editManagementService(Request $request, Department $department, EntityManagerInterface $entityManager): Response
     {
 
-        // if (!$department) {
-        //     throw $this->createNotFoundException('Le département n\'existe pas.');
-        // }
-
-        // if ($request->isMethod('POST')) {
-        //     $newName = $request->request->get('name');
-
-        //     if ($request->request->has('edit')) {
-        //         // Modifier le nom du département
-        //         $department->setName($newName);
-        //         $entityManager->flush();
-        //         $this->addFlash('success', 'Le département a été mis à jour.');
-
-        //         return $this->redirectToRoute('app_administration_management_service', [
-        //             'id' => $department->getId(),
-        //         ]);
-        //     }
-
-        //     if ($request->request->has('delete')) {
-        //         // Supprimer le département
-        //         $entityManager->remove($department);
-        //         $entityManager->flush();
-        //         $this->addFlash('warning', 'Le département a été supprimé.');
-
-        //         return $this->redirectToRoute('app_administration_management_service');
-        //     }
-        // }
-
-
         if (!$department) {
             throw $this->createNotFoundException('Le département n\'existe pas.');
         }
@@ -155,7 +116,4 @@ class ManagementServiceController extends AbstractController
  
         
     }
-
-    //SUPPRIMER MANAGEMENTS ET SERVICES VIA L'ADMINISTRATION DU PORTAIL MANAGER
-    //#[Route('/administration-supprimer-management-service/{id}', name: 'app_administration_supprimer_management-service', methods: ['POST', 'DELETE'])]
 }

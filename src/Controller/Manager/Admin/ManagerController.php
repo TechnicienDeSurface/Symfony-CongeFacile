@@ -4,10 +4,7 @@ namespace App\Controller\Manager\Admin;
 
 use App\Entity\User; 
 use App\Entity\Person; 
-use App\Entity\Position;
 use App\Form\ManagerType;
-use App\Form\DeleteType;
-use App\Entity\Department;  
 use App\Repository\UserRepository; 
 use App\Form\FilterManagerFormType;
 use App\Repository\PersonRepository;

@@ -15,12 +15,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
-use App\Repository\RequestRepository as RequestRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -79,8 +77,9 @@ class TeamController extends AbstractController
     }
 
     //PAGE DETAILS DE L'EQUIPE GERER PAR LE MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/detail-team-manager/{id}', name: 'app_detail_team', methods: ['GET', 'POST'])]
-    public function viewDetailTeam(int $id, ManagerRegistry $registry, UserRepository $repository, Request $request, DepartmentRepository $department_repository, PersonRepository $person_repository, EntityManagerInterface $entityManager, PositionRepository $position_repository): Response
+    public function viewDetailTeam(int $id, UserRepository $repository, Request $request, DepartmentRepository $department_repository, PersonRepository $person_repository, EntityManagerInterface $entityManager, PositionRepository $position_repository): Response
     {
         $collaborator = $person_repository->find($id);
         $exist_email = false;
@@ -221,6 +220,7 @@ class TeamController extends AbstractController
     }
 
     //PAGE AJOUTER MANAGER VIA ADMINISTRATION MANAGER
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-ajouter-collaborateur', name: 'app_administration_ajouter_collaborateur')]
     public function addCollaborateur(UserPasswordHasherInterface $hash, ManagerRegistry $registry, Security $security, Request $request, PositionRepository $position_repository, PersonRepository $person_repository, DepartmentRepository $department_repository, UserRepository $user_repository): Response
     {
@@ -299,6 +299,7 @@ class TeamController extends AbstractController
     }
 
     //PAGE SUPPRIMER UN COLLABORATEUR
+    #[IsGranted('ROLE_MANAGER')]
     #[Route('/admin-delete-collaborator/{id}', name: 'app_admin_delete_collaborator', methods: ['GET'])]
     public function deleteCollaborateur(int $id, PersonRepository $person_repository, EntityManagerInterface $entityManager): Response
     {
