@@ -84,7 +84,7 @@ class CollaborateurType extends AbstractType
                 'label' => 'Nouveau mot de passe - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
-                'required' => false,
+                'required' => true,
                 'constraints' => [
                     new Assert\Length([
                         'min' => 10,
@@ -110,7 +110,7 @@ class CollaborateurType extends AbstractType
                 'label' => 'Confirmation de mot de passe - champ obligatoire',
                 'label_attr' => ['class' => $labelClass],
                 'attr' => ['class' => $inputClass],
-                'required' => false,
+                'required' => true,
                 'constraints' => [
                     new Assert\Length([
                         'min' => 10,
