@@ -85,7 +85,7 @@ class PersonFixtures extends Fixture implements DependentFixtureInterface
         $person5->setAlertOnAnswer(false);
         $person5->setAlertBeforeVacation(false);
         $manager->persist($person5);
-        $this->addReference("Adrien", $person5);
+        $this->addReference("Martin", $person5);
 
         $manager->flush();
     }

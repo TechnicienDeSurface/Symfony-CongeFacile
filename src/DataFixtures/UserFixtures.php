@@ -20,7 +20,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface{
             ['name' => 'Bob', 'email' => 'bob@example.com', 'role' => ['ROLE_COLLABORATEUR'], 'password' => 'bob123'],
             ['name' => 'Charlie', 'email' => 'charlie@example.com', 'role' => ['ROLE_COLLABORATEUR'], 'password' => 'charlie123'],
             ['name' => 'John', 'email' => 'John@example.com', 'role' => ['ROLE_COLLABORATEUR'], 'password' => 'john123'],
-            ['name' => 'Jane', 'email' => 'Jane@example.com', 'role' => ['ROLE_MANAGER'], 'password' => 'jane123']
+            ['name' => 'Jane', 'email' => 'Jane@example.com', 'role' => ['ROLE_MANAGER'], 'password' => 'jane123'],
+            ['name' => 'Martin', 'email' => 'martin@example.com', 'role' => ['ROLE_MANAGER'], 'password' => 'martin123']
         ];
 
         foreach ($people as $personData) {

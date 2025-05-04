@@ -78,10 +78,9 @@ class TeamController extends AbstractController
 
     //PAGE DETAILS DE L'EQUIPE GERER PAR LE MANAGER
     #[IsGranted('ROLE_MANAGER')]
-    #[Route('/detail-team-manager/{id}', name: 'app_detail_team', methods: ['GET', 'POST'])]
-    public function viewDetailTeam(int $id, UserRepository $repository, Request $request, DepartmentRepository $department_repository, PersonRepository $person_repository, EntityManagerInterface $entityManager, PositionRepository $position_repository): Response
+    #[Route('/detail-team-manager', name: 'app_detail_team', methods: ['POST'])]
+    public function viewDetailTeam(UserRepository $repository, Request $request, DepartmentRepository $department_repository, PersonRepository $person_repository, EntityManagerInterface $entityManager, PositionRepository $position_repository, Request $requestHttp): Response
     {
-        $collaborator = $person_repository->find($id);
         $exist_email = false;
         $form = $this->createForm(CollaborateurType::class, null, [
             'csrf_token_id' => 'submit', //Ajout du token csrf id car formulaire non lié à une entité 
@@ -89,12 +88,21 @@ class TeamController extends AbstractController
         ]);
         $form->handleRequest($request);
 
+        $id = $requestHttp->request->get('id');
+        $collaborator = $person_repository->find($id);
         $users = $repository->findBy([], []);
+
         foreach ($users as $row) {
-            if ($row->getPerson()->getId() === $id) {
+            if ($row->getPerson() && $row->getPerson()->getId() === (int)$id) {
                 $user = $row;
+                break;
             }
         }
+        
+        if (!$user) {
+            throw $this->createNotFoundException('Aucun utilisateur associé au collaborateur n\'a été trouvé.');
+        }
+        
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 $formData = $form->getData();

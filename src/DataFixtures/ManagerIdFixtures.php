@@ -14,7 +14,7 @@ class ManagerIdFixtures extends Fixture implements DependentFixtureInterface
     {
         $managerUser = $this->getReference('Jane@example.com', User::class);
 
-        $personNames = ['Alice', 'Bob', 'Charlie', 'Adrien', 'John'];
+        $personNames = ['Alice', 'Bob', 'Charlie', 'Martin', 'John'];
 
         foreach ($personNames as $name) {
             $person = $this->getReference($name, Person::class);
