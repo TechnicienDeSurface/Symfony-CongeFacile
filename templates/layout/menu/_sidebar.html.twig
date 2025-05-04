@@ -101,7 +101,6 @@
 			display: flex;
 			flex-direction: column;
 		}
-
 	</style>
 
 
@@ -115,27 +114,29 @@
 			{# Accès Collaborateur et Manager #}
 			{% if is_granted('ROLE_COLLABORATEUR') or is_granted('ROLE_MANAGER') %}
 				<a href="{{ path('app_new_request') }}" class="{% if app.request.get('_route') == 'app_new_request' %}active{% endif %}">Nouvelle demande</a>
+			{% endif %}
+
+			{% if is_granted('ROLE_MANAGER') %}
 				<a href="{{ path('app_request_pending') }}" class="{% if app.request.get('_route') == 'app_request_pending' %}active{% endif %}">Demandes en attente
 					<span class="notif">
 						{% if nombre is defined %}
-						{{nombre}}
+							{{nombre}}
 						{% else %}
-						0
+							0
 						{% endif %}
 					</span>
 				</a>
 			{% endif %}
-
 
 			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
 				<a href="{{path('app_history_request_manager')}}" class="{% if app.request.get('_route') == 'app_history_request_manager' %}active{% endif %}">Historique des demandes</a>
 			{% elseif app.user and 'ROLE_COLLABORATEUR' in app.user.roles %}
 				<a href="{{path('app_request_history_collaborator')}}" class="{% if app.request.get('_route') == 'app_request_history_collaborator' %}active{% endif %}">Historique des demandes</a>
 			{% endif %}
-				{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
-					<a href="{{path('app_team')}}" class="{% if app.request.get('_route') == 'app_team' %}active{% endif %}">Mon équipe</a>
-					<a href="{{ path('app_statistic') }}" class="{% if app.request.get('_route') == 'app_statistic' %}active{% endif %}">Statistiques</a>
-				{% endif %}
+			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
+				<a href="{{path('app_team')}}" class="{% if app.request.get('_route') == 'app_team' %}active{% endif %}">Mon équipe</a>
+				<a href="{{ path('app_statistic') }}" class="{% if app.request.get('_route') == 'app_statistic' %}active{% endif %}">Statistiques</a>
+			{% endif %}
 			<div class="trait"></div>
 
 			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
@@ -150,7 +151,7 @@
 				<a href="{{path('app_preference_collaborateur')}}" class="{% if app.request.get('_route') == 'app_preference_manager' %}active{% endif %}">Mes préférences</a>
 			{% endif %}
 
-			
+
 			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
 				<div class="dropdown-toggle">
 					<a href="#">Administration
@@ -183,29 +184,28 @@
 	</aside>
 
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.dropdown-toggle').forEach(item => {
-            item.addEventListener('click', function () {
-                this.classList.toggle('dropdown-open');
-            });
-        });
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+document.querySelectorAll('.dropdown-toggle').forEach(item => {
+item.addEventListener('click', function () {
+this.classList.toggle('dropdown-open');
+});
+});
 
-        // CODE POUR LAISSER OUVERT LES MODALES SPÉCIFIÉES
-        const idsToCheck = ['typededemande', 'directions', 'managers', 'postes'];
-        idsToCheck.forEach(id => {
-            const element = document.getElementById(id);
-            
-            if (element) {
-                const parentDropdown = element.closest('.dropdown-toggle');
-                if (parentDropdown) {
-                    parentDropdown.classList.add('dropdown-toggle', 'dropdown-open');
-                }
-            }
-        });
-    });
-</script>
+// CODE POUR LAISSER OUVERT LES MODALES SPÉCIFIÉES
+const idsToCheck = ['typededemande', 'directions', 'managers', 'postes'];
+idsToCheck.forEach(id => {
+const element = document.getElementById(id);
 
+if (element) {
+const parentDropdown = element.closest('.dropdown-toggle');
+if (parentDropdown) {
+parentDropdown.classList.add('dropdown-toggle', 'dropdown-open');
+}
+}
+});
+});
+	</script>
 
 
 {% endblock %}
