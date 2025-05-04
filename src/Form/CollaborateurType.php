@@ -16,7 +16,6 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class CollaborateurType extends AbstractType
 {
@@ -26,8 +25,6 @@ class CollaborateurType extends AbstractType
         $labelClass = 'block text-sm font-medium text-gray-700';
 
         $builder
-            ->add('id', HiddenType::class)
-            //Enabled
             ->add('enabled', CheckBoxType::class, [
                 'label' => '',
                 'required' => false,
