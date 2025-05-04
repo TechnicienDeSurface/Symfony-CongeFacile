@@ -101,49 +101,52 @@
 
 					<tbody>
 
+						{% set doublonKiller = [] %}
+
 						{% for item in requests %}
 							{% set collaborator = item.collaborator %}
+
 							{% for request in item.requests %}
-								<tr class="border-x border-b mt-4 text-gray-600">
-									<td class="py-6 px-6">{{ request.requestType.name }}
-									</td>
+								{% if request.id not in doublonKiller %}
+									{% set doublonKiller = doublonKiller | merge([request.id]) %}
 
-									<td class="py-6 px-6">{{ request.createdAt|date('d/m/Y H:i') }}</td>
-									<td class="py-6 px-6">{{ request.collaborator.firstname }}
-										{{ request.collaborator.lastname }}
-									</td>
-									<td class="py-6 px-6">{{ request.startAt|date('d/m/Y') }}
-									</td>
-									<td class="py-6 px-6">{{ request.endAt|date('d/m/Y') }}
+									<tr class="border-x border-b mt-4 text-gray-600">
+										<td class="py-6 px-6">{{ request.requestType.name }}</td>
 
-									</td>
-									<!-- Récupération des jours ouvrés -->
-									{% set nbDaysWorking = null %}
-									{% for daysWorking in item.daysWorking %}
-										{% if daysWorking.request.id == request.id %}
-											{% set nbDaysWorking = daysWorking.nbDaysWorking %}
-										{% endif %}
-									{% endfor %}
+										<td class="py-6 px-6">{{ request.createdAt|date('d/m/Y H:i') }}</td>
+										<td class="py-6 px-6">{{ request.collaborator.firstname }}
+											{{ request.collaborator.lastname }}</td>
+										<td class="py-6 px-6">{{ request.startAt|date('d/m/Y') }}</td>
+										<td class="py-6 px-6">{{ request.endAt|date('d/m/Y') }}</td>
 
-									<td class="py-6 px-6">
-										{{ nbDaysWorking }}
-										{% if nbDaysWorking <= 1 %}
-											jour
-										{% else %}
-											jours
-										{% endif %}
-									</td>
+										{# Récupération des jours ouvrés #}
+										{% set nbDaysWorking = null %}
+										{% for daysWorking in item.daysWorking %}
+											{% if daysWorking.request.id == request.id %}
+												{% set nbDaysWorking = daysWorking.nbDaysWorking %}
+											{% endif %}
+										{% endfor %}
 
-									<td class="py-6 px-6">
-										<form method="POST" action="{{ path('app_detail_request_pending') }}">
-											<!-- Champ caché pour l'ID -->
-											<input type="hidden" name="id" value="{{ request.id }}">
-											<button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
-										</form>
-									</td>
-								</tr>
+										<td class="py-6 px-6">
+											{{ nbDaysWorking }}
+											{% if nbDaysWorking <= 1 %}
+												jour
+											{% else %}
+												jours
+											{% endif %}
+										</td>
+
+										<td class="py-6 px-6">
+											<form method="POST" action="{{ path('app_detail_request_pending') }}">
+												<input type="hidden" name="id" value="{{ request.id }}">
+												<button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
+											</form>
+										</td>
+									</tr>
+								{% endif %}
 							{% endfor %}
 						{% endfor %}
+
 
 					</tbody>
 				</table>
