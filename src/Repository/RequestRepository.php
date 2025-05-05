@@ -165,7 +165,7 @@ class RequestRepository extends ServiceEntityRepository
         return $qb->getQuery();
     }
 
-    public function HistoryRequestfindByFilters(array $filters, string $order = ''): Query
+    public function HistoryRequestfindByFilters(array $filters, string $order): Query
     {
         $qb = $this->createQueryBuilder('r');
 
@@ -241,9 +241,9 @@ class RequestRepository extends ServiceEntityRepository
 
         // FILTRE PAR STATUT
         if (array_key_exists('answer', $filters)) {
-            if ($filters['answer'] === null) {
+            if ($filters['answer'] === "none") {
                 $qb->andWhere('r.answer IS NULL');
-            } else {
+            }elseif($filters['answer'] === false || $filters['answer'] === true) {
                 $qb->andWhere('r.answer = :answer')
                     ->setParameter('answer', $filters['answer']);
             }
