@@ -21,17 +21,26 @@ class RequestTypeForm extends AbstractType
         if (!empty($options['isAdd'])) {
             $builder->add('ajouter', SubmitType::class, [
                 'label' => 'Ajouter',
-                'attr' => ['class' => 'btn btn-success'],
+                'attr' => [
+                    'class' => 'btn btn-success',
+                    'style' => 'background-color: #004C6C;',
+                ],
             ]);
         } else {
             $builder
                 ->add('mettreAJour', SubmitType::class, [
                     'label' => 'Mettre à jour',
-                    'attr' => ['class' => 'btn btn-primary'],
+                    'attr' => [
+                        'class' => 'btn btn-primary',
+                        'style' => 'background-color: #004C6C;',
+                    ],
                 ])
                 ->add('delete', SubmitType::class, [
                     'label' => 'Supprimer',
-                    'attr' => ['class' => 'btn btn-primary'],
+                    'attr' => [
+                        'class' => 'btn btn-primary',
+                        'onclick' => "return confirm('Êtes-vous sûr de vouloir supprimer ?');",
+                    ],
                 ]);
         }
     }

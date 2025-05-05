@@ -333,6 +333,18 @@ class RequestRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    //Trouvé des demandes par un type de demande pour la vérification de suppression de postes
+    public function findRequestByTypeOfRequest(int $id): ?int
+    {
+        return $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->join('r.request_type', 'request_type') 
+            ->where('request_type.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getSingleScalarResult(); 
+    }
+
 
 
 

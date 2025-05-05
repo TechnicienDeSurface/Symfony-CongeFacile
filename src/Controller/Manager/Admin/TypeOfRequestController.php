@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\RequestType;
 use App\Form\RequestTypeForm;
+use App\Repository\RequestRepository;
 use App\Repository\RequestTypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter as ORMQueryAdapter;
@@ -91,25 +92,29 @@ class TypeOfRequestController extends AbstractController
     //PAGE DETAIL TYPE DE DEMANDE VIA ADMINISTRATION MANAGER
     #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-detail-type-de-demande/{id}', name: 'app_administration_detail_type_of_request', methods: ['GET', 'POST'])]
-    public function editRequestType(RequestType $typeDemande, Request $request, EntityManagerInterface $entityManager, CsrfTokenManagerInterface $csrfTokenManager): Response
+    public function editRequestType(RequestRepository $repository, RequestType $typeDemande, Request $request, EntityManagerInterface $entityManager, CsrfTokenManagerInterface $csrfTokenManager): Response
     {
         $form = $this->createForm(RequestTypeForm::class, $typeDemande, [
             'isAdd' => false
         ]);
         $form->handleRequest($request);
-    
+        $errorLinks = $repository->findRequestByTypeOfRequest($typeDemande->getId());
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get('delete')->isClicked()) {
-                try {
-                    $entityManager->remove($typeDemande);
-                    $entityManager->flush();
-                    $this->addFlash('success', 'Le type de demande a été supprimé avec succès.');
-                    return $this->redirectToRoute('app_administration_type_of_request');
-                } catch (ForeignKeyConstraintViolationException $e) {
+                if($errorLinks === false){
+                    try {
+                        $entityManager->remove($typeDemande);
+                        $entityManager->flush();
+                        $this->addFlash('success', 'Le type de demande a été supprimé avec succès.');
+                        return $this->redirectToRoute('app_administration_type_of_request');
+                    } catch (ForeignKeyConstraintViolationException $e) {
+                        $this->addFlash('error', 'Impossible de supprimer ce type de demande : il est encore utilisé par un ou plusieurs utilisateurs.');
+                        return $this->redirectToRoute('app_administration_detail_type_of_request', ['id' => $typeDemande->getId()]);
+                    }
+                }else{
                     $this->addFlash('error', 'Impossible de supprimer ce type de demande : il est encore utilisé par un ou plusieurs utilisateurs.');
-                    return $this->redirectToRoute('app_administration_detail_type_of_request', ['id' => $typeDemande->getId()]);
+                        return $this->redirectToRoute('app_administration_detail_type_of_request', ['id' => $typeDemande->getId()]);
                 }
-
 
             } else {
                 $entityManager->flush();

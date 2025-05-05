@@ -114,4 +114,29 @@ class PersonRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    //Trouvé des personnes par une position pour la vérification de suppression de postes
+    public function findPersonByPosition(int $id): ?int
+    {
+        return $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->join('p.position', 'position') 
+            ->where('position.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getSingleScalarResult(); 
+    }
+
+    //Trouvé des personnes par un département pour la vérification de suppression de postes
+    public function findPersonByDepartment(int $id): ?int
+    {
+        return $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->join('r.department', 'department') 
+            ->where('department.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getSingleScalarResult(); 
+    }
+
 }
