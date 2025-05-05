@@ -70,7 +70,7 @@ class JobController extends AbstractController
 
     //PAGE AJOUTER JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
     #[IsGranted('ROLE_MANAGER')]
-    #[Route('/administration-ajouter-job', name: 'app_administration_ajouter_job', methods:['POST'])]
+    #[Route('/administration-ajouter-job', name: 'app_administration_ajouter_job', methods:['GET','POST'])]
     public function addJob(PositionRepository $repository, Request $request, EntityManagerInterface $entityManager): Response
     {
         // Créer une nouvelle instance de Position
@@ -78,7 +78,9 @@ class JobController extends AbstractController
         $positions = $repository->findBy([],[]);
         $verif = false; 
         // Créer le formulaire et le traiter
-        $form = $this->createForm(AddJobForm::class, $position);
+        $form = $this->createForm(EditJobForm::class, $position, [
+            'submit_label' => 'Ajouter',
+         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -111,11 +113,13 @@ class JobController extends AbstractController
     #[Route('/administration-detail-job/{id}', name: 'app_administration_detail_job', methods: ['GET','POST'])]
     public function editJob(Request $request, Position $position, EntityManagerInterface $entityManager, int $id): Response
     {
-        $form = $this->createForm(EditJobForm::class, $position);
+        $form = $this->createForm(EditJobForm::class, $position, [
+           'submit_label' => 'Mettre à jour',
+        ]);
         $form->handleRequest($request);
     
         if ($form->isSubmitted()) {
-            if ($form->get('edit')->isClicked()) {
+            if ($form->get('submit')->isClicked()) {
                 if ($form->isValid()) {
                     $entityManager->flush();
                     $this->addFlash('success', 'Le poste a été mis à jour avec succès.');
