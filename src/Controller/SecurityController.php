@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\LoginFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,9 +19,26 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
+        $customError = null;
+
+        if ($error) {
+            switch ($error->getMessageKey()) {
+                case 'Invalid credentials.':
+                    $customError = 'Identifiants incorrects. Veuillez réessayer.';
+                    break;
+                case 'User could not be found.':
+                    $customError = 'Utilisateur introuvable.';
+                    break;
+                default:
+                    $customError = 'Une erreur est survenue lors de la connexion.';
+                    break;
+            }
+        }
+
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
+            'customError' => $customError,
         ]);
     }
 
