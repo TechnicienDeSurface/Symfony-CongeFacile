@@ -13,6 +13,10 @@ class DepartmentType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $deleteClass = 'block';
+        if($options['submit_label'] == "Mettre à jour"){
+            $deleteClass = 'hidden'; 
+        }
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom du service',
@@ -21,16 +25,19 @@ class DepartmentType extends AbstractType
                     'placeholder' => 'Nom du service',
                 ],
             ])
-            ->add('edit', SubmitType::class, [
-                'label' => 'Mettre à jour',
+            ->add('submit', SubmitType::class, [
+                'label' => $options['submit_label'],
                 'attr' => [
                     'class' => 'text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[154px] h-[35px] font-medium my-7 cursor-pointer inline-block',
+                    'style' => 'background-color: #004C6C;',
                 ],
             ])
             ->add('delete', SubmitType::class, [
                 'label' => 'Supprimer',
                 'attr' => [
-                    'class' => 'text-[#ebf1f4] bg-[#E10E0E] rounded-lg w-[130px] h-[35px] font-medium my-7 cursor-pointer inline-block',
+                    'class' => 'btn btn-primary '.$deleteClass ,
+                    'onclick' => "return confirm('Êtes-vous sûr de vouloir supprimer ?');",
+                    'class' => $deleteClass,
                 ],
             ]);
     }
@@ -39,6 +46,7 @@ class DepartmentType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Department::class,
+            'submit_label' => 'Ajouter',
         ]);
     }
 }
