@@ -312,8 +312,8 @@ class RequestRepository extends ServiceEntityRepository
         }
 
         // Ajouter un ordre de tri (si applicable)
-        if ($order) {
-            $qb->orderBy('r.created_at', $order); // Ou tout autre critère d'ordre
+        if ($order == 'ASC' || $order == 'DESC') {
+            $qb->orderBy('r.end_at - r.start_at', $order); // Ou tout autre critère d'ordre
         }
 
         return $qb->getQuery()->getResult();
