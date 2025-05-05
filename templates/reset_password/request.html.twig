@@ -7,10 +7,13 @@
 			{% include 'layout/menu/_sidebar.html.twig' %}
 
 			<div class="w-full p-8">
-				<title>
-					{% block title %}Mot de passe oublié
-					{% endblock %}
-				</title>
+				<title>{% block title %}Mot de passe oublié{% endblock %}</title>
+				{% for label, messages in app.flashes %}
+					{% for message in messages %}
+						<div class="mb-4 p-4 rounded-lg text-sm bg-red-100 text-red-800">{{ message }}</div>
+					{% endfor %}
+				{% endfor %}
+
 				<h1 style='color : #004C6C' class="font-bold text-2xl my-4">Mot de passe oublié</h1>
 				<br>
 				<p>Renseignez votre adresse email dans le champ ci-dessous.

@@ -10,7 +10,9 @@
 		{% include 'layout/menu/_sidebar.html.twig' %}
 
 		<div class="w-full p-8">
-
+			{% if customError %}
+				<div class="mb-4 p-4 rounded-lg text-sm bg-red-100 text-red-800">{{ customError }}</div>
+			{% endif %}
 
 			<h1 class="text-left font-bold text-2xl my-4 " style='color : #004C6C !important'>
 				CongéFacile
@@ -47,9 +49,6 @@
 				</div>
 
 				<button type="submit" class="bg-[#004C6C] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Connexion au portail</button>
-				{% if error %}
-					<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-				{% endif %}
 
 				{% if app.user %}
 					<div class="mb-3">
