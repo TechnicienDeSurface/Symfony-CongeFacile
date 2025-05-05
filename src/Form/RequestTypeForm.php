@@ -31,7 +31,10 @@ class RequestTypeForm extends AbstractType
                 ])
                 ->add('delete', SubmitType::class, [
                     'label' => 'Supprimer',
-                    'attr' => ['class' => 'btn btn-primary'],
+                    'attr' => [
+                        'class' => 'btn btn-primary',
+                        'onclick' => "return confirm('Êtes-vous sûr de vouloir supprimer ?');",
+                    ],
                 ]);
         }
     }
