@@ -16,7 +16,7 @@
 				<h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Effectuer une nouvelle demande</h1>
 				 {% include 'layout/_addFlash.html.twig'%} {# include pour appeler le message flash dans le formulaire#}
 				<form method="post" class="space-y-4 w-1/2">
-					{{ form_start(form) }}
+					{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
 					<div class="w-1/2 mb-6">
 						<label for="request_type" class="block text-gray-700 text-sm font-bold mb-2">Type de demande - champ obligatoire</label>
 						{{ form_widget(form.request_type, {'attr': {'class': 'w-full p-2 border rounded'}}) }}
