@@ -2,7 +2,7 @@
 
 {% block body %}
 
-	<title>{% block title %}Poste{% endblock %}</title>
+	<title>{% block title %}Administration - Poste{% endblock %}</title>
 	{% include 'layout/menu/_header.html.twig' %}
         <main style="display: flex;">
             {% include 'layout/menu/_sidebar.html.twig' %}
@@ -58,7 +58,7 @@
                                 <td class="py-6 px-6">{{ items.totalnbdemande }}</td>
                                 <td class="py-6 px-6">
 										<form method="POST" action="{{ path('app_administration_detail_job', {'id': items.id}) }}">
-											<button type="submit" class="bg-gray-200 px-3 py-1 rounded">Détails</button>
+											<button type="submit" class="text-gray-600 bg-[#ecf3f9] px-5 font-medium py-2 rounded">Détails</button>
 										</form>
 									</td>
                             </tr>

@@ -118,6 +118,7 @@ class JobController extends AbstractController
            'submit_label' => 'Mettre à jour',
         ]);
         $errorLinks = $repository->findPersonByPosition($position->getId());
+      
         if ($form->isSubmitted()) {
             if ($form->get('submit')->isClicked()) {
                 if ($form->isValid()) {

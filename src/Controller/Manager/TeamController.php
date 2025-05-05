@@ -73,6 +73,7 @@ class TeamController extends AbstractController
             'team' => $pagerfanta->getCurrentPageResults(),
             'filters' => $filters,
             'form' => $form->createView(),
+            'page' => 'team-manager',
         ]);
     }
 
@@ -222,7 +223,7 @@ class TeamController extends AbstractController
             'controller_name' => 'Team',
             'user' => $user,
             'collaborator' => $collaborator,
-            'page' => 'team-detail',
+            'page' => 'team-manager',
             'form' => $form,
         ]);
     }

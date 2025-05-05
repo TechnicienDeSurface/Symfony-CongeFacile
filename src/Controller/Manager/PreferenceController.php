@@ -48,6 +48,7 @@ class PreferenceController extends AbstractController
         // Rendre la vue
         return $this->render('manager/preference.html.twig', [
             'form' => $form->createView(),
+            'page' => 'preference-manager',
         ]);
     }
 }
