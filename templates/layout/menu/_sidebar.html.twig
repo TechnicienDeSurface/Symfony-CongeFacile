@@ -148,7 +148,7 @@
 			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
 				<a href="{{path('app_preference_manager')}}" class="{% if app.request.get('_route') == 'app_preference_manager' %}active{% endif %}">Mes préférences</a>
 			{% elseif app.user and 'ROLE_COLLABORATEUR' in app.user.roles %}
-				<a href="{{path('app_preference_collaborateur')}}" class="{% if app.request.get('_route') == 'app_preference_manager' %}active{% endif %}">Mes préférences</a>
+				<a href="{{path('app_preference_collaborateur')}}" class="{% if app.request.get('_route') == 'app_preference_collaborateur' %}active{% endif %}">Mes préférences</a>
 			{% endif %}
 
 
@@ -158,10 +158,10 @@
 						<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
 					</a>
 					<div class="submenu">
-						<a id="typededemande" href="{{ path('app_administration_type_of_request') }}" class="whitespace-nowrap {% if app.request.get('_route') == 'app_administration_type_of_request' %}active{% endif %}">Types de demandes</a>
-						<a id="directions" href="{{ path('app_administration_management_service') }}" class="whitespace-nowrap {% if app.request.get('_route') == 'app_administration_management_service' %}active{% endif %}">Directions/Services</a>
-						<a id="managers" href="{{ path('app_administration_manager') }}" class="whitespace-nowrap {% if app.request.get('_route') == 'app_administration_manager' %}active{% endif %}">Managers</a>
-						<a id="postes" href="{{ path('app_administration_job') }}" class="whitespace-nowrap {% if app.request.get('_route') == 'app_administration_job' %}active{% endif %}">Postes</a>
+						<a id="typededemande" href="{{ path('app_administration_type_of_request') }}" class="whitespace-nowrap {% if app.request.get('_route') starts with 'app_administration_type_of_request' %}active{% endif %}">Types de demandes</a>
+						<a id="directions" href="{{ path('app_administration_management_service') }}" class="whitespace-nowrap {% if app.request.get('_route') starts with 'app_administration_management_service' %}active{% endif %}">Directions/Services</a>
+						<a id="managers" href="{{ path('app_administration_manager') }}" class="whitespace-nowrap {% if app.request.get('_route') starts with 'app_administration_manager' %}active{% endif %}">Managers</a>
+						<a id="postes" href="{{ path('app_administration_job') }}" class="whitespace-nowrap {% if app.request.get('_route') starts with 'app_administration_job' %}active{% endif %}">Postes</a>
 					</div>
 				</div>
 			{% endif %}

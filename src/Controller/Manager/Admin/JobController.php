@@ -113,7 +113,7 @@ class JobController extends AbstractController
     {
         $form = $this->createForm(EditJobForm::class, $position);
         $form->handleRequest($request);
-    
+        
         if ($form->isSubmitted()) {
             if ($form->get('edit')->isClicked()) {
                 if ($form->isValid()) {
@@ -135,7 +135,7 @@ class JobController extends AbstractController
         }
     
         return $this->render('manager/admin/job/detail_job.html.twig', [
-            'page' => 'administration-job',
+            'page' => 'administration-job/detail-job',
             'form' => $form->createView(),
         ]);
     }
