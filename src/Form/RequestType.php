@@ -35,7 +35,7 @@ class RequestType extends AbstractType
                 'attr' => ['style' => 'display:none'],
                 'label_attr' => ['style' => 'display:none;']
             ])
-            ->add('start_at', DateTimeType::class, [
+            ->add('start_at', DateType::class, [
                 'widget' => 'single_text',
                 'input' => 'datetime', // important pour que Symfony convertisse en DateTime
                 'label' => 'Date et heure de début',
@@ -50,7 +50,7 @@ class RequestType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('end_at', DateTimeType::class, [
+            ->add('end_at', DateType::class, [
                 'widget' => 'single_text',
                 'input' => 'datetime',
                 'label' => 'Date et heure de fin',
