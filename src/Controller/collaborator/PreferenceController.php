@@ -6,13 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
-use App\Repository\PersonRepository ; 
-use App\Form\PreferenceType ; 
-use App\Entity\Person ;
-use App\Entity\User ;
+use App\Repository\PersonRepository; 
+use App\Form\PreferenceType; 
+use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
-use App\Service\MailerService ;
-use PDOException;
+use App\Service\MailerService;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class PreferenceController extends AbstractController

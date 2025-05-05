@@ -11,7 +11,6 @@ use App\Entity\RequestType;
 use App\Form\RequestTypeForm;
 use App\Repository\RequestTypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Doctrine\ORM\QueryAdapter as ORMQueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;

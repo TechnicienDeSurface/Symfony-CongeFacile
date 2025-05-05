@@ -9,8 +9,6 @@ use App\Form\PreferenceManagerType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
-use App\Entity\Person;
-use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 

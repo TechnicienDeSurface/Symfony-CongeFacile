@@ -4,8 +4,6 @@ namespace App\Form;
 
 use App\Entity\Position; 
 use App\Entity\Department; 
-use App\Repository\PositionRepository; 
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;

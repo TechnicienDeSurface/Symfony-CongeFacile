@@ -6,7 +6,6 @@ use App\Entity\Person;
 use App\Entity\User;
 use App\Form\MotDePasseType;
 use App\Form\InformationFormType;
-use App\Repository\UserRepository ; 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\SecurityBundle\Security; 
