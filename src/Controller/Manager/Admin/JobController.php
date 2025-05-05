@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\PositionRepository as PositionRepository;
+use App\Repository\PersonRepository;
 use App\Entity\Position;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\EditJobForm;
@@ -111,13 +112,12 @@ class JobController extends AbstractController
     //PAGE DETAIL JOB VIA L'ADMINISTRATION DU PORTAIL MANAGER
     #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-detail-job/{id}', name: 'app_administration_detail_job', methods: ['GET','POST'])]
-    public function editJob(Request $request, Position $position, EntityManagerInterface $entityManager, int $id): Response
+    public function editJob(PersonRepository $repository, Request $request, Position $position, EntityManagerInterface $entityManager, int $id): Response
     {
         $form = $this->createForm(EditJobForm::class, $position, [
            'submit_label' => 'Mettre à jour',
         ]);
-        $form->handleRequest($request);
-    
+        $errorLinks = $repository->findPersonByPosition($position->getId());
         if ($form->isSubmitted()) {
             if ($form->get('submit')->isClicked()) {
                 if ($form->isValid()) {
@@ -126,12 +126,17 @@ class JobController extends AbstractController
                     return $this->redirectToRoute('app_administration_job');
                 }
             } elseif ($form->get('delete')->isClicked()) {
-                try {
-                    $entityManager->remove($position);
-                    $entityManager->flush();
-                    $this->addFlash('warning', 'Le poste a été supprimé avec succès.');
-                    return $this->redirectToRoute('app_administration_job');
-                } catch (ForeignKeyConstraintViolationException $e) {
+                if($errorLinks === false){
+                    try {
+                        $entityManager->remove($position);
+                        $entityManager->flush();
+                        $this->addFlash('warning', 'Le poste a été supprimé avec succès.');
+                        return $this->redirectToRoute('app_administration_job');
+                    } catch (ForeignKeyConstraintViolationException $e) {
+                        $this->addFlash('error', 'Impossible de supprimer ce poste : il est encore utilisé par un ou plusieurs utilisateurs.');
+                        return $this->redirectToRoute('app_administration_detail_job', ['id' => $position->getId()]);
+                    }
+                }else{
                     $this->addFlash('error', 'Impossible de supprimer ce poste : il est encore utilisé par un ou plusieurs utilisateurs.');
                     return $this->redirectToRoute('app_administration_detail_job', ['id' => $position->getId()]);
                 }

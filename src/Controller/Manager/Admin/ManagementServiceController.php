@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Department;
 use App\Form\DepartmentType;
 use App\Repository\DepartmentRepository;
+use App\Repository\PersonRepository;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ManagementServiceController extends AbstractController
@@ -86,7 +87,7 @@ class ManagementServiceController extends AbstractController
     //PAGE DETAIL MANAGEMENTS ET SERVICES VIA ADMINISTRATION MANAGER
     #[IsGranted('ROLE_MANAGER')]
     #[Route('/administration-detail-management-service/{id}', name: 'app_administration_detail_management_service', methods: ['GET', 'POST'])]
-    public function editManagementService(Request $request, Department $department, EntityManagerInterface $entityManager): Response
+    public function editManagementService(PersonRepository $repository, Request $request, Department $department, EntityManagerInterface $entityManager): Response
     {
 
         if (!$department) {
@@ -97,7 +98,7 @@ class ManagementServiceController extends AbstractController
         $form = $this->createForm(DepartmentType::class, $department, ['submit_label' => 'Mettre à jour']);
 
         $form->handleRequest($request);
-
+        $errorLinks = $repository->findPersonByDepartment($department->getId());
         // Si le formulaire est soumis
         if ($form->isSubmitted()) {
             // Action de mise à jour
@@ -109,10 +110,15 @@ class ManagementServiceController extends AbstractController
 
             // Action de suppression
             if ($form->get('delete')->isClicked()) {
-                $entityManager->remove($department); // Supprimer le département
-                $entityManager->flush(); // Appliquer la suppression
-                $this->addFlash('warning', 'Le département a été supprimé.');
-                return $this->redirectToRoute('app_administration_management_service'); // Rediriger vers la liste des départements
+                if($errorLinks === false){
+                    $entityManager->remove($department); // Supprimer le département
+                    $entityManager->flush(); // Appliquer la suppression
+                    $this->addFlash('warning', 'Le département a été supprimé.');
+                    return $this->redirectToRoute('app_administration_management_service'); // Rediriger vers la liste des départements
+                }else{
+                    $this->addFlash('error', 'Impossible de supprimer ce département, des personnes y sont enregistrés.');
+                    return $this->redirectToRoute('app_administration_management_service');
+                }
             }
         }
 
