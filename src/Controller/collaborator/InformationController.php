@@ -51,19 +51,23 @@ class InformationController extends AbstractController
 
                 $verifHash = $this->passwordHasher->hashPassword($user, $currentPassword) ;
                 if ($hash->isPasswordValid($collaborator, $currentPassword)) {
-                    if($newPassword == $confirmPassword){
-                        if($newPassword || $confirmPassword != $currentPassword){
-                            $password = $this->passwordHasher->hashPassword($user, $newPassword) ; 
-                            $collaborator->setPassword($password) ; 
-                            $entityManager->flush(); // Mettre à jour l'entité
+                    if($newPassword != $currentPassword){
+                        if($newPassword == $confirmPassword){
+                            if($newPassword || $confirmPassword != $currentPassword){
+                                $password = $this->passwordHasher->hashPassword($user, $newPassword) ; 
+                                $collaborator->setPassword($password) ; 
+                                $entityManager->flush(); // Mettre à jour l'entité
 
-                            $this->addFlash('success', 'Mot de passe modifié'); //Création d'un message flash de succès
+                                $this->addFlash('success', 'Mot de passe modifié'); //Création d'un message flash de succès
+                            }else{
+                                $this->addFlash('error', 'Le nouveau mot passe est le même que l\'actuel');
+                            }
                         }else{
-                            $this->addFlash('error', 'Le nouveau mot passe est le même que l\'actuel');
-                        }
+                            $this->addFlash('error', 'La confirmation du nouveau mot de passe ne correspond pas au nouveau mot de passe');
+                        }   
                     }else{
-                        $this->addFlash('error', 'La confirmation du nouveau mot de passe ne correspond pas au nouveau mot de passe');
-                    }   
+                        $this->addFlash('error', 'Le nouveau mot de passe est identique à l\'actuel');
+                    }
                 }else{
                     $this->addFlash('error', 'Le mot de passe actuel est incorrect'); //Création d'un message flash erreur 
                 }
