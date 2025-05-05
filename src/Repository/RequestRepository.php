@@ -250,7 +250,7 @@ class RequestRepository extends ServiceEntityRepository
         }
 
         if (!empty($order)) {
-            $qb->orderBy('r.id', $order);
+            $qb->orderBy('r.end_at - r.start_at', $order);
         }
 
         return $qb->getQuery();
