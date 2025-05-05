@@ -39,6 +39,7 @@ class SecurityController extends AbstractController
             'last_username' => $lastUsername,
             'error' => $error,
             'customError' => $customError,
+            'page' => 'login',
         ]);
     }
 

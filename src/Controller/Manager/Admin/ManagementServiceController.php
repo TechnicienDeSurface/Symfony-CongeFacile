@@ -109,7 +109,7 @@ class ManagementServiceController extends AbstractController
         }
 
         return $this->render('manager/admin/management-service/detail_management_service.html.twig', [
-            'page' => 'administration-detail-management-service',
+            'page' => 'administration-management-service',
             'department' => $department,
             'form' => $form->createView(),
         ]);

@@ -12,9 +12,9 @@ class HomeController extends AbstractController
     public function viewHome(): Response
     {
         return $this->render('home/home.html.twig', [
-            'page' => 'accueil', //définir la page
+            'page' => 'home', //définir la page
             'bleu' => '#004C6C', //définit la couleur du fond de l'étape 1 en back  
-            'blanc' => '#FFFFFF', 
+            'blanc' => '#FFFFFF',
         ]);
     }
 }

@@ -358,7 +358,7 @@ class RequestController extends AbstractController
         $form->handleRequest($request);
 
         return $this->render('manager/detail_history_request.html.twig', [
-            'page' => 'detail-history-request',
+            'page' => 'history-request',
             'request' => $requestLoaded,
             'form' => $form->createView(),
         ]);

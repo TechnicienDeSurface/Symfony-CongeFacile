@@ -107,73 +107,70 @@
 	<!-- SIDEBAR -->
 	<aside class="sidebar">
 		{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-			<a href="{{ path('app_login') }}" class="{% if app.request.get('_route') == 'app_login' %}active{% endif %}">Connexion</a>
+			<a href="{{ path('app_login') }}" class="{% if page == 'login' %}active{% endif %}">Connexion</a>
 		{% else %}
-			<a href="{{ path('app_home') }}" class="{% if app.request.get('_route') == 'app_home' %}active{% endif %}">Accueil</a>
+			<a href="{{ path('app_home') }}" class="{% if page == 'home' %}active{% endif %}">Accueil</a>
 
 			{# Accès Collaborateur et Manager #}
 			{% if is_granted('ROLE_COLLABORATEUR') or is_granted('ROLE_MANAGER') %}
-				<a href="{{ path('app_new_request') }}" class="{% if app.request.get('_route') == 'app_new_request' %}active{% endif %}">Nouvelle demande</a>
+				<a href="{{ path('app_new_request') }}" class="{% if page starts with 'new-request' %}active{% endif %}">Nouvelle demande</a>
 			{% endif %}
 
 			{% if is_granted('ROLE_MANAGER') %}
-				<a href="{{ path('app_request_pending') }}" class="{% if app.request.get('_route') == 'app_request_pending' %}active{% endif %}">Demandes en attente
-					<span class="notif">
-						{% if nombre is defined %}
-							{{nombre}}
-						{% else %}
-							0
-						{% endif %}
-					</span>
+				<a href="{{ path('app_request_pending') }}" class="{% if page starts with 'request-pending' %}active{% endif %}">Demandes en attente
+					<span class="notif">{{ nombre is defined ? nombre : 0 }}</span>
 				</a>
 			{% endif %}
 
 			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
-				<a href="{{path('app_history_request_manager')}}" class="{% if app.request.get('_route') == 'app_history_request_manager' %}active{% endif %}">Historique des demandes</a>
+				<a href="{{ path('app_history_request_manager') }}" class="{% if page starts with 'history-request' %}active{% endif %}">Historique des demandes</a>
 			{% elseif app.user and 'ROLE_COLLABORATEUR' in app.user.roles %}
-				<a href="{{path('app_request_history_collaborator')}}" class="{% if app.request.get('_route') == 'app_request_history_collaborator' %}active{% endif %}">Historique des demandes</a>
+				<a href="{{ path('app_request_history_collaborator') }}" class="{% if page starts with 'request-history-collaborator' %}active{% endif %}">Historique des demandes</a>
 			{% endif %}
+
 			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
-				<a href="{{path('app_team')}}" class="{% if app.request.get('_route') == 'app_team' %}active{% endif %}">Mon équipe</a>
-				<a href="{{ path('app_statistic') }}" class="{% if app.request.get('_route') == 'app_statistic' %}active{% endif %}">Statistiques</a>
+				<a href="{{ path('app_team') }}" class="{% if page starts with 'team' %}active{% endif %}">Mon équipe</a>
+				<a href="{{ path('app_statistic') }}" class="{% if page starts with 'statistic-manager' %}active{% endif %}">Statistiques</a>
 			{% endif %}
+
 			<div class="trait"></div>
 
 			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
-				<a href="{{path('app_information_manager')}}" class="{% if app.request.get('_route') == 'app_information_manager' %}active{% endif %}">Mes informations</a>
+				<a href="{{ path('app_information_manager') }}" class="{% if page starts with 'information-manager' %}active{% endif %}">Mes informations</a>
 			{% elseif app.user and 'ROLE_COLLABORATEUR' in app.user.roles %}
-				<a href="{{path('app_information_collaborateur')}}" class="{% if app.request.get('_route') == 'app_information_collaborateur' %}active{% endif %}">Mes informations</a>
+				<a href="{{ path('app_information_collaborateur') }}" class="{% if page starts with 'information-collaborator' %}active{% endif %}">Mes informations</a>
 			{% endif %}
 
 			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
-				<a href="{{path('app_preference_manager')}}" class="{% if app.request.get('_route') == 'app_preference_manager' %}active{% endif %}">Mes préférences</a>
+				<a href="{{ path('app_preference_manager') }}" class="{% if page starts with 'preference-manager' %}active{% endif %}">Mes préférences</a>
 			{% elseif app.user and 'ROLE_COLLABORATEUR' in app.user.roles %}
-				<a href="{{path('app_preference_collaborateur')}}" class="{% if app.request.get('_route') == 'app_preference_collaborateur' %}active{% endif %}">Mes préférences</a>
+				<a href="{{ path('app_preference_collaborateur') }}" class="{% if page starts with 'preference-collaborateur' %}active{% endif %}">Mes préférences</a>
 			{% endif %}
-
 
 			{% if app.user and 'ROLE_MANAGER' in app.user.roles %}
 				<div class="dropdown-toggle">
 					<a href="#">Administration
-						<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+							<path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/>
+						</svg>
 					</a>
 					<div class="submenu">
-						<a id="typededemande" href="{{ path('app_administration_type_of_request') }}" class="whitespace-nowrap {% if app.request.get('_route') starts with 'app_administration_type_of_request' %}active{% endif %}">Types de demandes</a>
-						<a id="directions" href="{{ path('app_administration_management_service') }}" class="whitespace-nowrap {% if app.request.get('_route') starts with 'app_administration_management_service' %}active{% endif %}">Directions/Services</a>
-						<a id="managers" href="{{ path('app_administration_manager') }}" class="whitespace-nowrap {% if app.request.get('_route') starts with 'app_administration_manager' %}active{% endif %}">Managers</a>
-						<a id="postes" href="{{ path('app_administration_job') }}" class="whitespace-nowrap {% if app.request.get('_route') starts with 'app_administration_job' %}active{% endif %}">Postes</a>
+						<a id="typededemande" href="{{ path('app_administration_type_of_request') }}" class="whitespace-nowrap {% if page starts with 'administration-type-de-demande' %}active{% endif %}">Types de demandes</a>
+						<a id="directions" href="{{ path('app_administration_management_service') }}" class="whitespace-nowrap {% if page starts with 'administration-management-service' %}active{% endif %}">Directions/Services</a>
+						<a id="managers" href="{{ path('app_administration_manager') }}" class="whitespace-nowrap {% if page starts with 'administration-manager' %}active{% endif %}">Managers</a>
+						<a id="postes" href="{{ path('app_administration_job') }}" class="whitespace-nowrap {% if page starts with 'administration-job' %}active{% endif %}">Postes</a>
 					</div>
 				</div>
 			{% endif %}
 
-			<a href="{{ path('app_logout') }}" class="{% if app.request.get('_route') == 'app_logout' %}active{% endif %}">Déconnexion</a>
+			<a href="{{ path('app_logout') }}" class="{% if page == 'logout' %}active{% endif %}">Déconnexion</a>
 
 			<div class="user-info">
 				<img src="avatar.png" alt="User">
 				<div>
 					{% if app.user %}
 						<strong>{{ app.user.person.FirstNameLastName }}</strong><br>
-						{{ is_granted("ROLE_MANAGER") ? "Manager" : "Collaborateur" }}
+						{{ is_granted('ROLE_MANAGER') ? 'Manager' : 'Collaborateur' }}
 					{% else %}
 						<strong>Utilisateur non connecté</strong><br>
 						Invité
@@ -182,7 +179,6 @@
 			</div>
 		{% endif %}
 	</aside>
-
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function () {

@@ -266,7 +266,7 @@ class ManagerController extends AbstractController
             ]);
         }
         return $this->render('manager/admin/manager/detail_manager.html.twig', [
-            'page' => 'administration-detail-manager',
+            'page' => 'administration-manager',
             'form'=>$form, 
             'manager'=>$manager,
             'user'=>$user,

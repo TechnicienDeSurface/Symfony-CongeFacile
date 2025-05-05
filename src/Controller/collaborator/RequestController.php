@@ -127,7 +127,7 @@ class RequestController extends AbstractController
     public function detailRequest(): Response
     {
         return $this->render('collaborator/detail_request.html.twig', [
-            'page' => 'detail-request-collaborator',
+            'page' => 'request-collaborator',
         ]);
     }
 

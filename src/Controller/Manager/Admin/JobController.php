@@ -135,7 +135,7 @@ class JobController extends AbstractController
         }
     
         return $this->render('manager/admin/job/detail_job.html.twig', [
-            'page' => 'administration-job/detail-job',
+            'page' => 'administration-job',
             'form' => $form->createView(),
         ]);
     }
