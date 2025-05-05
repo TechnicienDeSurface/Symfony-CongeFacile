@@ -36,7 +36,10 @@ class EditJobForm extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => $options['submit_label'],
-                'attr' => ['class' => 'btn btn-primary'],
+                'attr' => [
+                    'class' => 'btn btn-primary',
+                    'style' => 'background-color: #004C6C;',
+                ],
             ])
             ->add('delete', SubmitType::class, [
                 'label' => 'Supprimer',

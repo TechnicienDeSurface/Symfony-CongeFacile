@@ -29,6 +29,7 @@ class DepartmentType extends AbstractType
                 'label' => $options['submit_label'],
                 'attr' => [
                     'class' => 'text-[#ebf1f4] bg-[#004C6C] rounded-lg w-[154px] h-[35px] font-medium my-7 cursor-pointer inline-block',
+                    'style' => 'background-color: #004C6C;',
                 ],
             ])
             ->add('delete', SubmitType::class, [
