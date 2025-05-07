@@ -110,7 +110,7 @@ class ManagementServiceController extends AbstractController
 
             // Action de suppression
             if ($form->get('delete')->isClicked()) {
-                if($errorLinks === false){
+                if($errorLinks == false){
                     $entityManager->remove($department); // Supprimer le département
                     $entityManager->flush(); // Appliquer la suppression
                     $this->addFlash('warning', 'Le département a été supprimé.');
