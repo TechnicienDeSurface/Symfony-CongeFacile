@@ -121,7 +121,7 @@ class JobController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted()) {
-            if($form->get('edit')->isClicked()) {
+            if($form->get('submit')->isClicked()) {
                 if($form->isValid()) {
                     $entityManager->flush();
                     $this->addFlash('success', 'Le poste a été mis à jour avec succès.');
