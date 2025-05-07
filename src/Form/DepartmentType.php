@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class DepartmentType extends AbstractType
 {
@@ -23,6 +24,11 @@ class DepartmentType extends AbstractType
                 'attr' => [
                     'class' => 'block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6',
                     'placeholder' => 'Nom du service',
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le champ ne peut pas être vide.',
+                    ]),
                 ],
             ])
             ->add('submit', SubmitType::class, [
