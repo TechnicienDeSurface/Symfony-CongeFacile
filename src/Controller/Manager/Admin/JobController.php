@@ -118,15 +118,19 @@ class JobController extends AbstractController
            'submit_label' => 'Mettre à jour',
         ]);
         $errorLinks = $repository->findPersonByPosition($position->getId());
-      
-        if ($form->isSubmitted()) {
-            if ($form->get('submit')->isClicked()) {
-                if ($form->isValid()) {
+        $form->handleRequest($request);
+
+        if($form->isSubmitted()) {
+            if($form->get('edit')->isClicked()) {
+                if($form->isValid()) {
                     $entityManager->flush();
                     $this->addFlash('success', 'Le poste a été mis à jour avec succès.');
                     return $this->redirectToRoute('app_administration_job');
+                }else{
+                    $this->addFlash('error', 'Erreurs de validations.');
+                    return $this->redirectToRoute('app_administration_detail_job', ['id' => $position->getId()]);
                 }
-            } elseif ($form->get('delete')->isClicked()) {
+            } elseif($form->get('delete')->isClicked()) {
                 if($errorLinks == false){
                     try {
                         $entityManager->remove($position);

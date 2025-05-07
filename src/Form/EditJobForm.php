@@ -34,7 +34,7 @@ class EditJobForm extends AbstractType
                     ]),
                 ],
             ])
-            ->add('submit', SubmitType::class, [
+            ->add('edit', SubmitType::class, [
                 'label' => $options['submit_label'],
                 'attr' => [
                     'class' => 'btn btn-primary',

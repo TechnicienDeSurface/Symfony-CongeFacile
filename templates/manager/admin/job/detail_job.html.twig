@@ -14,7 +14,7 @@
 				<h1 class="text-left font-bold text-2xl my-4 " style='color : #004C6C !important'>
 					Développeur web
 				</h1>
-
+				{% include 'layout/_addFlash.html.twig'%}
 				{{ form_start(form) }}
 				<div class="mb-4 w-1/4">
 					{{ form_label(form.name, 'Nom du poste :', {'label_attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
@@ -36,7 +36,7 @@
 				</div>
 
 				<div class="flex items-left gap-5">
-					{{ form_widget(form.submit, {'attr': {'class': ' hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'}}) }}
+					{{ form_widget(form.edit, {'attr': {'class': ' hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'}}) }}
 					{{ form_widget(form.delete, {'attr': {'class': 'bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2'}}) }}
 				</div>
 				{{ form_end(form) }}
