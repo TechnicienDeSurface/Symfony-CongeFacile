@@ -10,18 +10,18 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request as RequestFondation;
-use App\Form\RequestType ; 
+use App\Form\RequestType;
 use App\Entity\Request;
 use App\Form\FilterRequestHistoryFormType;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
-use App\Entity\Person ; 
-use App\Entity\User ; 
+use App\Entity\Person;
+use App\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class RequestController extends AbstractController
-{ 
+{
 
     //PAGE NOUVELLE DEMANDE "COLLABORATEUR"
     #[IsGranted('ROLE_COLLABORATEUR')]
@@ -29,15 +29,15 @@ class RequestController extends AbstractController
     public function viewNewRequest(Security $security, RequestFondation $request_bd, RequestRepository $repository, ManagerRegistry $registry, PersonRepository $personRepository): Response
     {
         $request = new Request();
-        
+
         // Récupérez l'utilisateur connecté
-        $user = New User() ; 
-        $user = $security->getUser() ;
-        $persons = $personRepository->findBy([],[]);
-        $person = New Person() ; 
+        $user = new User();
+        $user = $security->getUser();
+        $persons = $personRepository->findBy([], []);
+        $person = new Person();
         foreach ($persons as $row) {
-            if($user == $row->getUser()){
-                $person = $row ; 
+            if ($user == $row->getUser()) {
+                $person = $row;
             }
         }
         $request->setCollaborator($person);
@@ -48,7 +48,7 @@ class RequestController extends AbstractController
         $form->handleRequest($request_bd);
 
         if ($form->isSubmitted()) {
-            if($form->isValid()){
+            if ($form->isValid()) {
                 try {
                     // Si valide : j'enregistre les données dans la BDD.
                     $data = $form->getData();
@@ -59,7 +59,7 @@ class RequestController extends AbstractController
                 } catch (NotFoundHttpException $e) {
                     $this->addFlash('error', 'Erreur lors de la création de la demande');
                 }
-            }else {
+            } else {
                 $this->addFlash('error', 'Erreur lors de la validation de la demande');
             }
         }
@@ -88,7 +88,7 @@ class RequestController extends AbstractController
             'nbdays'           => $request->query->get('nbdays'),
             'answer'           => $request->query->get('answer'),
         ];
-        
+
 
         // Si le formulaire est soumis et valide, on utilise ses données
         if ($form->isSubmitted() && $form->isValid()) {
@@ -99,16 +99,15 @@ class RequestController extends AbstractController
 
         // Recherche dans le repository avec les filtres
         $query = $requestRepository->HistoryRequestfindByFilters($filters, $order);
-        
+
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage(10);
 
-        try{
+        try {
             $pagerfanta->setCurrentPage($page);
-        }
-        catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
+        } catch (\Pagerfanta\Exception\OutOfRangeCurrentPageException $e) {
             throw $this->createNotFoundException('La page demandée n\'existe pas.');
         }
 
@@ -124,11 +123,17 @@ class RequestController extends AbstractController
     //PAGE DETAILS DES DEMANDES "COLLABORATEUR"
     #[IsGranted('ROLE_COLLABORATEUR')]
     #[Route('/detail-request-collaborator/{id}', name: 'app_detail_request_collaborator')]
-    public function detailRequest(): Response
+    public function detailRequest(int $id, RequestRepository $requestRepository): Response
     {
+        $requestEntity = $requestRepository->find($id);
+
+        if (!$requestEntity) {
+            throw $this->createNotFoundException('Aucune demande trouvée avec cet ID.');
+        }
+
         return $this->render('collaborator/detail_request.html.twig', [
             'page' => 'request-collaborator',
+            'request' => $requestEntity,
         ]);
     }
-
 }
