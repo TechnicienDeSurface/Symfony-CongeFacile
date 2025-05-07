@@ -127,7 +127,7 @@ class JobController extends AbstractController
                     return $this->redirectToRoute('app_administration_job');
                 }
             } elseif ($form->get('delete')->isClicked()) {
-                if($errorLinks === false){
+                if($errorLinks == false){
                     try {
                         $entityManager->remove($position);
                         $entityManager->flush();
