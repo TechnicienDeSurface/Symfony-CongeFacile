@@ -101,7 +101,7 @@ class TypeOfRequestController extends AbstractController
         $errorLinks = $repository->findRequestByTypeOfRequest($typeDemande->getId());
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get('delete')->isClicked()) {
-                if($errorLinks === false){
+                if($errorLinks == false){
                     try {
                         $entityManager->remove($typeDemande);
                         $entityManager->flush();

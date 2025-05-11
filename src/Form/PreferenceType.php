@@ -29,7 +29,7 @@ class PreferenceType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregistrer mes préférences', 
-                'attr' => ['class'=>'w-full text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-700 transition"', 
+                'attr' => ['class'=>'w-full text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition"', 
                             'style' => 'background-color : #004C6C ; '], 
             ]);
     }

@@ -120,8 +120,12 @@ class RequestController extends AbstractController
             if (!empty($formData['answer'])) {
                 $filters['answer'] = $formData['answer'];
             }
+
+            if (!empty($formData['nbdays'])) {
+                $order = $formData['nbdays'];
+            }
             
-            $filteredRequests = $requestRepository->findRequestPendingByFilters($user->getId(), $filters, 'DESC');
+            $filteredRequests = $requestRepository->findRequestPendingByFilters($user->getId(), $filters, $order);
 
             foreach ($collaborators as $collaboratorData) {
                 $collaboratorId = $collaboratorData->getId();

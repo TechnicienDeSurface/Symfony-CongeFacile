@@ -8,8 +8,8 @@
 	
 	<main style="display: flex;">
 		{% include 'layout/menu/_sidebar.html.twig' %}
-
 		<div class="w-full p-8">
+         <h1 class="text-left font-bold text-2xl my-4 text-[#004C6C]">Mes informations</h1>
             {{ form_start(form1) }}
                 <div class="space-y-6">
                     <div class="grid grid-cols-2 gap-4">
@@ -56,7 +56,7 @@
                                     data-eye-closed="{{ asset('assets/image/eye-slash-solid.svg') }}" alt="Afficher/Masquer" class="w-5 h-5">
                                 </button>
                             </div>
-                            <h3 class="text-red-500 mt-10">{{ form_errors(form2.currentPassword) }}</h3>
+                            <h3 class="text-red-500 mt-1">{{ form_errors(form2.currentPassword) }}</h3>
                         </div>
                         <br>
                         <div class="grid grid-cols-2 gap-x-1 gap-y-1">
@@ -84,7 +84,7 @@
                             </div>
                         </div>
                     <div class="mt-6">
-                        {{ form_widget(form2.Submit, {'label': 'Réinitialiser le mot de passe', 'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white font-bold rounded py-2 px-6'}}) }}
+                        {{ form_widget(form2.Submit, {'label': 'Réinitialiser le mot de passe', 'attr': {'class': 'bg-[#004c6c] hover:bg-blue-700 text-white rounded py-2 px-6'}}) }}
                     </div>
                 </div>
                 {{ form_end(form2) }}

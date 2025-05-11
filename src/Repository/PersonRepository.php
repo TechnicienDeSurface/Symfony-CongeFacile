@@ -130,9 +130,9 @@ class PersonRepository extends ServiceEntityRepository
     //Trouvé des personnes par un département pour la vérification de suppression de postes
     public function findPersonByDepartment(int $id): ?int
     {
-        return $this->createQueryBuilder('r')
-            ->select('COUNT(r.id)')
-            ->join('r.department', 'department') 
+        return $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->join('p.department', 'department') 
             ->where('department.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
