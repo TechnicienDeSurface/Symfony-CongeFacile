@@ -59,22 +59,24 @@ class ManagementServiceController extends AbstractController
          $form->handleRequest($request);
 
          if ($form->isSubmitted() && $form->isValid()) {
-             foreach($departments as $row){
-                 if($department->getName() == $row->getName()){
-                     $verif = true; 
-                 };
+             if (empty($department->getName())) {
+                 $this->addFlash('error', 'Erreur : le champ ne peut pas être vide.');
+             } else {
+                 foreach ($departments as $row) {
+                     if ($department->getName() == $row->getName()) {
+                         $verif = true;
+                     };
+                 }
+                 if ($verif === true) {
+                     $this->addFlash('error', 'Erreur : ce département existe déjà.');
+                 } else {
+                     $entityManager->persist($department);
+                     $entityManager->flush();
+                     $this->addFlash('success', 'Le département a été ajouté avec succès.');
+                     return $this->redirectToRoute('app_administration_management_service');
+                 }
              }
-             if($verif === true){
-                 $this->addFlash('error','Erreur ce département existe déjà');
-             }else{
-                 $entityManager->persist($department);
-                 $entityManager->flush();
-                 $this->addFlash('success','Le département a été ajouté avec succès.');
-                 return $this->redirectToRoute('app_administration_management_service');
-             }
-             
          }
-
 
         return $this->render('manager/admin/management-service/add_management_service.html.twig', [
             'page' => 'administration-ajouter-management-service',
