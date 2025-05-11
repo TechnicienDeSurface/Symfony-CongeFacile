@@ -40,8 +40,15 @@
 			<p class="mb-2 mt-5">Commentaire supplémentaire</p>
 			<textarea id="" class="w-[55%] h-[25%] bg-white border border-[#dfe4ea] rounded-md p-5 resize-none font-[5]" readonly>{{ request.comment }}</textarea>
 
-			<button type="submit" class="text-[#004c6c] bg-[#ebf1f4] border-none rounded-md w-[300px] h-[35px] font-medium my-7 cursor-pointer block">Télécharger le justificatif</button>
-
+			{% if request.receiptFile %}
+				<a href="{{ asset('assets/uploads/' ~ request.receiptFile) }}" download class="text-[#004c6c] bg-[#ebf1f4] border-none rounded-md w-[300px] h-[35px] font-medium my-7 cursor-pointer block text-center flex items-center justify-center">
+					Télécharger le justificatif
+				</a>
+			{% else %}
+				<p class="text-[#004c6c] bg-[#ebf1f4] border-none rounded-md w-[300px] h-[35px] font-medium my-7 cursor-pointer block text-center flex items-center justify-center">
+					Aucun justificatif
+				</p>
+			{% endif %}
 		</div>
 	</main>
 {% endblock %}

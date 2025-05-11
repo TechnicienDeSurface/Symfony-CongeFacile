@@ -284,7 +284,7 @@ class RequestController extends AbstractController
         }
 
         return $this->render('manager/detail_request_pending.html.twig', [
-            'page' => 'detail-request-pending',
+            'page' => 'request-pending',
             'request' => $requestLoaded,
             'requestId' => $id,
             'form' => $form->createView(),

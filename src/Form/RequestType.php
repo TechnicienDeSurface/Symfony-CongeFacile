@@ -80,9 +80,10 @@ class RequestType extends AbstractType
                 ],
             ])
             ->add('receipt_file', FileType::class, [
-                'label' => 'Justificatif si applicable',
+                'label' => 'Justificatif si applicable (PDF - max 1 Mo)',
                 'attr' => ['class' => 'form-input mt-1 block w-full border border-gray-300 rounded-md p-2'],
                 'required' => false,
+                'mapped' => false,
                 'constraints' => [
                     new Assert\File([
                         'maxSize' => '1024k',

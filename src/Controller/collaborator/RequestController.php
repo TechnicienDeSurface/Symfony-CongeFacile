@@ -10,7 +10,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request as RequestFondation;
-use App\Form\RequestType;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Form\RequestType; 
 use App\Entity\Request;
 use App\Form\FilterRequestHistoryFormType;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
@@ -18,6 +19,7 @@ use Pagerfanta\Pagerfanta;
 use App\Entity\Person;
 use App\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class RequestController extends AbstractController
@@ -25,8 +27,8 @@ class RequestController extends AbstractController
 
     //PAGE NOUVELLE DEMANDE "COLLABORATEUR"
     #[IsGranted('ROLE_COLLABORATEUR')]
-    #[Route('/new-request', name: 'app_new_request')]
-    public function viewNewRequest(Security $security, RequestFondation $request_bd, RequestRepository $repository, ManagerRegistry $registry, PersonRepository $personRepository): Response
+    #[Route('/new-request', name: 'app_new_request', methods: ['GET', 'POST'])]
+    public function viewNewRequest(Security $security, RequestFondation $request_bd, RequestRepository $repository, ManagerRegistry $registry, PersonRepository $personRepository, SluggerInterface $slugger): Response
     {
         $request = new Request();
 
@@ -47,22 +49,35 @@ class RequestController extends AbstractController
 
         $form->handleRequest($request_bd);
 
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            $uploadedFile = $form->get('receipt_file')->getData();
+            $newFilename = null;
+          
+            if ($uploadedFile) {
+                $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
+              
                 try {
-                    // Si valide : j'enregistre les données dans la BDD.
-                    $data = $form->getData();
-                    $registry->getManager()->persist($data);
-                    $registry->getManager()->flush();
-                    $this->addFlash('success', 'La demande a été créée');
-                    return $this->redirectToRoute('app_request_history_collaborator');
-                } catch (NotFoundHttpException $e) {
-                    $this->addFlash('error', 'Erreur lors de la création de la demande');
+                    $uploadedFile->move($this->getParameter('justificatif_directory'), $newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Le fichier n\'a pas pu être enregistré.');
+                    return $this->redirectToRoute('app_new_request');
                 }
-            } else {
-                $this->addFlash('error', 'Erreur lors de la validation de la demande');
+                $request->setReceiptFile($newFilename);
             }
+            $em = $registry->getManager();
+            $em->persist($request);
+            $em->flush();
+
+            $this->addFlash('success', 'La demande a été créée');
+            return $this->redirectToRoute('app_request_history_collaborator');
         }
+
+        if ($form->isSubmitted()) {
+            $this->addFlash('error', 'Erreur lors de la validation de la demande');
+        }
+
         return $this->render('collaborator/new_request.html.twig', [
             'page' => 'new-request',
             'form' => $form,
