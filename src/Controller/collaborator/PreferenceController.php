@@ -37,11 +37,11 @@ class PreferenceController extends AbstractController
                 // Si valide : j'enregistre les données dans la BDD.
                 $request->cookies->all();
                 $registry->getManager()->flush();
-
+                $this->addFlash('success','Modifications de préférences enregistées');
                 // Faire une redirection vers le formulaire de modification.
             } else {
                 // Sinon j'affiche un message d'erreur
-                dd('Formulaire invalide');
+                $this->addFlash('error','Erreur lors des modifications de préférences enregistées');
             }
         }
 
