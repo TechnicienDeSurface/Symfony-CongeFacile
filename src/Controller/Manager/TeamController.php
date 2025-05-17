@@ -238,10 +238,10 @@ class TeamController extends AbstractController
         $exist_email = false;
         $manager = new User();
         $manager = $security->getUser();
-
         if (!$manager instanceof User) {
             throw new \LogicException('L\'utilisateur connecté n\'est pas une instance de App\Entity\User.');
         }
+        $person = $manager->getPerson();
 
         $form = $this->createForm(CollaborateurType::class);
         $form->handleRequest($request);
@@ -263,7 +263,7 @@ class TeamController extends AbstractController
                             $new_collaborator = new Person();
                             $new_collaborator->setFirstName($formData['first_name']);
                             $new_collaborator->setLastName($formData['last_name']);
-                            $new_collaborator->setDepartment($formData['department']);
+                            $new_collaborator->setDepartment($person->getDepartment());
                             $new_collaborator->setAlertBeforeVacation(false);
                             $new_collaborator->setAlertNewRequest(false);
                             $new_collaborator->setAlertOnAnswer(true);

@@ -48,18 +48,6 @@ class CollaborateurType extends AbstractType
                     new Assert\NotBlank(['message' => 'Le nom de famille est obligatoire']),
                 ],
             ])
-
-            // Direction / Département
-            ->add('department', EntityType::class, [
-                'class' => Department::class,
-                'choice_label' => 'name',
-                'label' => 'Direction/Service - champ obligatoire',
-                'label_attr' => ['class' => $labelClass],
-                'attr' => ['class' => $inputClass],
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'Le département est obligatoire']),
-                ],
-            ])
             ->add('position', EntityType::class, [
                 'class' => Position::class,
                 'choice_label' => 'name',
