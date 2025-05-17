@@ -36,7 +36,8 @@ class TeamController extends AbstractController
         if (!$manager instanceof User) {
             throw new \LogicException('L\'utilisateur connecté n\'est pas une instance de App\Entity\User.');
         }
-
+        $person = $manager->getPerson();
+        $department = $person->getDepartment();
         $form = $this->createForm(FilterManagerTeamFormType::class);
         $form->handleRequest($request);
 
@@ -55,7 +56,7 @@ class TeamController extends AbstractController
         $order = $filters['nbdays'] ?? '';
 
         // Recherche dans le repository avec les filtres
-        $query = $personRepository->searchTeamMembers($filters, $manager, $order);
+        $query = $personRepository->searchTeamMembers($filters, $department, $manager, $order);
 
         // Pagination avec QueryAdapter
         $adapter = new QueryAdapter($query);

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use App\Entity\Person;
+use App\Entity\Department;
 use Doctrine\ORM\Query;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -18,7 +19,7 @@ class PersonRepository extends ServiceEntityRepository
         parent::__construct($registry, Person::class);
     }
 
-    public function searchTeamMembers(array $filters,User $manager, $order): Query
+    public function searchTeamMembers(array $filters,Department $department, User $manager, $order): Query
     {
         $qb = $this->createQueryBuilder('person');
 
@@ -51,7 +52,13 @@ class PersonRepository extends ServiceEntityRepository
                 ->setParameter('name', '%' . $filters['name'] . '%');
         }
 
-        // FILTRE PAR LE DEPARTEMENT
+        // RESTRICTIONS SUR LE DEPARTEMENT DES COLLABORATEURS
+        if (!empty($department)) {
+            $qb->andWhere('person.department = :department_id')
+                ->setParameter('department_id',$department->getId());
+        }
+
+        // RESTRICTIONS SUR LE MANAGER DES COLLABORATEURS
         if (!empty($manager)) {
             $qb->andWhere('person.manager = :id')
                 ->setParameter('id',$manager->getId());
@@ -60,7 +67,6 @@ class PersonRepository extends ServiceEntityRepository
         if ($order) {
             $qb->orderBy('person.id', $order);
         }
-
         return $qb->getQuery();
     }
 
